@@ -11,7 +11,9 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://aymanbalaa30:SOEN341GROUP9@soen341.flzqs.mongodb.net/?retryWrites=true&w=majority&appName=SOEN341')
+mongoose.connect('mongodb+srv://aymanbalaa30:SOEN341GROUP9@soen341.flzqs.mongodb.net/?retryWrites=true&w=majority&appName=SOEN341', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,})
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
