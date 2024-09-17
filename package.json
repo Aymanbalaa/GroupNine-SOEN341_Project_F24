@@ -1,0 +1,24 @@
+{
+  "name": "groupnine-soen341_project_f24",
+  "version": "1.0.0",
+  "description": "- **Karim Sleiman** - 40224330\r - **Nikolaos Chaskis** - 40092571\r - **Salaheddin Alattar** - 40189830\r - **Georges Ghazal** - 40231026\r - **Ayman El Balaa** - 40200099\r - **Samuel Sebaaly** - 40084264",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.2",
+    "moongoose": "^0.0.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "proxy": "http://localhost:3001"
+}
