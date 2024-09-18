@@ -8,7 +8,7 @@ const Register = ({ setRoute }) => {
     username: '',
     firstname: '',
     lastname: '',
-    id: '',
+    id: 0,
     password: '',
     role: 'student'
   });
