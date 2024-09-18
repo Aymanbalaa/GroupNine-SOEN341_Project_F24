@@ -6,11 +6,14 @@ import './Register.css'; // Make sure to create this CSS file
 const Register = ({ setRoute }) => {
   const [formData, setFormData] = useState({
     username: '',
+    firstname: '',
+    lastname: '',
+    id: '',
     password: '',
     role: 'student'
   });
 
-  const { username, password, role } = formData;
+  const { username, firstname, lastname, id, password, role } = formData;
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -38,6 +41,39 @@ const Register = ({ setRoute }) => {
             value={username}
             onChange={onChange}
             placeholder="Username"
+            required
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="firstname"
+            name="firstname"
+            value={firstname}
+            onChange={onChange}
+            placeholder="First Name"
+            required
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="lastname"
+            name="lastname"
+            value={lastname}
+            onChange={onChange}
+            placeholder="Last Name"
+            required
+            className="form-input"
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="id"
+            name="id"
+            value={id}
+            onChange={onChange}
+            placeholder="Student/Faculty ID"
             required
             className="form-input"
           />
