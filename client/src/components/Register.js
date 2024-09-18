@@ -8,7 +8,7 @@ const Register = ({ setRoute }) => {
     username: '',
     firstname: '',
     lastname: '',
-    id: 0, //id field currently displays 0, must change to be blank
+    id: Number,
     password: '',
     role: 'student'
   });
