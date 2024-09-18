@@ -28,7 +28,7 @@ router.post('/register', async (req, res) => {
     await user.save();
 
     const payload = { userId: user._id, role: user.role };
-    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     res.status(201).json({ token });
   } catch (err) {
     console.error('Error in register route:', err.message);

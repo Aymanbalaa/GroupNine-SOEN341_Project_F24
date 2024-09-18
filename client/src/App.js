@@ -1,6 +1,6 @@
 // client/src/App.js
 import React, { useState } from 'react';
-import Register from './components/Register';
+import Register from './components/register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 
