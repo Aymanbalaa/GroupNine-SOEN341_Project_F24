@@ -1,4 +1,3 @@
-// client/src/components/Login.js
 import React, { useState } from 'react';
 import API from '../api';
 import './Login.css'; // Make sure to create this CSS file
@@ -8,6 +7,7 @@ const Login = ({ setRoute }) => {
     username: '',
     password: ''
   });
+  const [errorMessage, setErrorMessage] = useState(''); // State for error message
 
   const { username, password } = formData;
 
@@ -28,13 +28,15 @@ const Login = ({ setRoute }) => {
       console.log(res.data);
       setRoute('dashboard'); // Navigate to dashboard
     } catch (err) {
-      console.error(err.response.data);
+      // Set error message based on response, or show a generic message
+      setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Error message display */}
       <form onSubmit={onSubmit} className="login-form">
         <div className="form-group">
           <input

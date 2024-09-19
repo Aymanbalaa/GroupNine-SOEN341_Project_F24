@@ -1,22 +1,30 @@
-// client/src/components/Register.js
 import React, { useState } from 'react';
 import API from '../api';
-import './Register.css'; // Make sure to create this CSS file
+import './Register.css'; // Ensure you have this CSS file
 
 const Register = ({ setRoute }) => {
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
     lastname: '',
-    id: Number,
+    id: '', // Leave it as an empty string initially
     password: '',
     role: 'student'
   });
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const { username, firstname, lastname, id, password, role } = formData;
 
   const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === 'id') {
+      // Ensure the id is converted to a number
+      setFormData({ ...formData, [name]: Number(value) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const onSubmit = async (e) => {
@@ -26,13 +34,15 @@ const Register = ({ setRoute }) => {
       console.log(res.data);
       setRoute('dashboard'); // Navigate to dashboard
     } catch (err) {
-      console.error(err.response.data);
+      // Display error message from response or a general message
+      setErrorMessage(err.response.data.message || 'Registration failed. Please try again.');
     }
   };
 
   return (
     <div className="register-container">
       <h2>Register</h2>
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
       <form onSubmit={onSubmit} className="register-form">
         <div className="form-group">
           <input
@@ -47,7 +57,7 @@ const Register = ({ setRoute }) => {
         </div>
         <div className="form-group">
           <input
-            type="firstname"
+            type="text"
             name="firstname"
             value={firstname}
             onChange={onChange}
@@ -58,7 +68,7 @@ const Register = ({ setRoute }) => {
         </div>
         <div className="form-group">
           <input
-            type="lastname"
+            type="text"
             name="lastname"
             value={lastname}
             onChange={onChange}
@@ -69,7 +79,7 @@ const Register = ({ setRoute }) => {
         </div>
         <div className="form-group">
           <input
-            type="id"
+            type="number" // This ensures it's a number input
             name="id"
             value={id}
             onChange={onChange}
