@@ -49,6 +49,45 @@ router.post('/create', verifyInstructor, async (req, res) => {
       res.status(500).send('Server error');
     }
   });
+
+  // Get the team of the logged-in student
+router.get('/myteam', async (req, res) => {
+    try {
+      const token = req.cookies.token;
+      if (!token) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+  
+      // Decode the JWT to get the user ID
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const userId = decoded.userId;
+  
+      // Find the team where the student is a member
+      const team = await Team.findOne({ members: userId }).populate('members', 'firstname lastname');
+      
+      if (!team) {
+        return res.status(404).json({ message: 'You are not assigned to any team' });
+      }
+  
+      res.json(team);
+    } catch (err) {
+      console.error('Error fetching team details:', err.message);
+      res.status(500).send('Server error');
+    }
+  });
+
+  // Get all teams
+router.get('/all', async (req, res) => {
+    try {
+      const teams = await Team.find().populate('members', 'firstname lastname'); // Populate members with firstname and lastname
+      res.json(teams);
+    } catch (err) {
+      console.error('Error fetching teams:', err.message);
+      res.status(500).send('Server error');
+    }
+  });
+  
+  
   
   
 
