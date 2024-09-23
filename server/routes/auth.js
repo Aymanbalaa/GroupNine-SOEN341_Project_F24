@@ -94,4 +94,16 @@ router.get('/me', async (req, res) => {
   }
 });
 
+// Get all students for the instructor to assign to teams
+router.get('/all-students', async (req, res) => {
+  try {
+    const students = await User.find({ role: 'student' }).select('firstname lastname _id');
+    res.json(students);
+  } catch (err) {
+    console.error('Error fetching students:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+
 module.exports = router;

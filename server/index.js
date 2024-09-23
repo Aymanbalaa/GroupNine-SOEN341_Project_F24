@@ -27,6 +27,8 @@ mongoose.connect('mongodb+srv://aymanbalaa30:SOEN341GROUP9@soen341.flzqs.mongodb
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/team', require('./routes/team'));
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
