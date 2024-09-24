@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
+import './InstructorDashboard.css';
 
 const InstructorDashboard = () => {
   const [teamName, setTeamName] = useState('');
@@ -80,7 +81,7 @@ const InstructorDashboard = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Create Team</h2>
       <form onSubmit={createTeam}>
         <input
@@ -99,7 +100,7 @@ const InstructorDashboard = () => {
                 value={student._id}
                 checked={selectedStudents.includes(student._id)}
                 onChange={handleStudentSelect}
-                disabled={isStudentInTeam(student._id)} // Disable if the student is already in a team
+                disabled={isStudentInTeam(student._id)}
               />
               {student.firstname} {student.lastname} {isStudentInTeam(student._id) && '(Already in a team)'}
             </label>
