@@ -59,7 +59,7 @@ router.get('/myteam', async (req, res) => {
       }
   
       // Decode the JWT to get the user ID
-      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+      const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
       const userId = decoded.userId;
   
       // Find the team where the student is a member

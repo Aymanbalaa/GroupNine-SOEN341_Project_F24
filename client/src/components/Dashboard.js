@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
-import InstructorDashboard from './InstructorDashboard'; // Import Instructor Dashboard
+import InstructorDashboard from './InstructorDashboard';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -23,10 +23,10 @@ const Dashboard = () => {
 
     const fetchTeamData = async () => {
       try {
-        const res = await API.get('/team/myteam'); // Only for students
+        const res = await API.get('/team/myteam');
         setTeam(res.data);
       } catch (err) {
-        console.error('Error fetching team details:', err);
+        console.error('Error fetching team details:', err.response?.data || err.message);
       }
     };
 
