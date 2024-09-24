@@ -34,7 +34,11 @@ This system allows students to evaluate their teammates' contributions in group 
    - **Detailed Peer Assessment Results**: Instructors can view results by team and by student, with the option to download them in CSV format.
 
 ---
+### Technologies
 
+The Peer Evaluation System is built using modern web development technologies to ensure scalability, performance, and ease of use. The backend is developed with **Node.js**, providing a fast and lightweight server-side environment. The frontend is built using **React**, a popular JavaScript library for creating dynamic and responsive user interfaces. The system also uses **MongoDB**, a NoSQL database, which offers flexibility in storing and retrieving the evaluation data, allowing for efficient handling of large datasets and team member assessments.
+
+---
 ## Team Distribution
 
 | Name                 | Role                                         |
