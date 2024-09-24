@@ -1,6 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 import './InstructorDashboard.css';
+
+// Memoized component for rendering each student checkbox
+const StudentCheckbox = React.memo(({ student, selectedStudents, handleStudentSelect, isStudentInTeam }) => (
+  <div key={student._id}>
+    <label>
+      <input
+        type="checkbox"
+        value={student._id}
+        checked={selectedStudents.includes(student._id)}
+        onChange={handleStudentSelect}
+        disabled={isStudentInTeam(student._id)}
+      />
+      {student.firstname} {student.lastname} {isStudentInTeam(student._id) && '(Already in a team)'}
+    </label>
+  </div>
+));
 
 const InstructorDashboard = () => {
   const [teamName, setTeamName] = useState('');
@@ -9,45 +25,37 @@ const InstructorDashboard = () => {
   const [teams, setTeams] = useState([]); // State to store all teams
 
   useEffect(() => {
-    // Fetch all students
-    const fetchStudents = async () => {
+    const fetchStudentsAndTeams = async () => {
       try {
-        const res = await API.get('/auth/all-students');
-        setStudents(res.data);
+        // Fetch all students and teams in parallel
+        const [studentsRes, teamsRes] = await Promise.all([
+          API.get('/auth/all-students'),
+          API.get('/team/all'),
+        ]);
+        setStudents(studentsRes.data);
+        setTeams(teamsRes.data);
       } catch (err) {
-        console.error('Error fetching students:', err);
+        console.error('Error fetching students or teams:', err);
       }
     };
 
-    // Fetch all teams
-    const fetchTeams = async () => {
-      try {
-        const res = await API.get('/team/all');
-        setTeams(res.data);
-      } catch (err) {
-        console.error('Error fetching teams:', err);
-      }
-    };
-
-    fetchStudents();
-    fetchTeams();
+    fetchStudentsAndTeams();
   }, []);
 
-  const isStudentInTeam = (studentId) => {
-    return teams.some(team => team.members.some(member => member._id === studentId));
-  };
+  const isStudentInTeam = useCallback(
+    (studentId) => teams.some((team) => team.members.some((member) => member._id === studentId)),
+    [teams]
+  );
 
   const createTeam = async (e) => {
     e.preventDefault();
 
-    // Ensure that the team name is not empty or just spaces
-    if (!teamName || teamName.trim() === '') {
+    if (!teamName.trim()) {
       alert('Team name cannot be empty');
       return;
     }
 
-    // Check if any selected student is already in a team
-    const studentsAlreadyInTeam = selectedStudents.filter(id => isStudentInTeam(id));
+    const studentsAlreadyInTeam = selectedStudents.filter((id) => isStudentInTeam(id));
 
     if (studentsAlreadyInTeam.length > 0) {
       alert('Some students are already in a team and cannot be added.');
@@ -67,18 +75,19 @@ const InstructorDashboard = () => {
       setTeams(res.data);
     } catch (err) {
       console.error('Error creating team:', err);
-      alert(err.response.data.message || 'Failed to create team');
+      alert(err.response?.data?.message || 'Failed to create team');
     }
   };
 
-  const handleStudentSelect = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setSelectedStudents([...selectedStudents, value]);
-    } else {
-      setSelectedStudents(selectedStudents.filter(id => id !== value));
-    }
-  };
+  const handleStudentSelect = useCallback(
+    (e) => {
+      const { value, checked } = e.target;
+      setSelectedStudents((prevSelected) =>
+        checked ? [...prevSelected, value] : prevSelected.filter((id) => id !== value)
+      );
+    },
+    [setSelectedStudents]
+  );
 
   return (
     <div className="container">
@@ -93,18 +102,13 @@ const InstructorDashboard = () => {
         />
         <h3>Select Students:</h3>
         {students.map((student) => (
-          <div key={student._id}>
-            <label>
-              <input
-                type="checkbox"
-                value={student._id}
-                checked={selectedStudents.includes(student._id)}
-                onChange={handleStudentSelect}
-                disabled={isStudentInTeam(student._id)}
-              />
-              {student.firstname} {student.lastname} {isStudentInTeam(student._id) && '(Already in a team)'}
-            </label>
-          </div>
+          <StudentCheckbox
+            key={student._id}
+            student={student}
+            selectedStudents={selectedStudents}
+            handleStudentSelect={handleStudentSelect}
+            isStudentInTeam={isStudentInTeam}
+          />
         ))}
         <button type="submit">Create Team</button>
       </form>
