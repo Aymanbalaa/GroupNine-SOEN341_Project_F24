@@ -22,33 +22,44 @@ const verifyInstructor = (req, res, next) => {
 
 // Create a new team
 router.post('/create', verifyInstructor, async (req, res) => {
-    const { name, members } = req.body;
-  
-    // Ensure that the team name is not null or empty
-    if (!name || name.trim() === '') {
-      return res.status(400).json({ message: 'Team name is required' });
+  const { name, members } = req.body;
+
+  if (!name || name.trim() === '') {
+    return res.status(400).json({ message: 'Team name is required' });
+  }
+
+  try {
+    // Check if a team with the same name already exists
+    const existingTeam = await Team.findOne({ name });
+    if (existingTeam) {
+      return res.status(400).json({ message: 'Team name already exists' });
     }
-  
-    try {
-      // Check if a team with the same name already exists
-      const existingTeam = await Team.findOne({ name });
-      if (existingTeam) {
-        return res.status(400).json({ message: 'Team name already exists' });
-      }
-  
-      const team = new Team({
-        name,
-        members,
-        createdBy: req.user.userId,
+
+    // Check if any of the members are already in a team
+    const membersInAnotherTeam = await Team.find({ members: { $in: members } });
+
+    if (membersInAnotherTeam.length > 0) {
+      return res.status(400).json({ 
+        message: 'Some members are already assigned to another team',
+        members: membersInAnotherTeam.map(team => team.members),
       });
-  
-      await team.save();
-      res.status(201).json({ message: 'Team created successfully', team });
-    } catch (err) {
-      console.error('Error creating team:', err.message);
-      res.status(500).send('Server error');
     }
-  });
+
+    // If validation passes, create the new team
+    const team = new Team({
+      name,
+      members: members.map(id => mongoose.Types.ObjectId(id)), // Ensure members are ObjectIds
+      createdBy: req.user.userId,
+    });
+
+    await team.save();
+    res.status(201).json({ message: 'Team created successfully', team });
+  } catch (err) {
+    console.error('Error creating team:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
 
   // Get the team of the logged-in student
 router.get('/myteam', async (req, res) => {

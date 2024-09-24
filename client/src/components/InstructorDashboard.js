@@ -11,7 +11,7 @@ const InstructorDashboard = () => {
     // Fetch all students
     const fetchStudents = async () => {
       try {
-        const res = await API.get('/auth/all-students'); // Fetch all students
+        const res = await API.get('/auth/all-students');
         setStudents(res.data);
       } catch (err) {
         console.error('Error fetching students:', err);
@@ -21,7 +21,7 @@ const InstructorDashboard = () => {
     // Fetch all teams
     const fetchTeams = async () => {
       try {
-        const res = await API.get('/team/all'); // Fetch all teams
+        const res = await API.get('/team/all');
         setTeams(res.data);
       } catch (err) {
         console.error('Error fetching teams:', err);
@@ -32,12 +32,24 @@ const InstructorDashboard = () => {
     fetchTeams();
   }, []);
 
+  const isStudentInTeam = (studentId) => {
+    return teams.some(team => team.members.some(member => member._id === studentId));
+  };
+
   const createTeam = async (e) => {
     e.preventDefault();
 
     // Ensure that the team name is not empty or just spaces
     if (!teamName || teamName.trim() === '') {
       alert('Team name cannot be empty');
+      return;
+    }
+
+    // Check if any selected student is already in a team
+    const studentsAlreadyInTeam = selectedStudents.filter(id => isStudentInTeam(id));
+
+    if (studentsAlreadyInTeam.length > 0) {
+      alert('Some students are already in a team and cannot be added.');
       return;
     }
 
@@ -63,7 +75,7 @@ const InstructorDashboard = () => {
     if (checked) {
       setSelectedStudents([...selectedStudents, value]);
     } else {
-      setSelectedStudents(selectedStudents.filter((id) => id !== value));
+      setSelectedStudents(selectedStudents.filter(id => id !== value));
     }
   };
 
@@ -87,8 +99,9 @@ const InstructorDashboard = () => {
                 value={student._id}
                 checked={selectedStudents.includes(student._id)}
                 onChange={handleStudentSelect}
+                disabled={isStudentInTeam(student._id)} // Disable if the student is already in a team
               />
-              {student.firstname} {student.lastname}
+              {student.firstname} {student.lastname} {isStudentInTeam(student._id) && '(Already in a team)'}
             </label>
           </div>
         ))}
