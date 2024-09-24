@@ -4,6 +4,8 @@ const User = require('../models/user');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
+const mongoose = require('mongoose');
+
 // Middleware to verify instructor
 const verifyInstructor = (req, res, next) => {
   const token = req.cookies.token;
@@ -11,13 +13,17 @@ const verifyInstructor = (req, res, next) => {
     return res.status(401).json({ message: 'Not authenticated' });
   }
 
-  const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
-  if (decoded.role !== 'instructor') {
-    return res.status(403).json({ message: 'Access denied' });
+  try {
+    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');  // Removed '${}'
+    if (decoded.role !== 'instructor') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token' });
   }
-  
-  req.user = decoded;
-  next();
 };
 
 // Create a new team
@@ -39,16 +45,19 @@ router.post('/create', verifyInstructor, async (req, res) => {
     const membersInAnotherTeam = await Team.find({ members: { $in: members } });
 
     if (membersInAnotherTeam.length > 0) {
+      const studentsInOtherTeams = membersInAnotherTeam.flatMap(team => 
+        team.members.filter(member => members.includes(member.toString()))
+      );
       return res.status(400).json({ 
         message: 'Some members are already assigned to another team',
-        members: membersInAnotherTeam.map(team => team.members),
+        studentsInOtherTeams,
       });
     }
 
-    // If validation passes, create the new team
+    // Create the new team
     const team = new Team({
       name,
-      members: members.map(id => mongoose.Types.ObjectId(id)), // Ensure members are ObjectIds
+      members: members.map(id => new mongoose.Types.ObjectId(id)), // Ensure members are ObjectIds
       createdBy: req.user.userId,
     });
 
@@ -59,7 +68,6 @@ router.post('/create', verifyInstructor, async (req, res) => {
     res.status(500).send('Server error');
   }
 });
-
 
   // Get the team of the logged-in student
 router.get('/myteam', async (req, res) => {
