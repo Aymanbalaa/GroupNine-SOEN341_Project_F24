@@ -2,14 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 import './InstructorDashboard.css';
 
-
-
 const InstructorDashboard = ({ setRoute }) => {
+  // Debugging log to check if setRoute is passed
+  console.log('setRoute in InstructorDashboard:', setRoute);
+
+  // Hooks should not be conditional; declare them at the top
   const [teamName, setTeamName] = useState('');
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [teams, setTeams] = useState([]);
 
+  // Fetch data on mount
   useEffect(() => {
     const fetchStudentsAndTeams = async () => {
       try {
@@ -69,6 +72,11 @@ const InstructorDashboard = ({ setRoute }) => {
     [setSelectedStudents]
   );
 
+  if (!setRoute) {
+    console.error('setRoute is not passed correctly to InstructorDashboard');
+    return <div>Error: setRoute is undefined.</div>;
+  }
+
   return (
     <div className="container">
       <h2>Create Team</h2>
@@ -117,8 +125,15 @@ const InstructorDashboard = ({ setRoute }) => {
         <p>No teams available.</p>
       )}
 
-      {/* Use setRoute instead of useNavigate */}
-      <button onClick={() => setRoute('create-team-from-csv')}>Create Team from CSV</button>
+      <button onClick={() => {
+        if (typeof setRoute === 'function') {
+          setRoute('create-team-from-csv');
+        } else {
+          console.error('setRoute is not defined or not a function');
+        }
+      }}>
+        Create Team from CSV
+      </button>
     </div>
   );
 };

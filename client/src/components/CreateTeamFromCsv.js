@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import API from '../api';
 
-const CreateTeamFromCsv = ({ setRoute }) => {  // Ensure setRoute is received as a prop
+const CreateTeamFromCsv = ({ setRoute }) => {
+  console.log('setRoute in CreateTeamFromCsv:', setRoute);  // This should log the setRoute function
+
   const [teamName, setTeamName] = useState('');
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -102,7 +104,7 @@ const CreateTeamFromCsv = ({ setRoute }) => {  // Ensure setRoute is received as
   };
 
   return (
-    <div className="container"> {/* Consider adding a unique className for styling */}
+    <div className="container">
       <h2>Create Team from CSV</h2>
       <form onSubmit={createTeam}>
         <input
@@ -118,7 +120,6 @@ const CreateTeamFromCsv = ({ setRoute }) => {  // Ensure setRoute is received as
 
         {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
-        {/* Display students from the CSV file */}
         <h3>Students from CSV:</h3>
         {students.map((student) => (
           <div key={student._id}>
@@ -137,7 +138,6 @@ const CreateTeamFromCsv = ({ setRoute }) => {  // Ensure setRoute is received as
         <button type="submit">Create Team</button>
       </form>
 
-      {/* Button to navigate back to InstructorDashboard */}
       <button onClick={() => setRoute('instructor-dashboard')}>Back to Instructor Dashboard</button>
     </div>
   );

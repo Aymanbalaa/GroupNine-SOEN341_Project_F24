@@ -6,22 +6,31 @@ import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
 
 const App = () => {
-  const [route, setRoute] = useState('login'); // Initialize route as 'login'
-
-  // Function to render components based on route
+  const [route, setRoute] = useState('instructor-dashboard'); // Force rendering of InstructorDashboard
+  
+  console.log("App route state: ", route); // Track route state
+  console.log("App setRoute function: ", setRoute); // Ensure setRoute is defined
+  
   const renderComponent = () => {
+    console.log("Rendering component for route: ", route);
+    
     switch (route) {
       case 'register':
-        return <Register setRoute={setRoute} />; // Pass setRoute to Register
+        console.log("Rendering Register");
+        return <Register setRoute={setRoute} />;
       case 'dashboard':
-        return <Dashboard setRoute={setRoute} />; // Pass setRoute to Dashboard
+        console.log("Rendering Dashboard");
+        return <Dashboard setRoute={setRoute} />;
       case 'instructor-dashboard':
-        return <InstructorDashboard setRoute={setRoute} />; // Pass setRoute to InstructorDashboard
+        console.log("Rendering InstructorDashboard");
+        return <InstructorDashboard setRoute={setRoute} />;
       case 'create-team-from-csv':
-        return <CreateTeamFromCsv setRoute={setRoute} />; // Pass setRoute to CreateTeamFromCsv
+        console.log("Rendering CreateTeamFromCsv");
+        return <CreateTeamFromCsv setRoute={setRoute} />;
       case 'login':
       default:
-        return <Login setRoute={setRoute} />; // Pass setRoute to Login
+        console.log("Rendering Login");
+        return <Login setRoute={setRoute} />;
     }
   };
 

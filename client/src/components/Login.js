@@ -4,6 +4,8 @@ import API from '../api';
 import './Login.css';
 
 const Login = ({ setRoute }) => {
+  console.log("setRoute in Login:", setRoute);
+
   const [formData, setFormData] = useState({
     username: '',
     password: ''
