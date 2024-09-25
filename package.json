@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.3",
     "moongoose": "^0.0.1",
+    "papaparse": "^5.4.1",
     "react-router-dom": "^6.26.2"
   },
   "proxy": "http://localhost:3000"

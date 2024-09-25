@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Papa from 'papaparse';
 
 function StudentList() {
   const [studentData, setStudentData] = useState([]);
@@ -8,36 +9,27 @@ function StudentList() {
     const file = event.target.files[0];
 
     if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        const contents = e.target.result;
-
-        try {
-          // Basic CSV parsing (you might want to use a library like Papa Parse for more robust handling)
-          const rows = contents.split('\n');
-          const parsedData = rows
-            .slice(1) // Skip header row
-            .map(row => {
-              const cols = row.split(',');
-              return {
-                name: cols[0].replace(/"/g, ''),
-                lastName: cols[1].replace(/"/g, ''),
-                id: cols[2].replace(/"/g, ''),
-              };
-            })
-            .filter(student => student.name && student.lastName && student.id); // Filter out invalid rows
+      Papa.parse(file, {
+        header: true, // Assuming your CSV has headers
+        complete: function(results) {
+          console.log('Parsed Data:', results.data); // Log the parsed data
+          
+          // Map the parsed data to the required fields
+          const parsedData = results.data.map(row => ({
+            name: row['firstname'] || '', // Use 'firstname' from the CSV
+            lastName: row['lastname'] || '', // Use 'lastname' from the CSV
+            id: row['id'] || '' // Use 'id' from the CSV
+          }));
 
           setStudentData(parsedData);
           setErrorMessage(null); // Clear any previous errors
-        } catch (error) {
+        },
+        error: function(error) {
           console.error('Error parsing CSV:', error);
           setErrorMessage('Invalid CSV format. Please check your file.');
           setStudentData([]); // Clear the table in case of errors
         }
-      };
-
-      reader.readAsText(file);
+      });
     } else {
       setErrorMessage("Please select a CSV file.");
       setStudentData([]);
@@ -47,7 +39,7 @@ function StudentList() {
   return (
     <div>
       <h1>Upload Student CSV</h1>
-      <input type="file" accept=".csv" onChange={handleFileUpload} />
+      <input type="file" accept=".csv" onChange={handleFileUpload} /> {/* File upload input */}
 
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
 
