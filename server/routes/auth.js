@@ -105,5 +105,20 @@ router.get('/all-students', async (req, res) => {
   }
 });
 
+router.get('/student/:id', async (req, res) => {
+  try {
+    const studentId = req.params.id; // Get the student ID from the request parameters
+    const student = await User.findOne({ id: studentId, role: 'student' }).select('firstname lastname _id');
+
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.json(student);
+  } catch (err) {
+    console.error('Error fetching student:', err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;
