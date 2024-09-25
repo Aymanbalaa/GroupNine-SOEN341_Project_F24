@@ -1,113 +1,29 @@
-const express = require('express');
-const Team = require('../models/Team');
-const User = require('../models/user');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
-
 const mongoose = require('mongoose');
 
-// Middleware to verify instructor
-const verifyInstructor = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({ message: 'Not authenticated' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');  // Removed '${}'
-    if (decoded.role !== 'instructor') {
-      return res.status(403).json({ message: 'Access denied' });
-    }
-
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Invalid token' });
-  }
-};
-
-// Create a new team
-router.post('/create', verifyInstructor, async (req, res) => {
-  const { name, members } = req.body;
-
-  if (!name || name.trim() === '') {
-    return res.status(400).json({ message: 'Team name is required' });
-  }
-
-  try {
-    // Check if a team with the same name already exists
-    const existingTeam = await Team.findOne({ name });
-    if (existingTeam) {
-      return res.status(400).json({ message: 'Team name already exists' });
-    }
-
-    // Check if any of the members are already in a team
-    const membersInAnotherTeam = await Team.find({ members: { $in: members } });
-
-    if (membersInAnotherTeam.length > 0) {
-      const studentsInOtherTeams = membersInAnotherTeam.flatMap(team => 
-        team.members.filter(member => members.includes(member.toString()))
-      );
-      return res.status(400).json({ 
-        message: 'Some members are already assigned to another team',
-        studentsInOtherTeams,
-      });
-    }
-
-    // Create the new team
-    const team = new Team({
-      name,
-      members: members.map(id => new mongoose.Types.ObjectId(id)), // Ensure members are ObjectIds
-      createdBy: req.user.userId,
-    });
-
-    await team.save();
-    res.status(201).json({ message: 'Team created successfully', team });
-  } catch (err) {
-    console.error('Error creating team:', err.message);
-    res.status(500).send('Server error');
+const TeamSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  members: [{
+    firstname: {
+      type: String,
+      required: true,
+    },
+    lastname: {
+      type: String,
+      required: true,
+    },
+    id: {
+      type: String,
+      required: true,
+    },
+  }],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   }
 });
 
-  // Get the team of the logged-in student
-router.get('/myteam', async (req, res) => {
-    try {
-      const token = req.cookies.token;
-      if (!token) {
-        return res.status(401).json({ message: 'Not authenticated' });
-      }
-  
-      // Decode the JWT to get the user ID
-      const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
-      const userId = decoded.userId;
-  
-      // Find the team where the student is a member
-      const team = await Team.findOne({ members: userId }).populate('members', 'firstname lastname');
-      
-      if (!team) {
-        return res.status(404).json({ message: 'You are not assigned to any team' });
-      }
-  
-      res.json(team);
-    } catch (err) {
-      console.error('Error fetching team details:', err.message);
-      res.status(500).send('Server error');
-    }
-  });
-
-  // Get all teams
-router.get('/all', async (req, res) => {
-    try {
-      const teams = await Team.find().populate('members', 'firstname lastname'); // Populate members with firstname and lastname
-      res.json(teams);
-    } catch (err) {
-      console.error('Error fetching teams:', err.message);
-      res.status(500).send('Server error');
-    }
-  });
-  
-  
-  
-  
-
-module.exports = router;
+module.exports = mongoose.model('Team', TeamSchema);

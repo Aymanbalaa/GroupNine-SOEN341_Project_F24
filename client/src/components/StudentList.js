@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
+import axios from 'axios'; // For making API calls
 
 function StudentList() {
   const [studentData, setStudentData] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null); // To display errors
+  const [teamName, setTeamName] = useState(''); // New state for team name
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -12,9 +14,6 @@ function StudentList() {
       Papa.parse(file, {
         header: true, // Assuming your CSV has headers
         complete: function(results) {
-          console.log('Parsed Data:', results.data); // Log the parsed data
-          
-          // Map the parsed data to the required fields
           const parsedData = results.data.map(row => ({
             name: row['firstname'] || '', // Use 'firstname' from the CSV
             lastName: row['lastname'] || '', // Use 'lastname' from the CSV
@@ -36,13 +35,48 @@ function StudentList() {
     }
   };
 
+  const saveTeam = async () => {
+    if (!teamName.trim()) {
+      alert('Team name cannot be empty');
+      return;
+    }
+
+    try {
+      // Format the student data into the structure the backend expects
+      const members = studentData.map(student => ({
+        firstname: student.name,
+        lastname: student.lastName,
+        id: student.id
+      }));
+
+      const response = await axios.post('/team/create', {
+        name: teamName,
+        members: members,
+      });
+
+      alert('Team saved successfully');
+    } catch (error) {
+      console.error('Error saving team:', error);
+      alert('Failed to save team.');
+    }
+  };
+
   return (
     <div>
       <h1>Upload Student CSV</h1>
       <input type="file" accept=".csv" onChange={handleFileUpload} /> {/* File upload input */}
-
+      
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
-
+      
+      <input 
+        type="text" 
+        placeholder="Enter Team Name" 
+        value={teamName} 
+        onChange={(e) => setTeamName(e.target.value)} 
+      />
+      
+      <button onClick={saveTeam}>Save Team</button> {/* Save team button */}
+      
       {studentData.length > 0 ? (
         <table>
           <thead>
