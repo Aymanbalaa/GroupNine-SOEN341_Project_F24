@@ -1,0 +1,34 @@
+# Meeting Minutes
+
+**Present:** Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
+**Absent:** None  
+**Chair:** Karim  
+**Minutes:** Karim  
+
+## Upcoming Deadlines
+
+**FOCUS FOR THIS WEEK:** Sprint 1 Deliverables
+- Start up on the database.
+- Test the database using a login (read) and authentication page (write).
+
+## Individual Updates
+- **Karim:**
+  - Updated the GitHub for more clarity, by adding tags, new assignees (teams of 2), and more requirements.
+- **Nikolaos:**
+  - Learned the Database implementation with Ayman.
+  - Worked on the Register Page and credentials implementations.
+  - Worked on limitations of the registrations to limit the creation of duplicates.
+- **Samuel:**
+  - Learned how to install the database application.
+- **Salahedin:**
+  - Learned how to install the database application.
+- **Georges:**
+- **Ayman:**
+  - Initiated the database, decided which application and language we will use.
+  - Taught us how to get it on our laptops and how it worked.
+  - Worked on the login page to test the database.
+
+## Action Items
+- Focus on the deliverables of Sprint 1.
+
+## Resources
