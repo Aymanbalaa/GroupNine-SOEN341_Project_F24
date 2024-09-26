@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 import './InstructorDashboard.css';
 
+//Backend
 const InstructorDashboard = ({ setRoute }) => {
   console.log('setRoute in InstructorDashboard:', setRoute);
 
@@ -69,6 +70,7 @@ const InstructorDashboard = ({ setRoute }) => {
     [setSelectedStudents]
   );
 
+  //FrontEnd
   return (
     <div className="container">
       <h2>Create Team</h2>

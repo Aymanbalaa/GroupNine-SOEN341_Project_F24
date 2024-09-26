@@ -1,12 +1,14 @@
 import React from 'react';
 
+//Backend
 const Dashboard = ({ setRoute }) => {
-  console.log("setRoute in Dashboard:", setRoute); // Ensure setRoute is passed
+  console.log("setRoute in Dashboard:", setRoute);
 
   const goToInstructorDashboard = () => {
-    setRoute('instructor-dashboard'); // Navigate to Instructor Dashboard
+    setRoute('instructor-dashboard');
   };
 
+  //Frontend
   return (
     <div>
       <h2>Dashboard</h2>

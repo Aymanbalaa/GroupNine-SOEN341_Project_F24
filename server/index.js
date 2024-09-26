@@ -3,14 +3,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-require('dotenv').config(); // Load environment variables
+require('dotenv').config();
 
 const app = express();
 
 // Middleware
 const corsOptions ={
     origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,            
     optionSuccessStatus:200
 }
 app.use(cors(corsOptions));

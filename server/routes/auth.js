@@ -35,7 +35,6 @@ router.post('/register', async (req, res) => {
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
-    // Set the token in an HTTP-only cookie
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
     
     res.status(201).json({ message: 'User registered successfully' });
@@ -45,7 +44,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login route
+// Login Route
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -62,7 +61,6 @@ router.post('/login', async (req, res) => {
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
-    // Set the token in an HTTP-only cookie
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
     
     res.json({ message: 'Login successful' });
@@ -72,7 +70,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// Get user details route (new)
+
 router.get('/me', async (req, res) => {
   try {
     const token = req.cookies.token;
@@ -94,7 +92,7 @@ router.get('/me', async (req, res) => {
   }
 });
 
-// Get all students for the instructor to assign to teams
+// Get All Students
 router.get('/all-students', async (req, res) => {
   try {
     const students = await User.find({ role: 'student' }).select('firstname lastname _id');
@@ -107,7 +105,7 @@ router.get('/all-students', async (req, res) => {
 
 router.get('/student/:id', async (req, res) => {
   try {
-    const studentId = req.params.id; // Get the student ID from the request parameters
+    const studentId = req.params.id;
     const student = await User.findOne({ id: studentId, role: 'student' }).select('firstname lastname _id');
 
     if (!student) {

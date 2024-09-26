@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import API from '../api';
 
-const CreateTeamFromCsv = ({ setRoute, instructorId }) => { // Added instructorId prop
-  console.log('setRoute in CreateTeamFromCsv:', setRoute);  // Log setRoute function
+//Backend
+const CreateTeamFromCsv = ({ setRoute, instructorId }) => { 
+  console.log('setRoute in CreateTeamFromCsv:', setRoute);  
 
-  const [teamName, setTeamName] = useState(''); // Store the team name
-  const [students, setStudents] = useState([]); // Store the students found in the database
-  const [selectedStudents, setSelectedStudents] = useState([]); // Store selected students
-  const [errorMessage, setErrorMessage] = useState(null); // Error message handler
+  const [teamName, setTeamName] = useState(''); //Store Team Name
+  const [students, setStudents] = useState([]); //Store Students in Database
+  const [selectedStudents, setSelectedStudents] = useState([]); //Store Checkmarked Students
+  const [errorMessage, setErrorMessage] = useState(null); //Error Message Handling
 
-  // Handle the CSV file upload
+  //CSV File Upload
   const handleFileUpload = async (event) => {
     const file = event.target.files[0]; // Get the file from the input
 
@@ -73,7 +74,7 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => { // Added instructorI
     }
   };
 
-  // Create the team using the selected students
+  //Create Team from Checkmarked Students
   const createTeam = async (e) => {
     e.preventDefault();
   
@@ -85,22 +86,22 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => { // Added instructorI
     try {
       const response = await API.post('/team/create', {
         name: teamName,
-        members: students.filter(student => selectedStudents.includes(student._id)), // Pass the selected student IDs
-        // createdBy: instructorId  // Remove this line since you don't want to require the instructor ID
+        members: students.filter(student => selectedStudents.includes(student._id)),
       });
   
+      //Clear All After Team Successfully Created
       alert('Team created successfully');
-      setTeamName(''); // Clear the form after team creation
-      setSelectedStudents([]); // Clear the selected students
+      setTeamName('');
+      setSelectedStudents([]);
       setRoute('instructor-dashboard');
     } catch (err) {
-      console.error('Error creating team:', err); // Log the error
+      console.error('Error creating team:', err);
       alert(err.response?.data?.message || 'Failed to create team');
     }
   };
   
 
-  // Handle selecting or deselecting students for team creation
+  //Selection of Students
   const handleStudentSelect = (e) => {
     const { value, checked } = e.target;
     setSelectedStudents((prevSelected) =>
@@ -108,6 +109,7 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => { // Added instructorI
     );
   };
 
+  //Frontend
   return (
     <div className="container">
       <h2>Create Team from CSV</h2>

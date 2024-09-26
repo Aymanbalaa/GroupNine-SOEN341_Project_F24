@@ -13,7 +13,7 @@ const TeamSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: false, // Make this optional
+    required: false,
   }
 });
 

@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import API from '../api';
 import './Login.css';
 
+//Backend
 const Login = ({ setRoute }) => {
-  console.log("setRoute in Login:", setRoute); // Log to ensure setRoute is passed
+  console.log("setRoute in Login:", setRoute);
 
   const [formData, setFormData] = useState({
     username: '',
@@ -21,12 +22,13 @@ const Login = ({ setRoute }) => {
     e.preventDefault();
     try {
       await API.post('/auth/login', formData);
-      setRoute('dashboard'); // Navigate to dashboard after successful login
+      setRoute('dashboard');
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
 
+  //Frontend
   return (
     <div className="login-container">
       <h2>Login</h2>

@@ -5,11 +5,12 @@ import Dashboard from './components/Dashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
 
+//Backend
 const App = () => {
-  const [route, setRoute] = useState('login'); // Set initial route to 'login'
+  const [route, setRoute] = useState('login');
 
-  console.log("App route state: ", route); // Track route state
-  console.log("App setRoute function: ", setRoute); // Ensure setRoute is defined
+  console.log("App route state: ", route);
+  console.log("App setRoute function: ", setRoute);
   
   const renderComponent = () => {
     console.log("Rendering component for route: ", route);

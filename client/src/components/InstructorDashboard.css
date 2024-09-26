@@ -16,11 +16,11 @@ body {
   .container {
     width: 90%;
     max-width: 800px;
-    background-color: rgba(255, 255, 255, 0.85); /* Solid white background with transparency */
+    background-color: rgba(255, 255, 255, 0.85);
     border-radius: 20px;
     padding: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
-    backdrop-filter: blur(10px); /* Add blur for a smooth background blending effect */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
     animation: fadeIn 1s ease-in-out;
     margin-top: 50px;
   }
@@ -37,7 +37,7 @@ body {
     }
   }
   
-  /* Styling for the heading */
+  /* Heading */
   h2 {
     text-align: center;
     font-size: 2.5rem;
@@ -64,7 +64,7 @@ body {
     margin-bottom: 15px;
   }
   
-  /* Form and input styling */
+  /* Form and Input Styling */
   form {
     margin-bottom: 40px;
   }
@@ -84,22 +84,22 @@ body {
     border-color: #42a5f5;
   }
   
-  /* Label and checkbox styling */
+  /* Label and Checkbox Styling */
   label {
     font-size: 1.1rem;
     display: block;
     margin-bottom: 10px;
     padding: 10px;
-    background-color: rgba(255, 255, 255, 0.7); /* Solid background for labels */
+    background-color: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for separation */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   input[type="checkbox"] {
     margin-right: 10px;
   }
   
-  /* Button styling */
+  /* Buttons Styling */
   button {
     background-color: #6c63ff;
     color: white;
@@ -116,18 +116,18 @@ body {
     transform: translateY(-2px);
   }
   
-  /* List styling */
+  /* List Styling */
   ul {
     list-style-type: none;
     padding-left: 0;
   }
   
   ul li {
-    background-color: rgba(255, 255, 255, 0.9); /* Solid background for list items */
+    background-color: rgba(255, 255, 255, 0.9);
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
   ul li strong {
@@ -139,10 +139,10 @@ body {
   }
   
   ul ul li {
-    background-color: rgba(250, 250, 250, 0.9); /* Slightly lighter for nested list items */
+    background-color: rgba(250, 250, 250, 0.9);
   }
   
-  /* Responsiveness for smaller screens */
+  /* Smaller Screen Adjustments */
   @media screen and (max-width: 768px) {
     .container {
       padding: 20px;

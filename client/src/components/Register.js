@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import API from '../api';
-import './Register.css'; // Ensure you have this CSS file
+import './Register.css';
 
+//Backend
 const Register = ({ setRoute }) => {
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
     lastname: '',
-    id: '', // Leave it as an empty string initially
+    id: '',
     password: '',
     role: 'student'
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-
   const { username, firstname, lastname, id, password, role } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.target;
 
     if (name === 'id') {
-      // Ensure the id is converted to a number
       setFormData({ ...formData, [name]: Number(value) });
     } else {
       setFormData({ ...formData, [name]: value });
@@ -32,13 +31,13 @@ const Register = ({ setRoute }) => {
     try {
       const res = await API.post('/auth/register', formData);
       console.log(res.data);
-      setRoute('dashboard'); // Navigate to dashboard
+      setRoute('dashboard');
     } catch (err) {
-      // Display error message from response or a general message
       setErrorMessage(err.response.data.message || 'Registration failed. Please try again.');
     }
   };
 
+  //Frontend
   return (
     <div className="register-container">
       <h2>Register</h2>
@@ -79,7 +78,7 @@ const Register = ({ setRoute }) => {
         </div>
         <div className="form-group">
           <input
-            type="number" // This ensures it's a number input
+            type="number"
             name="id"
             value={id}
             onChange={onChange}
