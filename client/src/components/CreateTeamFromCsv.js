@@ -10,45 +10,47 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
   const [selectedStudents, setSelectedStudents] = useState([]); //Store Checkmarked Students
   const [errorMessage, setErrorMessage] = useState(null); //Error Message Handling
 
-  //CSV File Upload
+  //CSV File Upload 
+  //Format includes a header row with Column 1: First Name, Column 2: Last Name and Column 3: ID
+  //CSV File must be of this format
   const handleFileUpload = async (event) => {
-    const file = event.target.files[0]; // Get the file from the input
+    const file = event.target.files[0];
 
     if (file) {
-      const reader = new FileReader(); // Create a new FileReader to read the CSV
+      const reader = new FileReader();
 
       reader.onload = async (e) => {
         const contents = e.target.result;
         try {
-          const rows = contents.split('\n'); // Split CSV by rows
+          const rows = contents.split('\n');
           const parsedData = rows
-            .slice(1) // Skip header row
+            .slice(1) // Skip Header
             .map(row => {
-              const cols = row.split(','); // Split row by columns (comma-separated)
+              const cols = row.split(',');
               return {
                 name: cols[0]?.replace(/"/g, '') || '',
                 lastName: cols[1]?.replace(/"/g, '') || '',
-                id: cols[2]?.replace(/"/g, '') || '', // Assuming ID is in the third column
+                id: cols[2]?.replace(/"/g, '') || '',
               };
             })
-            .filter(student => student.name && student.lastName && student.id); // Filter valid students
+            .filter(student => student.name && student.lastName && student.id);
 
-          console.log("Parsed Student IDs:", parsedData.map(student => student.id)); // Log the IDs
+          console.log("Parsed Student IDs:", parsedData.map(student => student.id));
 
-          const studentIdsFromCsv = parsedData.map(student => student.id.replace(/^0+/, '')); // Remove leading zeros
-          console.log("Parsed Student IDs after removing leading zeros:", studentIdsFromCsv); // Log normalized IDs
+          const studentIdsFromCsv = parsedData.map(student => student.id.replace(/^0+/, '')); //Remove Leading Zeros from ID
+          console.log("Parsed Student IDs after removing leading zeros:", studentIdsFromCsv);
 
-          setErrorMessage(null); // Clear any previous error messages
+          setErrorMessage(null);
 
           try {
             const studentDetailsPromises = studentIdsFromCsv.map(studentId =>
-              API.get(`/auth/student/${studentId}`) // API call to get student details by ID
+              API.get(`/auth/student/${studentId}`)
             );
             const studentDetailsResponses = await Promise.all(studentDetailsPromises);
-            const studentDetails = studentDetailsResponses.map(res => res.data); // Extract the student data
+            const studentDetails = studentDetailsResponses.map(res => res.data);
 
-            const validStudentDetails = studentDetails.filter(student => student); // Filter valid students
-            setStudents(validStudentDetails); // Update the state with found students
+            const validStudentDetails = studentDetails.filter(student => student);
+            setStudents(validStudentDetails);
 
             if (validStudentDetails.length !== studentIdsFromCsv.length) {
               setErrorMessage('Some student IDs were not found in the database. Please check your CSV file.');
@@ -67,10 +69,10 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
         }
       };
 
-      reader.readAsText(file); // Read the file as text
+      reader.readAsText(file);
     } else {
       setErrorMessage("Please select a CSV file.");
-      setStudents([]); // Clear the student list if no file is uploaded
+      setStudents([]);
     }
   };
 
