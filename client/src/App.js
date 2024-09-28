@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
+import StudentDashboard from './components/StudentDashboard';
 
 //Backend
 const App = () => {
@@ -28,6 +29,8 @@ const App = () => {
       case 'create-team-from-csv':
         console.log("Rendering CreateTeamFromCsv");
         return <CreateTeamFromCsv setRoute={setRoute} />;
+      case 'student-dashboard':  // Add this if not already there
+        return <StudentDashboard setRoute={setRoute} />;
       case 'login':
       default:
         console.log("Rendering Login");

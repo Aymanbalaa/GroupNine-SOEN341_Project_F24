@@ -21,12 +21,20 @@ const Login = ({ setRoute }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      await API.post('/auth/login', formData);
-      setRoute('dashboard');
+      const res = await API.post('/auth/login', formData, { withCredentials: true });
+      const user = res.data;
+      if (user.role === 'instructor') {
+        setRoute('instructor-dashboard');
+      } else if (user.role === 'student') {
+        setRoute('student-dashboard');
+      }else {
+        setRoute('dashboard');
+      }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
+  
 
   //Frontend
   return (
