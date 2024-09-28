@@ -25,10 +25,9 @@ const Login = ({ setRoute }) => {
       const user = res.data;
       if (user.role === 'instructor') {
         setRoute('instructor-dashboard');
-      } else if (user.role === 'student') {
+      }
+      else {
         setRoute('student-dashboard');
-      }else {
-        setRoute('dashboard');
       }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');

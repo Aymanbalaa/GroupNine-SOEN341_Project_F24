@@ -3,7 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-
+const Team = require('../models/Team');
 const router = express.Router();
 
 // Register route
@@ -116,6 +116,24 @@ router.get('/student/:id', async (req, res) => {
   } catch (err) {
     console.error('Error fetching student:', err.message);
     res.status(500).send('Server error');
+  }
+});
+
+router.get('/my-team', async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming the user ID is stored in req.user from the auth middleware
+
+    // Find a team where the logged-in student is a member
+    const team = await Team.findOne({ members: userId }).populate('members', 'firstname lastname');
+    
+    if (!team) {
+      return res.status(404).json({ message: 'You are not currently assigned to a team' });
+    }
+
+    res.json(team);
+  } catch (err) {
+    console.error('Error fetching team:', err.message);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

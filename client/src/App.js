@@ -29,9 +29,9 @@ const App = () => {
       case 'create-team-from-csv':
         console.log("Rendering CreateTeamFromCsv");
         return <CreateTeamFromCsv setRoute={setRoute} />;
-      case 'student-dashboard':  // Add this if not already there
+      case 'student-dashboard':
         return <StudentDashboard setRoute={setRoute} />;
-      case 'login':
+        case 'login':
       default:
         console.log("Rendering Login");
         return <Login setRoute={setRoute} />;
