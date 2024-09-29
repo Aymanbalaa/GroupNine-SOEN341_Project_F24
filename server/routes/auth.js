@@ -57,18 +57,18 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    
+
     const payload = { userId: user._id, role: user.role };
-    const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
     
-    res.json({ message: 'Login successful' });
+    // Send the role in the response body
+    res.json({ message: 'Login successful', role: user.role });
   } catch (err) {
     console.error('Error in login route:', err.message);
     res.status(500).send('Server error');
   }
 });
+
 
 
 router.get('/me', async (req, res) => {

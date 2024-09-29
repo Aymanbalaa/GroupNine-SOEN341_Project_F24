@@ -22,12 +22,17 @@ const Login = ({ setRoute }) => {
     e.preventDefault();
     try {
       const res = await API.post('/auth/login', formData, { withCredentials: true });
-      const user = res.data;
-      if (user.role === 'instructor') {
+  
+      // Access the role from the response
+      const userRole = res.data.role;
+  
+      if (userRole === 'instructor') {
         setRoute('instructor-dashboard');
-      }
-      else {
+      } else if (userRole === 'student') {
         setRoute('student-dashboard');
+      } else {
+        // Handle the case where the role is not recognized
+        setErrorMessage('Unknown user role');
       }
     } catch (err) {
       setErrorMessage(err.response?.data?.message || 'Login failed. Please try again.');
