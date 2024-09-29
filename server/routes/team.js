@@ -1,9 +1,32 @@
 const express = require('express');
-const router = express.Router();
-const Team = require('../models/Team'); 
+const Team = require('../models/Team');
 const User = require('../models/user');
+const router = express.Router();
+const jwt = require('jsonwebtoken');
 
-//Create New Team
+const mongoose = require('mongoose');
+
+// Middleware to verify instructor
+const verifyInstructor = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({ message: 'Not authenticated' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');  // Removed '${}'
+    if (decoded.role !== 'instructor') {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid token' });
+  }
+};
+
+// Create a new team
 router.post('/create', async (req, res) => {
   try {
     const { name, members } = req.body;
@@ -28,7 +51,7 @@ router.post('/create', async (req, res) => {
     await newTeam.save(); //Save in Database
     res.status(201).json(newTeam);
   } catch (err) {
-    console.error('Error creating team:', err);
+    console.error('Error creating team:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
@@ -38,29 +61,41 @@ router.post('/create', async (req, res) => {
 
 //Fetch All Teams
 router.get('/all', async (req, res) => {
-  try {
-    const teams = await Team.find().populate('members', 'firstname lastname').populate('createdBy', 'firstname lastname');
-    res.json(teams);
-  } catch (err) {
-    console.error('Error fetching teams:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-//Delete Team
-router.delete('/:teamId', async (req, res) => {
-  try {
-    const team = await Team.findById(req.params.teamId);
-    if (!team) {
-      return res.status(404).json({ message: 'Team not found' });
+    try {
+      const teams = await Team.find().populate('members', 'firstname lastname'); // Populate members with firstname and lastname
+      res.json(teams);
+    } catch (err) {
+      console.error('Error fetching teams:', err.message);
+      res.status(500).send('Server error');
     }
-
-    await team.remove();
-    res.json({ message: 'Team deleted successfully' });
-  } catch (err) {
-    console.error('Error deleting team:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+  });
+  
+  
+  
+  
+  router.get('/myteam', async (req, res) => {
+    try {
+      const token = req.cookies.token;
+      if (!token) {
+        return res.status(401).json({ message: 'Not authenticated' });
+      }
+  
+      // Decode the JWT to get the user ID
+      const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
+      const userId = decoded.userId;
+  
+      // Find the team where the student is a member
+      const team = await Team.findOne({ members: userId }).populate('members', 'firstname lastname');
+      
+      if (!team) {
+        return res.status(404).json({ message: 'You are not assigned to any team' });
+      }
+  
+      res.json(team);
+    } catch (err) {
+      console.error('Error fetching team details:', err.message);
+      res.status(500).send('Server error');
+    }
+  });
 
 module.exports = router;
