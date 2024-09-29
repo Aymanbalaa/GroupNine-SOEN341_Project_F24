@@ -1,0 +1,307 @@
+Index: client/src/components/InstructorDashboard.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState, useEffect, useCallback } from 'react';\r\nimport API from '../api';\r\nimport './InstructorDashboard.css';\r\n\r\n// Memoized component for rendering each student checkbox\r\nconst StudentCheckbox = React.memo(({ student, selectedStudents, handleStudentSelect, isStudentInTeam }) => (\r\n  <div key={student._id}>\r\n    <label>\r\n      <input\r\n        type=\"checkbox\"\r\n        value={student._id}\r\n        checked={selectedStudents.includes(student._id)}\r\n        onChange={handleStudentSelect}\r\n        disabled={isStudentInTeam(student._id)}\r\n      />\r\n      {student.firstname} {student.lastname} {isStudentInTeam(student._id) && '(Already in a team)'}\r\n    </label>\r\n  </div>\r\n));\r\n\r\nconst InstructorDashboard = () => {\r\n  const [teamName, setTeamName] = useState('');\r\n  const [students, setStudents] = useState([]);\r\n  const [selectedStudents, setSelectedStudents] = useState([]);\r\n  const [teams, setTeams] = useState([]); // State to store all teams\r\n\r\n  useEffect(() => {\r\n    const fetchStudentsAndTeams = async () => {\r\n      try {\r\n        // Fetch all students and teams in parallel\r\n        const [studentsRes, teamsRes] = await Promise.all([\r\n          API.get('/auth/all-students'),\r\n          API.get('/team/all'),\r\n        ]);\r\n        setStudents(studentsRes.data);\r\n        setTeams(teamsRes.data);\r\n      } catch (err) {\r\n        console.error('Error fetching students or teams:', err);\r\n      }\r\n    };\r\n\r\n    fetchStudentsAndTeams();\r\n  }, []);\r\n\r\n  const isStudentInTeam = useCallback(\r\n    (studentId) => teams.some((team) => team.members.some((member) => member._id === studentId)),\r\n    [teams]\r\n  );\r\n\r\n  const createTeam = async (e) => {\r\n    e.preventDefault();\r\n\r\n    if (!teamName.trim()) {\r\n      alert('Team name cannot be empty');\r\n      return;\r\n    }\r\n\r\n    const studentsAlreadyInTeam = selectedStudents.filter((id) => isStudentInTeam(id));\r\n\r\n    if (studentsAlreadyInTeam.length > 0) {\r\n      alert('Some students are already in a team and cannot be added.');\r\n      return;\r\n    }\r\n\r\n    try {\r\n      await API.post('/team/create', {\r\n        name: teamName,\r\n        members: selectedStudents,\r\n      });\r\n      alert('Team created successfully');\r\n      setTeamName(''); // Clear the input after team creation\r\n      setSelectedStudents([]); // Clear selected students\r\n      // Fetch updated teams after creation\r\n      const res = await API.get('/team/all');\r\n      setTeams(res.data);\r\n    } catch (err) {\r\n      console.error('Error creating team:', err);\r\n      alert(err.response?.data?.message || 'Failed to create team');\r\n    }\r\n  };\r\n\r\n  const handleStudentSelect = useCallback(\r\n    (e) => {\r\n      const { value, checked } = e.target;\r\n      setSelectedStudents((prevSelected) =>\r\n        checked ? [...prevSelected, value] : prevSelected.filter((id) => id !== value)\r\n      );\r\n    },\r\n    [setSelectedStudents]\r\n  );\r\n\r\n  return (\r\n    <div className=\"container\">\r\n      <h2>Create Team</h2>\r\n      <form onSubmit={createTeam}>\r\n        <input\r\n          type=\"text\"\r\n          value={teamName}\r\n          onChange={(e) => setTeamName(e.target.value)}\r\n          placeholder=\"Team Name\"\r\n          required\r\n        />\r\n        <h3>Select Students:</h3>\r\n        {students.map((student) => (\r\n          <StudentCheckbox\r\n            key={student._id}\r\n            student={student}\r\n            selectedStudents={selectedStudents}\r\n            handleStudentSelect={handleStudentSelect}\r\n            isStudentInTeam={isStudentInTeam}\r\n          />\r\n        ))}\r\n        <button type=\"submit\">Create Team</button>\r\n      </form>\r\n\r\n      <h2>All Teams</h2>\r\n      {teams.length > 0 ? (\r\n        <ul>\r\n          {teams.map((team) => (\r\n            <li key={team._id}>\r\n              <strong>{team.name}</strong>\r\n              <ul>\r\n                {team.members.map((member) => (\r\n                  <li key={member._id}>\r\n                    {member.firstname} {member.lastname}\r\n                  </li>\r\n                ))}\r\n              </ul>\r\n            </li>\r\n          ))}\r\n        </ul>\r\n      ) : (\r\n        <p>No teams available.</p>\r\n      )}\r\n    </div>\r\n  );\r\n};\r\n\r\nexport default InstructorDashboard;\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/src/components/InstructorDashboard.js b/client/src/components/InstructorDashboard.js
+--- a/client/src/components/InstructorDashboard.js	(revision 39d8f47265ce622a5b88e134b396f0660763568c)
++++ b/client/src/components/InstructorDashboard.js	(date 1727224030900)
+@@ -1,8 +1,124 @@
++// api.js (assuming this is your API configuration file)
++import axios from 'axios';
++
++const API = axios.create({
++  baseURL: 'http://localhost:5000/api', 
++  withCredentials: true, 
++});
++
++export default API;
++
++// App.js (Main application component)
++import React, { useState } from 'react';
++import Register from './components/Register';
++import Login from './components/Login';
++import Dashboard from './components/Dashboard';
++import StudentList from './components/StudentList';
++
++const App = () => {
++  const [route, setRoute] = useState('login');
++
++  const renderComponent = () => {
++    switch (route) {
++      case 'register':
++        return <Register setRoute={setRoute} />;
++      case 'dashboard':
++        return <Dashboard />; 
++      case 'studentList': 
++        return <StudentList />;
++      case 'login':
++      default:
++        return <Login setRoute={setRoute} />;
++    }
++  };
++
++  return (
++    <div>
++      {renderComponent()}
++
++      {route === 'dashboard' && ( 
++        <button onClick={() => setRoute('studentList')}>View Student List</button>
++      )} 
++    </div>
++  );
++};
++
++export default App;
++
++// Dashboard.js (Component for displaying user dashboard)
++import React, { useState, useEffect } from 'react';
++import API from '../api';
++import InstructorDashboard from './InstructorDashboard';
++
++const Dashboard = () => {
++  const [user, setUser] = useState(null);
++  const [team, setTeam] = useState(null);
++
++  useEffect(() => {
++    const fetchUserData = async () => {
++      try {
++        const res = await API.get('/auth/me');
++        setUser(res.data);
++
++        if (res.data.role === 'student') {
++          await fetchTeamData();
++        }
++      } catch (err) {
++        console.error('Error fetching user details:', err);
++      }
++    };
++
++    const fetchTeamData = async () => {
++      try {
++        const res = await API.get('/team/myteam');
++        setTeam(res.data);
++      } catch (err) {
++        console.error('Error fetching team details:', err.response?.data || err.message);
++      }
++    };
++
++    fetchUserData();
++  }, []);
++
++  if (!user) {
++    return <div>Loading...</div>;
++  }
++
++  if (user.role === 'instructor') {
++    return <InstructorDashboard />;
++  }
++
++  return (
++    <div>
++      <h2>Welcome, {user.firstname} {user.lastname}!</h2>
++      <p>You are logged in as a {user.role}.</p>
++
++      {team ? (
++        <div>
++          <h3>Your Team: {team.name}</h3>
++          <h4>Members:</h4>
++          <ul>
++            {team.members.map((member) => (
++              <li key={member._id}>
++                {member.firstname} {member.lastname}
++              </li>
++            ))}
++          </ul>
++        </div>
++      ) : (
++        <p>You are not assigned to any team.</p>
++      )}
++    </div>
++  );
++};
++
++export default Dashboard;
++
++// InstructorDashboard.js (Component for instructor actions, including team creation)
+ import React, { useState, useEffect, useCallback } from 'react';
+ import API from '../api';
+ import './InstructorDashboard.css';
+ 
+-// Memoized component for rendering each student checkbox
+ const StudentCheckbox = React.memo(({ student, selectedStudents, handleStudentSelect, isStudentInTeam }) => (
+   <div key={student._id}>
+     <label>
+@@ -22,12 +138,13 @@
+   const [teamName, setTeamName] = useState('');
+   const [students, setStudents] = useState([]);
+   const [selectedStudents, setSelectedStudents] = useState([]);
+-  const [teams, setTeams] = useState([]); // State to store all teams
++  const [teams, setTeams] = useState([]);
++  const [errorMessage, setErrorMessage] = useState(null);
++  const [csvData, setCsvData] = useState([]); 
+ 
+   useEffect(() => {
+     const fetchStudentsAndTeams = async () => {
+       try {
+-        // Fetch all students and teams in parallel
+         const [studentsRes, teamsRes] = await Promise.all([
+           API.get('/auth/all-students'),
+           API.get('/team/all'),
+@@ -47,6 +164,45 @@
+     [teams]
+   );
+ 
++  const handleFileUpload = (event) => {
++    const file = event.target.files[0];
++
++    if (file) {
++      const reader = new FileReader();
++
++      reader.onload = (e) => {
++        const contents = e.target.result;
++
++        try {
++          const rows = contents.split('\n');
++          const parsedData = rows
++            .slice(1) 
++            .map(row => {
++              const cols = row.split(',');
++              return {
++                name: cols[0].replace(/"/g, ''),
++                lastName: cols[1].replace(/"/g, ''),
++                id: cols[2].replace(/"/g, ''),
++              };
++            })
++            .filter(student => student.name && student.lastName && student.id); 
++
++          setCsvData(parsedData);
++          setErrorMessage(null); 
++        } catch (error) {
++          console.error('Error parsing CSV:', error);
++          setErrorMessage('Invalid CSV format. Please check your file.');
++          setCsvData([]);
++        }
++      };
++
++      reader.readAsText(file);
++    } else {
++      setErrorMessage("Please select a CSV file.");
++      setCsvData([]);
++    }
++  };
++
+   const createTeam = async (e) => {
+     e.preventDefault();
+ 
+@@ -54,23 +210,31 @@
+       alert('Team name cannot be empty');
+       return;
+     }
+-
+-    const studentsAlreadyInTeam = selectedStudents.filter((id) => isStudentInTeam(id));
+-
+-    if (studentsAlreadyInTeam.length > 0) {
+-      alert('Some students are already in a team and cannot be added.');
+-      return;
+-    }
+ 
+     try {
++      const studentIdsFromCsv = csvData.map(student => student.id);
++      const studentDetailsPromises = studentIdsFromCsv.map(studentId => 
++        API.get(`/auth/student/${studentId}`) 
++      );
++      const studentDetailsResponses = await Promise.all(studentDetailsPromises);
++      const studentDetails = studentDetailsResponses.map(res => res.data);
++
++      const validStudentDetails = studentDetails.filter(student => student);
++
++      if (validStudentDetails.length !== studentIdsFromCsv.length) {
++        alert('Some student IDs were not found in the database. Please check your CSV file.');
++        return;
++      }
++
+       await API.post('/team/create', {
+         name: teamName,
+-        members: selectedStudents,
++        members: validStudentDetails, 
+       });
++
+       alert('Team created successfully');
+-      setTeamName(''); // Clear the input after team creation
+-      setSelectedStudents([]); // Clear selected students
+-      // Fetch updated teams after creation
++      setTeamName('');
++      setCsvData([]); 
++
+       const res = await API.get('/team/all');
+       setTeams(res.data);
+     } catch (err) {
+@@ -100,40 +264,12 @@
+           placeholder="Team Name"
+           required
+         />
+-        <h3>Select Students:</h3>
++
++        <h3>Upload CSV File:</h3>
++        <input type="file" accept=".csv" onChange={handleFileUpload} />
++
++        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
++
++        <h3>Or Select Students:</h3> 
+         {students.map((student) => (
+-          <StudentCheckbox
+-            key={student._id}
+-            student={student}
+-            selectedStudents={selectedStudents}
+-            handleStudentSelect={handleStudentSelect}
+-            isStudentInTeam={isStudentInTeam}
+-          />
+-        ))}
+-        <button type="submit">Create Team</button>
+-      </form>
+-
+-      <h2>All Teams</h2>
+-      {teams.length > 0 ? (
+-        <ul>
+-          {teams.map((team) => (
+-            <li key={team._id}>
+-              <strong>{team.name}</strong>
+-              <ul>
+-                {team.members.map((member) => (
+-                  <li key={member._id}>
+-                    {member.firstname} {member.lastname}
+-                  </li>
+-                ))}
+-              </ul>
+-            </li>
+-          ))}
+-        </ul>
+-      ) : (
+-        <p>No teams available.</p>
+-      )}
+-    </div>
+-  );
+-};
+-
+-export default InstructorDashboard;
++          <StudentCheckbox
+\ No newline at end of file
+Index: client/src/App.css
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>.App {\r\n  text-align: center;\r\n}\r\n\r\n.App-logo {\r\n  height: 40vmin;\r\n  pointer-events: none;\r\n}\r\n\r\n@media (prefers-reduced-motion: no-preference) {\r\n  .App-logo {\r\n    animation: App-logo-spin infinite 20s linear;\r\n  }\r\n}\r\n\r\n.App-header {\r\n  background-color: #282c34;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  justify-content: center;\r\n  font-size: calc(10px + 2vmin);\r\n  color: white;\r\n}\r\n\r\n.App-link {\r\n  color: #61dafb;\r\n}\r\n\r\n@keyframes App-logo-spin {\r\n  from {\r\n    transform: rotate(0deg);\r\n  }\r\n  to {\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/src/App.css b/client/src/App.css
+--- a/client/src/App.css	(revision 39d8f47265ce622a5b88e134b396f0660763568c)
++++ b/client/src/App.css	(date 1727221678037)
+@@ -1,4 +1,4 @@
+-.App {
++npm.App {
+   text-align: center;
+ }
+ 
