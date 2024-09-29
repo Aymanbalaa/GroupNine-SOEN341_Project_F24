@@ -1,0 +1,40 @@
+Index: client/src/App.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import React, { useState } from 'react';\r\nimport Register from './components/Register';\r\nimport Login from './components/Login';\r\nimport Dashboard from './components/Dashboard';\r\nimport StudentList from './components/StudentList'; // Import the new component\r\n\r\nconst App = () => {\r\n  const [route, setRoute] = useState('login'); // Default route is 'login'\r\n\r\n  const renderComponent = () => {\r\n    switch (route) {\r\n      case 'register':\r\n        return <Register setRoute={setRoute} />;\r\n      case 'dashboard':\r\n        return <Dashboard />; \r\n      case 'studentList': // Add a new case for the student list\r\n        return <StudentList />;\r\n      case 'login':\r\n      default:\r\n        return <Login setRoute={setRoute} />;\r\n    }\r\n  };\r\n\r\n  return (\r\n    <div>\r\n      {renderComponent()}\r\n\r\n      {/* Conditionally render a button to navigate to the StudentList */}\r\n      {route === 'dashboard' && ( \r\n        <button onClick={() => setRoute('studentList')}>View Student List</button>\r\n      )} \r\n    </div>\r\n  );\r\n};\r\n\r\nexport default App;
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/client/src/App.js b/client/src/App.js
+--- a/client/src/App.js	(revision 39d8f47265ce622a5b88e134b396f0660763568c)
++++ b/client/src/App.js	(date 1727224097767)
+@@ -2,7 +2,7 @@
+ import Register from './components/Register';
+ import Login from './components/Login';
+ import Dashboard from './components/Dashboard';
+-import StudentList from './components/StudentList'; // Import the new component
++import StudentList from './components/StudentList'; // Import the new compone
+ 
+ const App = () => {
+   const [route, setRoute] = useState('login'); // Default route is 'login'
+@@ -12,7 +12,7 @@
+       case 'register':
+         return <Register setRoute={setRoute} />;
+       case 'dashboard':
+-        return <Dashboard />; 
++        return <Dashboard />;
+       case 'studentList': // Add a new case for the student list
+         return <StudentList />;
+       case 'login':
+@@ -26,9 +26,9 @@
+       {renderComponent()}
+ 
+       {/* Conditionally render a button to navigate to the StudentList */}
+-      {route === 'dashboard' && ( 
++      {route === 'dashboard' && (
+         <button onClick={() => setRoute('studentList')}>View Student List</button>
+-      )} 
++      )}
+     </div>
+   );
+ };
