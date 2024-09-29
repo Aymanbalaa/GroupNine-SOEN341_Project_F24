@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import API from '../api';
 import InstructorDashboard from './InstructorDashboard';
 
-const Dashboard = () => {
+const Dashboard = ({ setRoute }) => {
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState(null);
 
@@ -39,7 +39,7 @@ const Dashboard = () => {
 
   // Instructor view
   if (user.role === 'instructor') {
-    return <InstructorDashboard />;
+    return <InstructorDashboard setRoute={setRoute} />;
   }
 
   // Student view
