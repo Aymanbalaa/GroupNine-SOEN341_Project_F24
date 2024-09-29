@@ -1,1 +1,6 @@
-
+Setup the web-app for the team includes basic React.js project files , Node.js project files and mongoDB deployement.
+Helped the team install and download required packages to have access to the web app.
+Implemented the log-in and register functionality with role and accesses : UI , backend and database saving.
+Allowed after login the correct dashboard to appear according to the role.
+Implemented Team creation manually with all members appearing on instructor dashboard and teams appearing.
+Fixed last minute bugs
