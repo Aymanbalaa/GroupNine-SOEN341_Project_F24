@@ -1,4 +1,7 @@
 # Meeting Minutes
+Thursday september 19
+1pm-6pm
+whole team
 
 **Present:** Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
 **Absent:** None  
@@ -14,6 +17,7 @@
 - Functions to create and consult teams formations
 - Function to import files, creating a list of students
 - Function to rate team members anonymously and for the rating to be available for consulting
+- Mongodb database setup
 
 ### Sprint 1 preparation:
 - Creation of Github
@@ -24,4 +28,6 @@
 
 ## Action Items
 - Focus on the deliverables of Sprint 1.
+
+
 
