@@ -15,10 +15,10 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
   //CSV File must be of this format
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
-
+  
     if (file) {
       const reader = new FileReader();
-
+  
       reader.onload = async (e) => {
         const contents = e.target.result;
         try {
@@ -34,26 +34,30 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
               };
             })
             .filter(student => student.name && student.lastName && student.id);
-
+  
           console.log("Parsed Student IDs:", parsedData.map(student => student.id));
-
+  
           const studentIdsFromCsv = parsedData.map(student => student.id.replace(/^0+/, '')); //Remove Leading Zeros from ID
           console.log("Parsed Student IDs after removing leading zeros:", studentIdsFromCsv);
-
+  
           setErrorMessage(null);
-
+  
           try {
             const studentDetailsPromises = studentIdsFromCsv.map(studentId =>
               API.get(`/auth/student/${studentId}`)
+                .then(res => res.data)
+                .catch(err => {
+                  console.warn(`Student ID ${studentId} not found.`);
+                  return null; // Return null for non-existent students
+                })
             );
             const studentDetailsResponses = await Promise.all(studentDetailsPromises);
-            const studentDetails = studentDetailsResponses.map(res => res.data);
-
-            const validStudentDetails = studentDetails.filter(student => student);
+  
+            const validStudentDetails = studentDetailsResponses.filter(student => student !== null);
             setStudents(validStudentDetails);
-
-            if (validStudentDetails.length !== studentIdsFromCsv.length) {
-              setErrorMessage('Some student IDs were not found in the database. Please check your CSV file.');
+  
+            if (validStudentDetails.length < studentIdsFromCsv.length) {
+              setErrorMessage('Some student IDs were not found in the database, but valid students have been loaded.');
             } else {
               setErrorMessage(null);
             }
@@ -68,7 +72,7 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
           setStudents([]);
         }
       };
-
+  
       reader.readAsText(file);
     } else {
       setErrorMessage("Please select a CSV file.");
