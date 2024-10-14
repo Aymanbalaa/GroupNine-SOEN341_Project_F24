@@ -1,0 +1,76 @@
+/* PeerEvaluation.css */
+
+.peer-evaluation-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .title {
+    text-align: center;
+    color: #333;
+  }
+  
+  .team-name {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  .teammates-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .teammate-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+    color: #444;
+  }
+  
+  .evaluation-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .evaluation-form label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .select-teammate,
+  .select-rating,
+  .feedback-textarea {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .feedback-textarea {
+    height: 80px;
+    resize: vertical;
+  }
+  
+  .submit-button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #45a049;
+  }
+  
+  .error-message {
+    color: red;
+    font-weight: bold;
+  }
+  

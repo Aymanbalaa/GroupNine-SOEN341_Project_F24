@@ -1,79 +1,120 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './PeerEvaluation.css'; // Import your CSS file
 
 const PeerEvaluation = () => {
   const [teammates, setTeammates] = useState([]);
+  const [teamName, setTeamName] = useState('');
   const [selectedTeammate, setSelectedTeammate] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [rating, setRating] = useState(1); // Default rating set to 1
+  const [error, setError] = useState('');
 
-  // Fetch the user's team and members when the component loads
   useEffect(() => {
-    const fetchTeammates = async () => {
+    const fetchTeamData = async () => {
       try {
-        // Fetch the current user's team members from the server
-        const response = await axios.get('/api/team/myteam');
-        setTeammates(response.data.members);  // Set the teammates from the team data
+        const response = await axios.get('/api/team/myteam', { withCredentials: true });
+        if (response.data) {
+          setTeammates(response.data.members);
+          setTeamName(response.data.name); // Get the team name
+        }
       } catch (error) {
         console.error('Error fetching teammates:', error);
       }
     };
 
-    fetchTeammates();
+    fetchTeamData();
   }, []);
 
-  // Handler for submitting peer evaluations
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Reset error message
+
+    // Validate the input
+    if (!selectedTeammate || !feedback) {
+      setError('Please select a teammate and provide feedback.');
+      return;
+    }
 
     try {
       const evaluationData = {
-        teammate: selectedTeammate,
-        feedback: feedback,
+        teammateId: selectedTeammate,
+        feedback,
+        rating,
       };
 
-      // POST request to submit the peer evaluation
-      await axios.post('/api/team/evaluate', evaluationData);
-
-      // Clear the form after submission
+      // Submit the evaluation
+      const response = await axios.post('/api/evaluate', evaluationData, { withCredentials: true });
+      console.log('Evaluation submitted:', response.data);
+      // Clear form after submission
       setSelectedTeammate('');
       setFeedback('');
-      alert('Evaluation submitted successfully!');
+      setRating(1);
     } catch (error) {
       console.error('Error submitting evaluation:', error);
+      setError('Failed to submit evaluation. Please try again.');
     }
   };
 
   return (
-    <div className="peer-evaluation">
-      <h2>Peer Evaluation</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Select Teammate for Evaluation:</label>
-          <select
-            value={selectedTeammate}
-            onChange={(e) => setSelectedTeammate(e.target.value)}
-            required
-          >
-            <option value="">-- Select a teammate --</option>
-            {teammates.map((teammate) => (
-              <option key={teammate._id} value={teammate._id}>
-                {teammate.firstname} {teammate.lastname}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="peer-evaluation-container">
+      <h2 className="title">Peer Evaluation</h2>
 
-        <div className="form-group">
-          <label>Feedback:</label>
-          <textarea
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-            required
-            placeholder="Provide your feedback here"
-          ></textarea>
-        </div>
+      {teamName && <h3 className="team-name">Team: {teamName}</h3>}
+      {teammates.length > 0 ? (
+        <ul className="teammates-list">
+          <h4>Team Members:</h4>
+          {teammates.map(teammate => (
+            <li key={teammate._id} className="teammate-item">
+              {teammate.firstname} {teammate.lastname}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>No teammates found.</p>
+      )}
 
-        <button type="submit">Submit Evaluation</button>
+      <form onSubmit={handleSubmit} className="evaluation-form">
+        <label htmlFor="teammate">Select a Teammate to Evaluate:</label>
+        <select 
+          id="teammate" 
+          value={selectedTeammate} 
+          onChange={(e) => setSelectedTeammate(e.target.value)}
+          required
+          className="select-teammate"
+        >
+          <option value="">Select a teammate</option>
+          {teammates.map(teammate => (
+            <option key={teammate._id} value={teammate._id}>
+              {teammate.firstname} {teammate.lastname}
+            </option>
+          ))}
+        </select>
+
+        <label htmlFor="rating">Rating (1-5):</label>
+        <select 
+          id="rating" 
+          value={rating} 
+          onChange={(e) => setRating(e.target.value)}
+          className="select-rating"
+        >
+          {[1, 2, 3, 4, 5].map((rate) => (
+            <option key={rate} value={rate}>{rate}</option>
+          ))}
+        </select>
+
+        <label htmlFor="feedback">Feedback:</label>
+        <textarea 
+          id="feedback" 
+          value={feedback} 
+          onChange={(e) => setFeedback(e.target.value)} 
+          required
+          className="feedback-textarea"
+        ></textarea>
+
+        {error && <p className="error-message">{error}</p>}
+
+        <button type="submit" className="submit-button">Submit Evaluation</button>
       </form>
     </div>
   );

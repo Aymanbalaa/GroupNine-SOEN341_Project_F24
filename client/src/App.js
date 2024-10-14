@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
+import PeerEvaluation from './components/PeerEvaluation'; // Import PeerEvaluation
 
 // Backend
 const App = () => {
@@ -19,6 +20,8 @@ const App = () => {
         return <InstructorDashboard setRoute={setRoute} />;
       case 'create-team-from-csv':
         return <CreateTeamFromCsv setRoute={setRoute} />;
+      case 'peer-evaluation': // Add this case
+        return <PeerEvaluation setRoute={setRoute} />; // Render PeerEvaluation
       case 'login':
       default:
         return <Login setRoute={setRoute} />;
@@ -33,3 +36,4 @@ const App = () => {
 };
 
 export default App;
+

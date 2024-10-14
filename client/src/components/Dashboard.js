@@ -59,6 +59,8 @@ const Dashboard = ({ setRoute }) => {
               </li>
             ))}
           </ul>
+          {/* Add button to navigate to peer evaluation */}
+          <button onClick={() => setRoute('peer-evaluation')}>Evaluate Team Members</button>
         </div>
       ) : (
         <p>You are not assigned to any team.</p>
