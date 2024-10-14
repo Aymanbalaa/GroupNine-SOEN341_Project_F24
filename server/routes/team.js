@@ -3,8 +3,10 @@ const Team = require('../models/Team');
 const User = require('../models/user');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const Evaluation = require('../models/Evaluation'); // Import the Evaluation model
 
 const mongoose = require('mongoose');
+
 
 // Middleware to verify instructor
 const verifyInstructor = (req, res, next) => {
@@ -97,5 +99,35 @@ router.get('/all', async (req, res) => {
       res.status(500).send('Server error');
     }
   });
+
+// Submit peer evaluation
+router.post('/evaluate', async (req, res) => {
+  try {
+    const { teammate, feedback } = req.body;
+    const token = req.cookies.token;// JWT token from cookies
+
+    if (!token) {
+      return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    // Decode the token to get the evaluator's ID
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const evaluatorId = decoded.userId;
+
+    // Save the evaluation (assuming you have an Evaluation model)
+    const newEvaluation = new Evaluation({
+      evaluator: evaluatorId,
+      teammate,
+      feedback,
+    });
+
+    await newEvaluation.save();
+    res.status(201).json({ message: 'Evaluation submitted' });
+  } catch (error) {
+    console.error('Error submitting evaluation:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 module.exports = router;
