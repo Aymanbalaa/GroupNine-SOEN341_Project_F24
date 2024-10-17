@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './PeerEvaluation.css'; // Import your CSS file
 
-const PeerEvaluation = () => {
+const PeerEvaluation = ({ setRoute }) => {
   const [teammates, setTeammates] = useState([]);
   const [teamName, setTeamName] = useState('');
   const [selectedTeammate, setSelectedTeammate] = useState('');
@@ -14,9 +14,12 @@ const PeerEvaluation = () => {
     const fetchTeamData = async () => {
       try {
         const response = await axios.get('/api/team/myteam', { withCredentials: true });
-        if (response.data) {
-          setTeammates(response.data.members);
-          setTeamName(response.data.name); // Get the team name
+        if (response.data && response.data.members.length > 0) {
+          setTeammates(response.data.members); // Set teammates
+          setTeamName(response.data.name); // Set the team name
+        } else {
+          console.error('No teammates found in the response data');
+          setTeammates([]); // Clear teammates if none found
         }
       } catch (error) {
         console.error('Error fetching teammates:', error);
