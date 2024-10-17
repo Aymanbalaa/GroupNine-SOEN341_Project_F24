@@ -1,58 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import axios from 'axios'; // Ensure axios is imported
 import './PeerEvaluation.css'; // Import your CSS file
 
-const PeerEvaluation = ({ setRoute }) => {
-  const [teammates, setTeammates] = useState([]);
-  const [teamName, setTeamName] = useState('');
+const PeerEvaluation = ({ team }) => {
   const [selectedTeammate, setSelectedTeammate] = useState('');
-  const [feedback, setFeedback] = useState('');
-  const [rating, setRating] = useState(1); // Default rating set to 1
+  const [conceptualRating, setConceptualRating] = useState(1);
+  const [practicalRating, setPracticalRating] = useState(1);
+  const [workEthicRating, setWorkEthicRating] = useState(1);
+  const [conceptualFeedback, setConceptualFeedback] = useState('');
+  const [practicalFeedback, setPracticalFeedback] = useState('');
+  const [workEthicFeedback, setWorkEthicFeedback] = useState('');
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchTeamData = async () => {
-      try {
-        const response = await axios.get('/api/team/myteam', { withCredentials: true });
-        if (response.data && response.data.members.length > 0) {
-          setTeammates(response.data.members); // Set teammates
-          setTeamName(response.data.name); // Set the team name
-        } else {
-          console.error('No teammates found in the response data');
-          setTeammates([]); // Clear teammates if none found
-        }
-      } catch (error) {
-        console.error('Error fetching teammates:', error);
-      }
-    };
-
-    fetchTeamData();
-  }, []);
+  // Ensure team and members are defined
+  const teammates = team?.members || [];
+  const teamName = team?.name || '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); // Reset error message
 
     // Validate the input
-    if (!selectedTeammate || !feedback) {
-      setError('Please select a teammate and provide feedback.');
+    if (!selectedTeammate) {
+      setError('Please select a teammate.');
       return;
     }
 
     try {
       const evaluationData = {
         teammateId: selectedTeammate,
-        feedback,
-        rating,
+        conceptualRating,
+        practicalRating,
+        workEthicRating,
+        conceptualFeedback,
+        practicalFeedback,
+        workEthicFeedback,
       };
 
       // Submit the evaluation
       const response = await axios.post('/api/evaluate', evaluationData, { withCredentials: true });
       console.log('Evaluation submitted:', response.data);
+      
       // Clear form after submission
       setSelectedTeammate('');
-      setFeedback('');
-      setRating(1);
+      setConceptualRating(1);
+      setPracticalRating(1);
+      setWorkEthicRating(1);
+      setConceptualFeedback('');
+      setPracticalFeedback('');
+      setWorkEthicFeedback('');
     } catch (error) {
       console.error('Error submitting evaluation:', error);
       setError('Failed to submit evaluation. Please try again.');
@@ -94,24 +90,54 @@ const PeerEvaluation = ({ setRoute }) => {
           ))}
         </select>
 
-        <label htmlFor="rating">Rating (1-5):</label>
+        <h4>Conceptual Contribution</h4>
         <select 
-          id="rating" 
-          value={rating} 
-          onChange={(e) => setRating(e.target.value)}
+          value={conceptualRating} 
+          onChange={(e) => setConceptualRating(e.target.value)}
           className="select-rating"
         >
           {[1, 2, 3, 4, 5].map((rate) => (
             <option key={rate} value={rate}>{rate}</option>
           ))}
         </select>
+        <textarea
+          placeholder="comments on conceptual contribution"
+          value={conceptualFeedback}
+          onChange={(e) => setConceptualFeedback(e.target.value)}
+          className="feedback-textarea"
+        ></textarea>
 
-        <label htmlFor="feedback">Feedback:</label>
-        <textarea 
-          id="feedback" 
-          value={feedback} 
-          onChange={(e) => setFeedback(e.target.value)} 
-          required
+        <h4>Practical Contribution</h4>
+        <select 
+          value={practicalRating} 
+          onChange={(e) => setPracticalRating(e.target.value)}
+          className="select-rating"
+        >
+          {[1, 2, 3, 4, 5].map((rate) => (
+            <option key={rate} value={rate}>{rate}</option>
+          ))}
+        </select>
+        <textarea
+          placeholder="comments on practical contribution"
+          value={practicalFeedback}
+          onChange={(e) => setPracticalFeedback(e.target.value)}
+          className="feedback-textarea"
+        ></textarea>
+
+        <h4>Work Ethic</h4>
+        <select 
+          value={workEthicRating} 
+          onChange={(e) => setWorkEthicRating(e.target.value)}
+          className="select-rating"
+        >
+          {[1, 2, 3, 4, 5].map((rate) => (
+            <option key={rate} value={rate}>{rate}</option>
+          ))}
+        </select>
+        <textarea
+          placeholder="comments on work ethic"
+          value={workEthicFeedback}
+          onChange={(e) => setWorkEthicFeedback(e.target.value)}
           className="feedback-textarea"
         ></textarea>
 

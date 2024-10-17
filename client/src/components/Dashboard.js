@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
 import InstructorDashboard from './InstructorDashboard';
-import PeerEvaluation from './PeerEvaluation';
 
 const Dashboard = ({ setRoute }) => {
   const [user, setUser] = useState(null);
@@ -61,7 +60,7 @@ const Dashboard = ({ setRoute }) => {
             ))}
           </ul>
           {/* Add button to navigate to peer evaluation */}
-          <button onClick={() => setRoute(<PeerEvaluation team={team} />)}>Evaluate Team Members</button>
+          <button onClick={() => setRoute('peer-evaluation',{ team })}>Evaluate Team Members</button>
         </div>
       ) : (
         <p>You are not assigned to any team.</p>
