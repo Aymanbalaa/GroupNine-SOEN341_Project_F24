@@ -35,13 +35,13 @@ jobs:
           npm install --prefix frontend
 
       - name: Build and Test Backend
-        working-directory: backend
+        working-directory: server
         run: |
           npm run build
           npm test
 
       - name: Build and Test Frontend
-        working-directory: frontend
+        working-directory: client
         run: |
           npm run build
           npm test
