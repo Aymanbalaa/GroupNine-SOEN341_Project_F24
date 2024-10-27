@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login Route
+// Login route
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -70,21 +70,30 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Middleware for verifying tokens
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.token || req.headers['authorization'];
+  
+  if (!token) {
+    return res.status(401).json({ message: 'Access denied. No token provided.' });
+  }
 
-router.get('/me', async (req, res) => {
   try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ message: 'Not authenticated' });
-    }
-
     const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
-    const user = await User.findById(decoded.userId).select('-password');
-    
+    req.user = decoded;
+    next();
+  } catch (ex) {
+    res.status(400).json({ message: 'Invalid token.' });
+  }
+};
+
+// Route to get current logged-in user details
+router.get('/me', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
     res.json(user);
   } catch (err) {
     console.error('Error fetching user details:', err.message);
@@ -92,17 +101,7 @@ router.get('/me', async (req, res) => {
   }
 });
 
-// Get All Students
-router.get('/all-students', async (req, res) => {
-  try {
-    const students = await User.find({ role: 'student' }).select('firstname lastname _id');
-    res.json(students);
-  } catch (err) {
-    console.error('Error fetching students:', err.message);
-    res.status(500).send('Server error');
-  }
-});
-
+// Get a specific student by ID
 router.get('/student/:id', async (req, res) => {
   try {
     const studentId = req.params.id;
@@ -119,4 +118,15 @@ router.get('/student/:id', async (req, res) => {
   }
 });
 
-module.exports = router;
+router.get('/all-students', async (req, res) => {
+  try {
+    const students = await User.find({ role: 'student' }).select('firstname lastname _id');
+    res.json(students);
+  } catch (err) {
+    console.error('Error fetching students:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+// Export both router and verifyToken in a single export
+module.exports = { router, verifyToken };

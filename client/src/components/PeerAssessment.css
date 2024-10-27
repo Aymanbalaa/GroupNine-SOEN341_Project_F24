@@ -1,0 +1,26 @@
+.assessment-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  
+  .member-assessment {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 6px;
+  }
+  
+  .assessment-dimension {
+    margin-bottom: 0.5rem;
+  }
+  
+  textarea {
+    width: 100%;
+    min-height: 60px;
+    margin-top: 0.5rem;
+    resize: vertical;
+  }
+  
