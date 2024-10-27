@@ -19,11 +19,7 @@ jobs:
         image: mongo:latest
         ports:
           - 27017:27017
-        options: >
-          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'" 
-          --health-interval=10s 
-          --health-timeout=5s 
-          --health-retries=3
+        options: "--health-cmd='mongo --eval \"db.runCommand({ ping: 1 })\"' --health-interval=10s --health-timeout=5s --health-retries=3"
 
     steps:
       - name: Checkout repository
@@ -49,17 +45,17 @@ jobs:
         working-directory: client
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      - name: Build and Test Backend
+      - name: Start and Test Backend
         working-directory: server
         run: |
-          timeout 600 npm run start  # Times out after 10 minutes if build hangs
-          timeout 300 npm test       # Times out after 5 minutes if tests hang
+          timeout 600 npm start  # Starts the backend and times out after 10 minutes if it hangs
+          timeout 300 npm test   # Runs tests with a 5-minute timeout
 
-      - name: Build and Test Frontend
+      - name: Start and Test Frontend
         working-directory: client
         run: |
-          timeout 600 npm run start  # Times out after 10 minutes if build hangs
-          timeout 300 npm test       # Times out after 5 minutes if tests hang
+          timeout 600 npm start  # Starts the frontend and times out after 10 minutes if it hangs
+          timeout 300 npm test   # Runs tests with a 5-minute timeout
 
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
