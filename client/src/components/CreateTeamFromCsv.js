@@ -86,10 +86,10 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
     }
   
     try {
-      const response = await API.post('/team/create', {
-        name: teamName,
-        members: students.filter(student => selectedStudents.includes(student._id)),
-      });
+      // const response = await API.post('/team/create', {
+      //   name: teamName,
+      //   members: students.filter(student => selectedStudents.includes(student._id)),
+      // });
   
       //Clear All After Team Successfully Created
       alert('Team created successfully');
