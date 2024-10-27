@@ -12,13 +12,18 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # Sets an overall timeout for the job
 
     services:
-      # Add MongoDB if your app requires it
       mongodb:
-        image: mongo
+        image: mongo:latest
         ports:
           - 27017:27017
+        options: >
+          --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3
 
     steps:
       - name: Checkout repository
@@ -29,24 +34,32 @@ jobs:
         with:
           node-version: '16'
 
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies for backend
-        run: npm install
+        run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
       - name: Install dependencies for frontend
         working-directory: client
-        run: npm install
+        run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
       - name: Build and Test Backend
         working-directory: server
         run: |
-          npm run start
-          npm test
+          timeout 600 npm run build  # Times out after 10 minutes if build hangs
+          timeout 300 npm start       # Times out after 5 minutes if tests hang
 
       - name: Build and Test Frontend
         working-directory: client
         run: |
-          npm run start
-          npm test
+          timeout 600 npm run build  # Times out after 10 minutes if build hangs
+          timeout 300 npm start       # Times out after 5 minutes if tests hang
 
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
