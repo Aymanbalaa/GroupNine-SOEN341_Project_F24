@@ -1,0 +1,5 @@
+Followed up with George's peer evaluation and fixed bug for members not being selected. (2 HOURS) on 19 October
+Added new categories for peer evaluation and new scoring system. (4 HOURS) on 21 October
+Logged all Peer Assessments in the Database with a POST request (6 HOURS) on 23 October
+Peer Assessments are now displayed for the users in their dashboard. (3 HOURS) on 25 October
+Setup the Continous Integration Pipeline using Github Actions. (6 HOURS) on 27 October
