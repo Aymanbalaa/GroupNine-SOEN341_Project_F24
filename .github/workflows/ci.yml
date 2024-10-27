@@ -1,0 +1,52 @@
+# .github/workflows/ci.yml
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      # Add MongoDB if your app requires it
+      mongodb:
+        image: mongo
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          npm install --prefix backend
+          npm install --prefix frontend
+
+      - name: Build and Test Backend
+        working-directory: backend
+        run: |
+          npm run build
+          npm test
+
+      - name: Build and Test Frontend
+        working-directory: frontend
+        run: |
+          npm run build
+          npm test
+
+      - name: Deploy (Optional)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Add your deployment command or script here"
