@@ -31,8 +31,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install --prefix backend
-          npm install --prefix frontend
+          npm install --prefix server
+          npm install --prefix client
 
       - name: Build and Test Backend
         working-directory: server
