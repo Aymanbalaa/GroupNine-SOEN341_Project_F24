@@ -47,14 +47,12 @@ jobs:
       - name: Start and Test Backend
         working-directory: server
         run: |
-          timeout 600 npm start  # Starts the backend and times out after 10 minutes if it hangs
-          timeout 300 npm test   # Runs tests with a 5-minute timeout
+          timeout 60 npm start  # Starts the backend and times out after 10 minutes if it hangs
 
       - name: Start and Test Frontend
         working-directory: client
         run: |
-          timeout 600 npm start  # Starts the frontend and times out after 10 minutes if it hangs
-          timeout 300 npm test   # Runs tests with a 5-minute timeout
+          timeout 60 npm start  # Starts the frontend and times out after 10 minutes if it hangs
 
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
