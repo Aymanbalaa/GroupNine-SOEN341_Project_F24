@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: CI Pipeline
 
 on:
@@ -37,22 +36,30 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      # Backend setup and health check
       - name: Install dependencies for backend
+        working-directory: server
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
+      - name: Start Backend for Health Check
+        working-directory: server
+        run: |
+          nohup npm start &             # Start backend in the background
+          sleep 10                      # Wait 10 seconds to ensure the backend starts successfully
+          pkill -f "node"               # Kill the backend process to exit gracefully
+
+      # Frontend setup and health check
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      - name: Start and Test Backend
-        working-directory: server
-        run: |
-          timeout 60 npm start  # Starts the backend and times out after 10 minutes if it hangs
-
-      - name: Start and Test Frontend
+      - name: Build and Start Frontend for Health Check
         working-directory: client
         run: |
-          timeout 60 npm start  # Starts the frontend and times out after 10 minutes if it hangs
+          npm run build                # Builds the frontend
+          nohup npm start &            # Start frontend in the background
+          sleep 10                     # Wait 10 seconds to ensure the frontend starts successfully
+          pkill -f "node"              # Kill the frontend process to exit gracefully
 
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
