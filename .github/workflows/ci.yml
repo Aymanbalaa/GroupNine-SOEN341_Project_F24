@@ -29,10 +29,12 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
-        run: |
-          npm install --prefix server
-          npm install --prefix client
+      - name: Install dependencies for backend
+        run: npm install
+
+      - name: Install dependencies for frontend
+        working-directory: client
+        run: npm install
 
       - name: Build and Test Backend
         working-directory: server
