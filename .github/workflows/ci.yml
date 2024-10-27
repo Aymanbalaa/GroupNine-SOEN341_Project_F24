@@ -39,13 +39,13 @@ jobs:
       - name: Build and Test Backend
         working-directory: server
         run: |
-          npm run build
+          npm run start
           npm test
 
       - name: Build and Test Frontend
         working-directory: client
         run: |
-          npm run build
+          npm run start
           npm test
 
       - name: Deploy (Optional)
