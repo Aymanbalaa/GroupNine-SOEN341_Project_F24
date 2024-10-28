@@ -82,4 +82,17 @@ router.get('/all-assessments', verifyToken, async (req, res) => {
   }
 });
 
+router.get('/my-feedback', verifyToken, async (req, res) => {
+  try {
+    const feedback = await PeerAssessment.find({ memberId: req.user.userId })
+      .select('ratings comments')  // Exclude studentId to anonymize the feedback
+      .exec();
+      
+    res.json(feedback);
+  } catch (err) {
+    console.error('Error fetching anonymous feedback:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
