@@ -1,3 +1,4 @@
+// src/components/PeerAssessment.js
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import API from '../api';
@@ -9,26 +10,21 @@ const PeerAssessment = ({ setRoute }) => {
   const [ratings, setRatings] = useState({});
   const [comments, setComments] = useState({});
   const [submitted, setSubmitted] = useState(false);
-  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const userRes = await API.get('/auth/me');
-        setUserId(userRes.data._id); // Set current user ID
-
         const teamRes = await API.get('/team/myteam');
         const filteredMembers = teamRes.data.members.filter(
           (member) => member._id !== userRes.data._id
-        ); // Exclude self from team members list
-
+        );
         setTeamMembers(filteredMembers);
-        setSelectedMemberId(filteredMembers.length ? filteredMembers[0]._id : ''); // Default to first team member
+        setSelectedMemberId(filteredMembers.length ? filteredMembers[0]._id : '');
       } catch (err) {
-        console.error('Error fetching data:', err.response?.data || err.message);
+        console.error('Error fetching data:', err);
       }
     };
-
     fetchUserData();
   }, []);
 
@@ -48,17 +44,15 @@ const PeerAssessment = ({ setRoute }) => {
 
   const handleSubmit = async () => {
     try {
-      // Submit selected member's assessment only
       await API.post('/peer-assessment/submit', {
         ratings: ratings[selectedMemberId],
         comments: comments[selectedMemberId],
-        memberId: selectedMemberId, // Pass selected member ID for evaluation
+        memberId: selectedMemberId,
       });
-
       setSubmitted(true);
       alert('Peer assessment submitted successfully!');
     } catch (err) {
-      console.error('Error submitting peer assessment:', err.response?.data || err.message);
+      console.error('Error submitting peer assessment:', err);
       alert('Failed to submit assessment');
     }
   };
@@ -68,6 +62,7 @@ const PeerAssessment = ({ setRoute }) => {
       <div>
         <div>Thank you for your submission!</div>
         <button onClick={() => setSubmitted(false)}>Submit Another Assessment</button>
+        <button onClick={() => setRoute('dashboard')}>Back to Dashboard</button>
       </div>
     );
   }
@@ -75,7 +70,6 @@ const PeerAssessment = ({ setRoute }) => {
   return (
     <div className="assessment-container">
       <h2>Peer Assessment</h2>
-
       <label htmlFor="memberSelect">Select a team member to evaluate:</label>
       <select
         id="memberSelect"
@@ -93,7 +87,6 @@ const PeerAssessment = ({ setRoute }) => {
         <div className="member-assessment">
           <h3>Evaluating: {teamMembers.find((m) => m._id === selectedMemberId).firstname}{' '}
             {teamMembers.find((m) => m._id === selectedMemberId).lastname}</h3>
-          
           {['Cooperation', 'Conceptual Contribution', 'Practical Contribution', 'Work Ethic'].map((dimension) => (
             <div key={dimension} className="assessment-dimension">
               <label>{dimension}:</label>

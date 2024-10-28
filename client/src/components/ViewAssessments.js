@@ -1,15 +1,14 @@
 // src/components/ViewAssessments.js
 import React, { useEffect, useState } from 'react';
 import API from '../api';
-import './ViewAssessments.css'; // Import the CSS file here
+import './ViewAssessments.css';
 
-const ViewAssessments = ({ role }) => {
+const ViewAssessments = ({ role, setRoute }) => {
   const [assessments, setAssessments] = useState([]);
 
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
-        // Adjusted endpoints without duplicating /api
         const endpoint = role === 'instructor' 
           ? '/peer-assessment/all-assessments' 
           : '/peer-assessment/my-assessments';

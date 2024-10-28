@@ -1,0 +1,53 @@
+/* src/components/EditEvaluation.css */
+
+.edit-evaluation {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7f8fa;
+    border-radius: 8px;
+  }
+  
+  .edit-evaluation h2 {
+    text-align: center;
+    color: #444;
+    font-size: 22px;
+  }
+  
+  .evaluation-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .evaluation-card h3 {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .evaluation-card input[type="number"],
+  .evaluation-card textarea {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .evaluation-card button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .evaluation-card button:hover {
+    background-color: #0056b3;
+  }
+  

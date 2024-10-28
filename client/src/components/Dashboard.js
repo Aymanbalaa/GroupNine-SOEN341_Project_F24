@@ -3,22 +3,25 @@ import React, { useState, useEffect } from 'react';
 import API from '../api';
 import InstructorDashboard from './InstructorDashboard';
 import ViewAssessments from './ViewAssessments';
+import PeerAssessment from './PeerAssessment';
+import AnonymousFeedback from './AnonymousFeedback';
+import EditEvaluation from './EditEvaluation';
+import './Dashboard.css';
 
 const Dashboard = ({ setRoute }) => {
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState(null);
-  const [viewingAssessments, setViewingAssessments] = useState(false); // State to toggle assessments view
+  const [viewingAssessments, setViewingAssessments] = useState(false);
+  const [makingEvaluation, setMakingEvaluation] = useState(false);
+  const [viewingFeedback, setViewingFeedback] = useState(false);
+  const [editingEvaluation, setEditingEvaluation] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const res = await API.get('/auth/me');
         setUser(res.data);
-
-        // Only fetch team data if the user is a student
-        if (res.data.role === 'student') {
-          await fetchTeamData();
-        }
+        if (res.data.role === 'student') await fetchTeamData();
       } catch (err) {
         console.error('Error fetching user details:', err);
       }
@@ -36,58 +39,71 @@ const Dashboard = ({ setRoute }) => {
     fetchUserData();
   }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  if (!user) return <div>Loading...</div>;
 
-  // Toggle between dashboard and peer assessments
-  const handleViewAssessments = () => setViewingAssessments(!viewingAssessments);
+  const toggleView = (setFunction) => setFunction((prev) => !prev);
 
-  // Instructor view
+  const backButton = <button onClick={() => resetView()}>Back to Dashboard</button>;
+
+  const resetView = () => {
+    setViewingAssessments(false);
+    setMakingEvaluation(false);
+    setViewingFeedback(false);
+    setEditingEvaluation(false);
+  };
+
   if (user.role === 'instructor') {
-    return (
+    return viewingAssessments ? (
       <div>
-        {viewingAssessments ? (
-          <div>
-            <button onClick={handleViewAssessments}>Back to Dashboard</button>
-            <ViewAssessments role="instructor" />
-          </div>
-        ) : (
-          <InstructorDashboard setRoute={setRoute} handleViewAssessments={handleViewAssessments} />
-        )}
+        {backButton}
+        <ViewAssessments role="instructor" />
       </div>
+    ) : (
+      <InstructorDashboard setRoute={setRoute} handleViewAssessments={() => toggleView(setViewingAssessments)} />
     );
   }
 
-  // Student view
   return (
-    <div>
+    <div className="dashboard">
       <h2>Welcome, {user.firstname} {user.lastname}!</h2>
       <p>You are logged in as a {user.role}.</p>
 
       {viewingAssessments ? (
         <div>
-          <button onClick={handleViewAssessments}>Back to Dashboard</button>
+          {backButton}
           <ViewAssessments role="student" />
+        </div>
+      ) : makingEvaluation ? (
+        <div>
+          {backButton}
+          <PeerAssessment setRoute={setRoute} />
+        </div>
+      ) : viewingFeedback ? (
+        <div>
+          {backButton}
+          <AnonymousFeedback />
+        </div>
+      ) : editingEvaluation ? (
+        <div>
+          {backButton}
+          <EditEvaluation />
         </div>
       ) : (
         <div>
-          {team ? (
+          {team && (
             <div>
               <h3>Your Team: {team.name}</h3>
-              <h4>Members:</h4>
               <ul>
                 {team.members.map((member) => (
-                  <li key={member._id}>
-                    {member.firstname} {member.lastname}
-                  </li>
+                  <li key={member._id}>{member.firstname} {member.lastname}</li>
                 ))}
               </ul>
             </div>
-          ) : (
-            <p>You are not assigned to any team.</p>
           )}
-          <button onClick={handleViewAssessments}>View Peer Assessments</button> {/* Button to view assessments */}
+          <button onClick={() => toggleView(setViewingAssessments)}>View Peer Assessments</button>
+          <button onClick={() => toggleView(setMakingEvaluation)}>Make Evaluation</button>
+          <button onClick={() => toggleView(setViewingFeedback)}>View Received Feedback</button>
+          <button onClick={() => toggleView(setEditingEvaluation)}>Edit Evaluation</button>
         </div>
       )}
     </div>
