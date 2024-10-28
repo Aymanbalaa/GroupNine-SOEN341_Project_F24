@@ -4,8 +4,6 @@ import API from '../api';
 import './InstructorDashboard.css';
 
 const InstructorDashboard = ({ setRoute }) => {
-  console.log('setRoute in InstructorDashboard:', setRoute);
-
   const [teamName, setTeamName] = useState('');
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
@@ -82,19 +80,23 @@ const InstructorDashboard = ({ setRoute }) => {
           required
         />
         <h3>Select Students:</h3>
-        {students.map((student) => (
-          <div key={student._id}>
-            <label>
-              <input
-                type="checkbox"
-                value={student._id}
-                checked={selectedStudents.includes(student._id)}
-                onChange={handleStudentSelect}
-              />
-              {student.firstname} {student.lastname}
-            </label>
-          </div>
-        ))}
+        {students.map((student) => {
+          const inTeam = isStudentInTeam(student._id);
+          return (
+            <div key={student._id}>
+              <label className={inTeam ? 'disabled-student' : ''}>
+                <input
+                  type="checkbox"
+                  value={student._id}
+                  checked={selectedStudents.includes(student._id)}
+                  onChange={handleStudentSelect}
+                  disabled={inTeam}
+                />
+                {student.firstname} {student.lastname} {inTeam && '(Already in a team)'}
+              </label>
+            </div>
+          );
+        })}
         <button type="submit">Create Team</button>
       </form>
 
@@ -118,7 +120,6 @@ const InstructorDashboard = ({ setRoute }) => {
         <p>No teams available.</p>
       )}
 
-      {/* Button to go to the CSV Upload Page */}
       <button onClick={() => setRoute('create-team-from-csv')}>
         Upload Team from CSV
       </button>

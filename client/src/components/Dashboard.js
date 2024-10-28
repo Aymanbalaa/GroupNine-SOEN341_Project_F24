@@ -1,21 +1,27 @@
+// src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
 import API from '../api';
 import InstructorDashboard from './InstructorDashboard';
+import ViewAssessments from './ViewAssessments';
+import PeerAssessment from './PeerAssessment';
+import AnonymousFeedback from './AnonymousFeedback';
+import EditEvaluation from './EditEvaluation';
+import './Dashboard.css';
 
 const Dashboard = ({ setRoute }) => {
   const [user, setUser] = useState(null);
   const [team, setTeam] = useState(null);
+  const [viewingAssessments, setViewingAssessments] = useState(false);
+  const [makingEvaluation, setMakingEvaluation] = useState(false);
+  const [viewingFeedback, setViewingFeedback] = useState(false);
+  const [editingEvaluation, setEditingEvaluation] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const res = await API.get('/auth/me');
         setUser(res.data);
-
-        // Only fetch team if the user is a student
-        if (res.data.role === 'student') {
-          await fetchTeamData();
-        }
+        if (res.data.role === 'student') await fetchTeamData();
       } catch (err) {
         console.error('Error fetching user details:', err);
       }
@@ -33,35 +39,72 @@ const Dashboard = ({ setRoute }) => {
     fetchUserData();
   }, []);
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  if (!user) return <div>Loading...</div>;
 
-  // Instructor view
+  const toggleView = (setFunction) => setFunction((prev) => !prev);
+
+  const backButton = <button onClick={() => resetView()}>Back to Dashboard</button>;
+
+  const resetView = () => {
+    setViewingAssessments(false);
+    setMakingEvaluation(false);
+    setViewingFeedback(false);
+    setEditingEvaluation(false);
+  };
+
   if (user.role === 'instructor') {
-    return <InstructorDashboard setRoute={setRoute} />;
+    return viewingAssessments ? (
+      <div>
+        {backButton}
+        <ViewAssessments role="instructor" />
+      </div>
+    ) : (
+      <InstructorDashboard setRoute={setRoute} handleViewAssessments={() => toggleView(setViewingAssessments)} />
+    );
   }
 
-  // Student view
   return (
-    <div>
+    <div className="dashboard">
       <h2>Welcome, {user.firstname} {user.lastname}!</h2>
       <p>You are logged in as a {user.role}.</p>
 
-      {team ? (
+      {viewingAssessments ? (
         <div>
-          <h3>Your Team: {team.name}</h3>
-          <h4>Members:</h4>
-          <ul>
-            {team.members.map((member) => (
-              <li key={member._id}>
-                {member.firstname} {member.lastname}
-              </li>
-            ))}
-          </ul>
+          {backButton}
+          <ViewAssessments role="student" />
+        </div>
+      ) : makingEvaluation ? (
+        <div>
+          {backButton}
+          <PeerAssessment setRoute={setRoute} />
+        </div>
+      ) : viewingFeedback ? (
+        <div>
+          {backButton}
+          <AnonymousFeedback />
+        </div>
+      ) : editingEvaluation ? (
+        <div>
+          {backButton}
+          <EditEvaluation />
         </div>
       ) : (
-        <p>You are not assigned to any team.</p>
+        <div>
+          {team && (
+            <div>
+              <h3>Your Team: {team.name}</h3>
+              <ul>
+                {team.members.map((member) => (
+                  <li key={member._id}>{member.firstname} {member.lastname}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <button onClick={() => toggleView(setViewingAssessments)}>View Peer Assessments</button>
+          <button onClick={() => toggleView(setMakingEvaluation)}>Make Evaluation</button>
+          <button onClick={() => toggleView(setViewingFeedback)}>View Received Feedback</button>
+          <button onClick={() => toggleView(setEditingEvaluation)}>Edit Evaluation</button>
+        </div>
       )}
     </div>
   );

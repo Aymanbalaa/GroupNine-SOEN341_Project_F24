@@ -1,24 +1,43 @@
+// src/App.js
 import React, { useState } from 'react';
 import Register from './components/Register';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
+import PeerAssessment from './components/PeerAssessment';
+import ViewAssessments from './components/ViewAssessments';
+import EditEvaluation from './components/EditEvaluation';
+import AnonymousFeedback from './components/AnonymousFeedback';
+import AssessmentForm from './components/AssessmentForm';
+import InstructorViewAssessments from './components/InstructorViewAssessments';
 
-// Backend
 const App = () => {
-  const [route, setRoute] = useState('login'); // Default route is 'login'
+  const [route, setRoute] = useState('login'); // Set initial route
 
+  // Function to render components based on the current route
   const renderComponent = () => {
     switch (route) {
       case 'register':
         return <Register setRoute={setRoute} />;
       case 'dashboard':
-        return <Dashboard setRoute={setRoute} />; // Pass setRoute here
+        return <Dashboard setRoute={setRoute} />;
       case 'instructor-dashboard':
         return <InstructorDashboard setRoute={setRoute} />;
       case 'create-team-from-csv':
         return <CreateTeamFromCsv setRoute={setRoute} />;
+      case 'peer-assessment':
+        return <PeerAssessment setRoute={setRoute} />;
+      case 'view-assessments':
+        return <ViewAssessments role="student" setRoute={setRoute} />;
+      case 'edit-evaluation':
+        return <EditEvaluation setRoute={setRoute} />;
+      case 'anonymous-feedback':
+        return <AnonymousFeedback setRoute={setRoute} />;
+      case 'assessment-form':
+        return <AssessmentForm setRoute={setRoute} />;
+      case 'instructor-view-assessments':
+        return <InstructorViewAssessments setRoute={setRoute} />;
       case 'login':
       default:
         return <Login setRoute={setRoute} />;
@@ -26,7 +45,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <div className="app-container">
       {renderComponent()}
     </div>
   );
