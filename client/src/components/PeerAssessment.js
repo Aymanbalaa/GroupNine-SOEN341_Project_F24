@@ -62,7 +62,7 @@ const PeerAssessment = ({ setRoute }) => {
       <div>
         <div>Thank you for your submission!</div>
         <button onClick={() => setSubmitted(false)}>Submit Another Assessment</button>
-        <button onClick={() => setRoute('dashboard')}>Back to Dashboard</button>
+        {/* <button onClick={() => setRoute('dashboard')}>Back to Dashboard</button> */}
       </div>
     );
   }
