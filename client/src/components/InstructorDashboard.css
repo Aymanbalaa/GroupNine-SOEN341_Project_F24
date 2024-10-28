@@ -152,4 +152,11 @@ body {
       font-size: 2rem;
     }
   }
+
+
+  .disabled-student {
+    color: gray;
+    text-decoration: line-through;
+  }
+  
   
