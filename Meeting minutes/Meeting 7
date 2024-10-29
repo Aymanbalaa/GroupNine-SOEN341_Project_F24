@@ -1,0 +1,36 @@
+# Meeting Notes
+
+**Present**: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
+**Absent**: None  
+**Chair**: Georges  
+**Minutes**: Ayman  
+
+## Upcoming Deadlines
+
+## FOCUS FOR THIS WEEK: Feature Development for Sprint 2
+
+### Review tasks and set priorities. It includes:
+- Completing Front-End setup for Peer Evaluation feature
+- Bug fixes in CSV file upload and peer assessment components
+- Connecting Peer Evaluation features to the database
+
+### Sprint 2 Development:
+- Development of Peer Evaluation feature front-end and consistency with the rubric
+- Setting up tasks in the GitHub repository
+- Task Assignments and bug fixing
+
+## Individual Updates
+- **Karim**: Collaborating with Nikolaos on fixing bugs related to CSV upload functionality.
+- **Nikolaos**: Assisting Karim in debugging issues with CSV upload and improving import functionality.
+- **Samuel**: Reviewing peer evaluation front-end code and providing feedback.
+- **Salahedin**: Implementing the basic evaluation setup in JSON format.
+- **Georges**: Finished basic front-end setup for the Peer Evaluation feature and initiated back-end linking.
+- **Ayman**: Coordinating with Georges to prepare tasks and tracking development progress.
+
+## Action Items
+- Complete front-end and establish consistency with the rubric.
+- Begin the integration of database connection for Peer Evaluation features.
+
+## Resources
+- GitHub repository with task breakdown
+- MongoDB server setup for back-end implementation
