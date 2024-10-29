@@ -1,0 +1,36 @@
+# Meeting Notes
+
+**Present**: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
+**Absent**: None  
+**Chair**: Karim  
+**Minutes**: Nikolaos  
+
+## Upcoming Deadlines
+
+## FOCUS FOR THIS WEEK: Peer Evaluation Back-End Integration
+
+### Assess progress and plan next steps. It includes:
+- Establishing database connection for Peer Evaluation
+- Bug fixing in front-end implementation
+- Refining the CSV upload feature
+
+### Sprint 2 Development:
+- Creation of the route for logging Peer Assessments to MongoDB
+- Setting up continuous integration for automated testing and validation
+- Task review and adjustments based on team input
+
+## Individual Updates
+- **Karim**: Worked with Nikolaos on debugging CSV upload and fixed issues related to field mapping.
+- **Nikolaos**: Focused on refining CSV upload functionality and assisting in bug fixes.
+- **Samuel**: Tested front-end updates and coordinated UI feedback with Georges.
+- **Salahedin**: Collaborated with Georges on back-end setup and creating a secure route for evaluations.
+- **Georges**: Established new routes for the database and completed basic logging of Peer Evaluations.
+- **Ayman**: Followed up with Georges to debug the peer evaluation feature and added new categories for scoring.
+
+## Action Items
+- Finalize integration of Peer Evaluation back-end and test the full workflow.
+- Continue fixing bugs and refining the CSV upload feature.
+
+## Resources
+- GitHub Actions setup for automated testing
+- MongoDB server for database logging
