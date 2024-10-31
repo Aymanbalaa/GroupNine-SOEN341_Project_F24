@@ -26,10 +26,10 @@ const AnonymousFeedback = ({ setRoute }) => {
         feedback.map((item, index) => (
           <div key={index} className="feedback-card">
             {Object.entries(item.ratings).map(([dimension, rating]) => (
-              <p key={dimension}><strong>{dimension}:</strong> {rating}</p>
-            ))}
-            {Object.entries(item.comments).map(([dimension, comment]) => (
-              <p key={dimension}><strong>{dimension} Comment:</strong> {comment}</p>
+              <div key={dimension}>
+                <p><strong>{dimension}:</strong> {rating}</p>
+                <p><strong>{dimension} Comment:</strong> {item.comments[dimension]}</p>
+              </div>
             ))}
           </div>
         ))
