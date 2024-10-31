@@ -43,7 +43,11 @@ const Dashboard = ({ setRoute }) => {
 
   const toggleView = (setFunction) => setFunction((prev) => !prev);
 
-  const backButton = <button onClick={() => resetView()}>Back to Dashboard</button>;
+  const backButton = (
+    <div className="center-button">
+      <button onClick={() => resetView()}>Back to Dashboard</button>
+    </div>
+  );
 
   const resetView = () => {
     setViewingAssessments(false);

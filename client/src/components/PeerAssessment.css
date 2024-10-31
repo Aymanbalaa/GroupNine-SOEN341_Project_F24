@@ -52,3 +52,23 @@
 .assessment-container button:hover {
   background-color: #218838;
 }
+
+.assessment-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: #f4f7fb;
+  border-radius: 8px;
+  text-align: center; /* Center-align content within container */
+}
+
+.assessment-container button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

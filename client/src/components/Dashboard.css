@@ -36,3 +36,9 @@
     background-color: #0056b3;
   }
   
+  .center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
