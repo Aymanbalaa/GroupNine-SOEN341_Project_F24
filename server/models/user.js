@@ -20,7 +20,8 @@ const UserSchema = new mongoose.Schema({
   id: {
     type: Number,
     required: true,
-    unique: true
+    unique: true,
+    match: [/^\d{9}$/, 'ID must be a 9-digit number']
   },
   password: {
     type: String,

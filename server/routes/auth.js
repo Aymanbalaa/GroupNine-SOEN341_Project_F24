@@ -11,6 +11,10 @@ router.post('/register', async (req, res) => {
   const { username, firstname, lastname, id, password, role } = req.body;
 
   try {
+    if (!/^\d{9}$/.test(id)) {
+      return res.status(400).json({ message: 'ID must be a 9-digit number' });
+    }
+    
     let user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
