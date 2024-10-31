@@ -1,0 +1,36 @@
+# Meeting Notes
+
+**Present**: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
+**Absent**: None  
+**Chair**: Karim  
+**Minutes**: Georges  
+
+## Upcoming Deadlines
+
+## FOCUS FOR THIS WEEK: Finalizing and Testing Sprint 2 Deliverables
+
+### Address remaining tasks and plan for sprint completion. It includes:
+- Testing and bug fixing for Peer Evaluation feature
+- Logging all Peer Assessments and making them accessible to users
+- Improving routes for evaluation to ensure data consistency
+
+### Sprint 2 Finalization:
+- Implemented logging of Peer Assessments in the database
+- Setup of Continuous Integration Pipeline using GitHub Actions
+- Task prioritization and assignments based on pending issues
+
+## Individual Updates
+- **Karim**: Assisted Nikolaos with resolving CSV file upload bugs and improving upload logic.
+- **Nikolaos**: Continued refining the upload functionality and testing various CSV formats.
+- **Samuel**: Performed end-to-end testing of the Peer Evaluation feature and provided feedback.
+- **Salahedin**: Fixed minor bugs in evaluation routes and improved data consistency.
+- **Georges**: Coordinated testing and bug-fixing efforts and linked the front-end with the back-end logging routes.
+- **Ayman**: Logged all Peer Assessments in the database and displayed them on user dashboards.
+
+## Action Items
+- Review pending issues and assign tasks to wrap up Sprint 2 deliverables.
+- Plan Sprint 3 based on completed features and feedback.
+
+## Resources
+- GitHub Actions for CI/CD
+- Updated database schema for Peer Evaluation feature
