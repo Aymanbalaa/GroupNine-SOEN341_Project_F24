@@ -2,13 +2,31 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import API from '../api';
 import './InstructorDashboard.css';
+import EvaluationSummary from './EvaluationSummary';
+import EvaluationDetail from './EvaluationDetail';
 
 const InstructorDashboard = ({ setRoute }) => {
   const [teamName, setTeamName] = useState('');
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [evaluations, setEvaluations] = useState([]);
+  const [selectedEvaluation, setSelectedEvaluation] = useState(null);
 
+  // Fetch Evaluations for the Summary View
+  useEffect(() => {
+    const fetchEvaluations = async () => {
+      try {
+        const res = await API.get('/evaluations'); // Replace with the correct endpoint for evaluations
+        setEvaluations(res.data);
+      } catch (err) {
+        console.error('Error fetching evaluations:', err);
+      }
+    };
+    fetchEvaluations();
+  }, []);
+
+  // Fetch Students and Teams for Team Management
   useEffect(() => {
     const fetchStudentsAndTeams = async () => {
       try {
@@ -22,7 +40,6 @@ const InstructorDashboard = ({ setRoute }) => {
         console.error('Error fetching students or teams:', err);
       }
     };
-
     fetchStudentsAndTeams();
   }, []);
 
@@ -31,6 +48,7 @@ const InstructorDashboard = ({ setRoute }) => {
     [teams]
   );
 
+  // Create a New Team
   const createTeam = async (e) => {
     e.preventDefault();
     if (!teamName.trim()) {
@@ -58,6 +76,7 @@ const InstructorDashboard = ({ setRoute }) => {
     }
   };
 
+  // Handle Student Selection for Team Creation
   const handleStudentSelect = useCallback(
     (e) => {
       const { value, checked } = e.target;
@@ -68,8 +87,25 @@ const InstructorDashboard = ({ setRoute }) => {
     [setSelectedStudents]
   );
 
+  // Show Detailed Evaluation for Selected Student
+  const showDetail = (evaluation) => {
+    setSelectedEvaluation(evaluation);
+  };
+
+  // Return to Evaluation Summary View
+  const showSummary = () => {
+    setSelectedEvaluation(null);
+  };
+
   return (
     <div className="container">
+      {selectedEvaluation ? (
+        <EvaluationDetail evaluation={selectedEvaluation} />
+      ) : (
+        <EvaluationSummary evaluations={evaluations} onShowDetail={showDetail} />
+      )}
+      {selectedEvaluation && <button onClick={showSummary}>Back to Summary</button>}
+
       <h2>Create Team</h2>
       <form onSubmit={createTeam}>
         <input
