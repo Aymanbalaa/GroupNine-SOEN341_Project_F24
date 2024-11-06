@@ -8,6 +8,7 @@ const InstructorDashboard = ({ setRoute }) => {
   const [students, setStudents] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState([]);
   const [teams, setTeams] = useState([]);
+  const [expandedTeam, setExpandedTeam] = useState(null); // State for tracking expanded team
 
   useEffect(() => {
     const fetchStudentsAndTeams = async () => {
@@ -68,6 +69,10 @@ const InstructorDashboard = ({ setRoute }) => {
     [setSelectedStudents]
   );
 
+  const toggleTeamExpansion = (teamId) => {
+    setExpandedTeam((prevTeamId) => (prevTeamId === teamId ? null : teamId));
+  };
+
   return (
     <div className="container">
       <h2>Create Team</h2>
@@ -105,14 +110,18 @@ const InstructorDashboard = ({ setRoute }) => {
         <ul>
           {teams.map((team) => (
             <li key={team._id}>
-              <strong>{team.name}</strong>
-              <ul>
-                {team.members.map((member) => (
-                  <li key={member._id}>
-                    {member.firstname} {member.lastname}
-                  </li>
-                ))}
-              </ul>
+              <strong onClick={() => toggleTeamExpansion(team._id)} style={{ cursor: 'pointer' }}>
+                {team.name} {expandedTeam === team._id ? '-' : '+'}
+              </strong>
+              {expandedTeam === team._id && (
+                <ul>
+                  {team.members.map((member) => (
+                    <li key={member._id}>
+                      {member.firstname} {member.lastname}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
