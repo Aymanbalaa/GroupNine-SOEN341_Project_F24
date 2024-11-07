@@ -1,9 +1,10 @@
 // src/components/Register.test.js
-import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import React from 'react';// src/components/Login.test.js and src/components/Register.test.js
+import { render, fireEvent, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Register from '../Register';
 import API from '../../api';
+
 
 // Mock API module
 jest.mock('../../api');

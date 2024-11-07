@@ -1,6 +1,6 @@
 // src/components/Login.test.js
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from '.././Login';
 import API from '../../api';
