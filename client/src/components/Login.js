@@ -4,7 +4,7 @@ import './Login.css';
 
 //Backend
 const Login = ({ setRoute }) => {
-  console.log("setRoute in Login:", setRoute);
+  // console.log("setRoute in Login:", setRoute);
 
   const [formData, setFormData] = useState({
     username: '',

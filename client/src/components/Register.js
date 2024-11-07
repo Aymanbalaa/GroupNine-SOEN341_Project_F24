@@ -1,8 +1,9 @@
+// src/components/Register.js
 import React, { useState } from 'react';
 import API from '../api';
 import './Register.css';
 
-//Backend
+// Backend
 const Register = ({ setRoute }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -30,14 +31,14 @@ const Register = ({ setRoute }) => {
     e.preventDefault();
     try {
       const res = await API.post('/auth/register', formData);
-      console.log(res.data);
+      // console.log(res.data);
       setRoute('dashboard');
     } catch (err) {
       setErrorMessage(err.response.data.message || 'Registration failed. Please try again.');
     }
   };
 
-  //Frontend
+  // Frontend
   return (
     <div className="register-container">
       <h2>Register</h2>
@@ -99,7 +100,9 @@ const Register = ({ setRoute }) => {
           />
         </div>
         <div className="form-group">
+          <label htmlFor="role-select">Role</label>
           <select
+            id="role-select"
             name="role"
             value={role}
             onChange={onChange}

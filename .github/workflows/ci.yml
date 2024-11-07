@@ -37,18 +37,18 @@ jobs:
         working-directory: server
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      # - name: Run backend tests
-      #   working-directory: server
-      #   run: npm test
+      - name: Run backend tests
+        working-directory: server
+        run: npm test
 
       # Frontend setup and tests
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      # - name: Run frontend tests
-      #   working-directory: client
-      #   run: npm test
+      - name: Run frontend tests
+        working-directory: client
+        run: npm test
 
       # Build Frontend
       - name: Build frontend
