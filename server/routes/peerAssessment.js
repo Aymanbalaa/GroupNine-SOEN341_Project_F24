@@ -2,95 +2,116 @@
 const express = require('express');
 const router = express.Router();
 const PeerAssessment = require('../models/peerAssessment');
-const { verifyToken } = require('../routes/auth'); // Correct import for verifyToken
+const { verifyToken } = require('../routes/auth'); // Adjust import if needed
 
-// Route to submit or update a peer assessment
-router.post('/submit', verifyToken, async (req, res) => {
-  const { ratings, comments, memberId } = req.body;
-  const studentId = req.user.userId;
-
-  try {
-    const existingAssessment = await PeerAssessment.findOne({ studentId, memberId });
-    
-    if (existingAssessment) {
-      existingAssessment.ratings = ratings;
-      existingAssessment.comments = comments;
-      existingAssessment.updatedAt = Date.now();
-      await existingAssessment.save();
-      return res.json({ message: 'Peer assessment updated successfully' });
-    }
-
-    const assessment = new PeerAssessment({ studentId, memberId, ratings, comments });
-    await assessment.save();
-    res.status(201).json({ message: 'Peer assessment submitted successfully' });
-  } catch (err) {
-    console.error('Error submitting peer assessment:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Route to update an existing assessment
-router.put('/update', verifyToken, async (req, res) => {
-  const { ratings, comments, memberId } = req.body;
-  const studentId = req.user.userId;
-
-  try {
-    // Find the existing assessment based on studentId and memberId
-    const assessment = await PeerAssessment.findOne({ studentId, memberId });
-    if (!assessment) {
-      return res.status(404).json({ message: 'Assessment not found' });
-    }
-
-    // Update the assessment fields
-    assessment.ratings = ratings;
-    assessment.comments = comments;
-    assessment.updatedAt = Date.now();
-
-    await assessment.save();
-    res.json({ message: 'Assessment updated successfully' });
-  } catch (err) {
-    console.error('Error updating assessment:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Route to fetch all assessments for the logged-in student
-router.get('/my-assessments', verifyToken, async (req, res) => {
-  try {
-    const assessments = await PeerAssessment.find({ studentId: req.user.userId })
-      .populate('memberId', 'firstname lastname');
-    res.json(assessments);
-  } catch (err) {
-    console.error('Error fetching assessments:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// Route for instructors to view all assessments
-router.get('/all-assessments', verifyToken, async (req, res) => {
+router.get('/detailed-view', verifyToken, async (req, res) => {
   if (req.user.role !== 'instructor') {
     return res.status(403).json({ message: 'Access denied' });
   }
 
   try {
     const assessments = await PeerAssessment.find()
-      .populate('studentId memberId', 'firstname lastname');
-    res.json(assessments);
+      .populate('studentId', 'firstname lastname')
+      .populate('memberId', 'firstname lastname team'); // Attempt to populate `team` if it exists
+
+    // Group assessments by team
+    const detailedData = assessments.reduce((acc, assessment) => {
+      // Check if `memberId` and `memberId.team` are defined
+      const teamName = assessment.memberId && assessment.memberId.team ? assessment.memberId.team : 'No Team';
+
+      if (!acc[teamName]) {
+        acc[teamName] = {
+          name: teamName,
+          members: [],
+        };
+      }
+      
+      // Only add member details if `memberId` is defined
+      if (assessment.memberId) {
+        acc[teamName].members.push({
+          firstname: assessment.memberId.firstname,
+          lastname: assessment.memberId.lastname,
+          cooperation: assessment.ratings.get('cooperation') || 0,
+          conceptual: assessment.ratings.get('conceptual') || 0,
+          practical: assessment.ratings.get('practical') || 0,
+          workEthic: assessment.ratings.get('workEthic') || 0,
+          averageAcrossAll: (
+            (assessment.ratings.get('cooperation') || 0 +
+             assessment.ratings.get('conceptual') || 0 +
+             assessment.ratings.get('practical') || 0 +
+             assessment.ratings.get('workEthic') || 0) / 4
+          ).toFixed(2),
+          comment: assessment.comments.get('general') || 'No comment provided',
+        });
+      }
+      return acc;
+    }, {});
+
+    res.json(Object.values(detailedData));
   } catch (err) {
-    console.error('Error fetching all assessments:', err.message);
+    console.error('Error fetching detailed view data:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-router.get('/my-feedback', verifyToken, async (req, res) => {
+
+
+// Route for summary view of assessments by student
+router.get('/summary-view', verifyToken, async (req, res) => {
+  if (req.user.role !== 'instructor') {
+    return res.status(403).json({ message: 'Access denied' });
+  }
+
   try {
-    const feedback = await PeerAssessment.find({ memberId: req.user.userId })
-      .select('ratings comments')  // Exclude studentId to anonymize the feedback
-      .exec();
-      
-    res.json(feedback);
+    const assessments = await PeerAssessment.find()
+      .populate('studentId', 'firstname lastname');
+
+    // Calculate averages for each student
+    const summaryData = assessments.reduce((acc, assessment) => {
+      const studentId = assessment.memberId._id;
+      if (!acc[studentId]) {
+        acc[studentId] = {
+          studentId,
+          firstname: assessment.memberId.firstname,
+          lastname: assessment.memberId.lastname,
+          cooperation: 0,
+          conceptual: 0,
+          practical: 0,
+          workEthic: 0,
+          count: 0,
+        };
+      }
+
+      acc[studentId].cooperation += assessment.ratings.get('cooperation') || 0;
+      acc[studentId].conceptual += assessment.ratings.get('conceptual') || 0;
+      acc[studentId].practical += assessment.ratings.get('practical') || 0;
+      acc[studentId].workEthic += assessment.ratings.get('workEthic') || 0;
+      acc[studentId].count += 1;
+
+      return acc;
+    }, {});
+
+    // Calculate averages
+    const summary = Object.values(summaryData).map((student) => ({
+      studentId: student.studentId,
+      firstname: student.firstname,
+      lastname: student.lastname,
+      cooperation: (student.cooperation / student.count).toFixed(2),
+      conceptual: (student.conceptual / student.count).toFixed(2),
+      practical: (student.practical / student.count).toFixed(2),
+      workEthic: (student.workEthic / student.count).toFixed(2),
+      average: (
+        (student.cooperation +
+          student.conceptual +
+          student.practical +
+          student.workEthic) /
+        (4 * student.count)
+      ).toFixed(2),
+    }));
+
+    res.json(summary);
   } catch (err) {
-    console.error('Error fetching anonymous feedback:', err.message);
+    console.error('Error fetching summary view data:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
