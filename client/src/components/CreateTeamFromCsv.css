@@ -1,0 +1,94 @@
+.csv-upload-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .csv-upload-container h2 {
+    color: #5e35b1;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .csv-upload-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .csv-upload-container input[type="text"],
+  .csv-upload-container input[type="file"] {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+  
+  .csv-upload-container h3 {
+    font-size: 18px;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  
+  .csv-upload-container .error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .csv-upload-container .student-entry {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #555;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .csv-upload-container .student-entry:hover {
+    background-color: #f3f3f3;
+  }
+  
+  .csv-upload-container .student-entry input[type="checkbox"] {
+    margin-right: 10px;
+  }
+  
+  .csv-upload-container button {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #5e35b1;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .csv-upload-container button:hover {
+    background-color: #452682;
+  }
+  
+  .csv-upload-container .back-button {
+    background-color: #999;
+    margin-top: 10px;
+  }
+  
+  .csv-upload-container .back-button:hover {
+    background-color: #777;
+  }
+  

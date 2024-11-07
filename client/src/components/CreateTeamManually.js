@@ -1,7 +1,6 @@
-// src/components/teams/CreateTeamManually.js
-
 import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
+import './CreateTeamManually.css';
 
 const CreateTeamManually = ({ setRoute }) => {
   const [teamName, setTeamName] = useState('');
@@ -11,10 +10,26 @@ const CreateTeamManually = ({ setRoute }) => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await API.get('/auth/all-students');
-        setStudents(res.data);
+        const [studentsRes, teamsRes] = await Promise.all([
+          API.get('/auth/all-students'),  // Fetch all students
+          API.get('/team/all')            // Fetch all teams to check team membership
+        ]);
+
+        // Create a map of student IDs who are already in a team
+        const studentsInTeams = new Set();
+        teamsRes.data.forEach(team => {
+          team.members.forEach(member => studentsInTeams.add(member._id));
+        });
+
+        // Add `inTeam` property to each student based on membership
+        const studentsData = studentsRes.data.map(student => ({
+          ...student,
+          inTeam: studentsInTeams.has(student._id)
+        }));
+        
+        setStudents(studentsData);
       } catch (err) {
-        console.error('Error fetching students:', err);
+        console.error('Error fetching students or teams:', err);
       }
     };
     fetchStudents();
@@ -46,7 +61,7 @@ const CreateTeamManually = ({ setRoute }) => {
   };
 
   return (
-    <div>
+    <div className="create-team-container">
       <h2>Create Team Manually</h2>
       <form onSubmit={createTeam}>
         <input
@@ -58,13 +73,14 @@ const CreateTeamManually = ({ setRoute }) => {
         />
         <h3>Select Students:</h3>
         {students.map((student) => (
-          <label key={student._id}>
+          <label key={student._id} className={student.inTeam ? 'disabled-student' : ''}>
             <input
               type="checkbox"
               value={student._id}
               onChange={handleStudentSelect}
+              disabled={student.inTeam} // Disable if student is already in a team
             />
-            {student.firstname} {student.lastname}
+            {student.firstname} {student.lastname} {student.inTeam && '(Already in a team)'}
           </label>
         ))}
         <button type="submit">Create Team</button>
