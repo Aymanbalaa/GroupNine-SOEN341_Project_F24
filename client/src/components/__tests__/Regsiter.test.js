@@ -14,7 +14,8 @@ describe('Register Component', () => {
     API.post.mockClear();
     mockSetRoute.mockClear();
   });
-
+  // TEST 1111111111111111111111111111111111111111111111111111111
+  // MAKE SURE BUTTONS AND FORMS ARE THEREEEEEEEEEEEEEEEEEEEEEEEE
   test('renders registration form', () => {
     render(<Register setRoute={mockSetRoute} />);
 
@@ -26,6 +27,8 @@ describe('Register Component', () => {
     expect(screen.getByRole('button', { name: /register/i })).toBeInTheDocument();
   });
 
+  // TEST 2222222222222222222222222222222222222222222222222222222
+  // MAKE SURE IT REDIRECTS TO DASHBOARD ON SUCCESSFUL REGISTRATION
   test('redirects to dashboard on successful registration', async () => {
     API.post.mockResolvedValueOnce({});
 
