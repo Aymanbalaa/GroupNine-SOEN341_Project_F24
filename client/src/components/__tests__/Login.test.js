@@ -1,6 +1,6 @@
 // src/components/Login.test.js
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Login from '../Login';
 import API from '../../api';
@@ -37,7 +37,6 @@ describe('Login Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    await screen.findByRole('button', { name: /login/i });
-    expect(mockSetRoute).toHaveBeenCalledWith('dashboard');
+    await waitFor(() => expect(mockSetRoute).toHaveBeenCalledWith('dashboard'));
   });
 });

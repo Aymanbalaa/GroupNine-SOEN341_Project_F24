@@ -1,6 +1,6 @@
 // src/components/Register.test.js
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Register from '../Register';
 import API from '../../api';
@@ -52,7 +52,6 @@ describe('Register Component', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
-    await screen.findByRole('button', { name: /register/i });
-    expect(mockSetRoute).toHaveBeenCalledWith('dashboard');
+    await waitFor(() => expect(mockSetRoute).toHaveBeenCalledWith('dashboard'));
   });
 });

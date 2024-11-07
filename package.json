@@ -20,7 +20,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.6.2",
     "moongoose": "^0.0.1",
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "react-scripts": "^5.0.1"
   },
   "proxy": "http://localhost:3000",
   "devDependencies": {
