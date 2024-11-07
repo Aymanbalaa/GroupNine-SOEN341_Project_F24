@@ -28,31 +28,30 @@ jobs:
         with:
           node-version: '16'
 
-      # Backend setup and health check
+      # Backend setup and tests
       - name: Install dependencies for backend
         working-directory: server
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      - name: Start Backend for Health Check
+      - name: Run backend tests
         working-directory: server
-        run: |
-          nohup npm start &             # Start backend in the background
-          sleep 10                      # Wait 10 seconds to ensure the backend starts successfully
-          pkill -f "node"               # Kill the backend process to exit gracefully
+        run: npm test
 
-      # Frontend setup and health check
+      # Frontend setup and tests
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install  # Times out after 5 minutes if install hangs
 
-      - name: Build and Start Frontend for Health Check
+      - name: Run frontend tests
         working-directory: client
-        run: |
-          npm run build                # Builds the frontend
-          nohup npm start &            # Start frontend in the background
-          sleep 10                     # Wait 10 seconds to ensure the frontend starts successfully
-          pkill -f "node"              # Kill the frontend process to exit gracefully
+        run: npm test
 
+      # Build Frontend
+      - name: Build frontend
+        working-directory: client
+        run: npm run build  # Builds the frontend for production
+
+      # Deployment (Optional)
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
         run: |

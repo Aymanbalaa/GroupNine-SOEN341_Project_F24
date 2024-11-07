@@ -4,7 +4,8 @@
   "description": "- **Karim Sleiman** - 40224330\r - **Nikolaos Chaskis** - 40092571\r - **Salaheddin Alattar** - 40189830\r - **Georges Ghazal** - 40231026\r - **Ayman El Balaa** - 40200099\r - **Samuel Sebaaly** - 40084264",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js"
+    "start": "node server/index.js",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +22,10 @@
     "moongoose": "^0.0.1",
     "react-router-dom": "^6.26.2"
   },
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:3000",
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.0.1",
+    "jest": "^29.7.0"
+  }
 }
