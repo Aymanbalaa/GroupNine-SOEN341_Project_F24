@@ -30,7 +30,7 @@ const Register = ({ setRoute }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post('/auth/register', formData);
+      await API.post('/auth/register', formData);
       // console.log(res.data);
       setRoute('dashboard');
     } catch (err) {
