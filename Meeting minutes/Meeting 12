@@ -1,0 +1,30 @@
+##Meeting Notes##
+
+Present: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman
+Absent: None
+Chair: Karim
+Minutes: Nikolaos
+
+##Upcoming Deadlines##
+Complete Peer Assessment Integration
+Finalize and Test all Sprint 3 Features
+
+##FOCUS FOR THIS WEEK##: Peer Assessment and Final Sprint 3 Bug Fixes
+
+##Review Tasks and Set Priorities:##
+Integrate peer assessment with instructor dashboard and database
+Address outstanding bugs from Sprint 2 and 3
+
+##Individual Updates##
+Ayman: Integrated peer assessment logging with the instructor dashboard, in collaboration with Salah.
+Georges: Resolved server bugs affecting evaluation pages, enhancing user interface.
+Karim & Nikolaos: Improved test coverage for Sprint 3, addressed minor issues.
+Salah: Assisted with peer assessment integration and coordination with Ayman.
+
+##Action Items##
+Ensure peer assessment feature is fully operational.
+Complete final testing for all Sprint 3 components.
+
+##Resources##
+GitHub repository for final code review and testing
+MongoDB setup and configuration for Sprint 3
