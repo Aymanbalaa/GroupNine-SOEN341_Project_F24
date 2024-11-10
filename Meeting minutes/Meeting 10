@@ -1,1 +1,36 @@
+# Meeting Notes
 
+**Present**: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman  
+**Absent**: None  
+**Chair**: Karim  
+**Minutes**: Nikolaos  
+
+## Upcoming Deadlines
+
+## FOCUS FOR THIS WEEK: Peer Evaluation Dimension Based Assessment
+
+### Assess progress and plan next steps. It includes:
+- Adding the remaining assessment dimensions: Conceptual Contribution, Practical Contribution, and Work Ethic
+- Adding comment boxes for each dimension, where students can provide qualitative feedback if desired.
+- Bug fixing in front-end implementation
+
+### Sprint 3 Development:
+- Adding the dimension-based assessment
+- Improving upon the instructor dashboard
+- Task review and adjustments based on team input
+
+## Individual Updates
+- **Karim**: Worked with Nikolaos on debugging CSV upload and fixed issues related to field mapping.
+- **Nikolaos**: Focused on refining CSV upload functionality and assisting in bug fixes.
+- **Samuel**: Tested front-end updates and coordinated UI feedback with Georges.
+- **Salahedin**: Collaborated with Georges on back-end setup and creating a secure route for evaluations.
+- **Georges**: Established new routes for the database and completed basic logging of Peer Evaluations.
+- **Ayman**: Followed up with Georges to debug the peer evaluation feature and added new categories for scoring.
+
+## Action Items
+- Finalize integration of Peer Evaluation by adding the new features for evaluation and on the instructor dashboard
+- Continue fixing bugs
+
+## Resources
+- GitHub Actions setup for automated testing
+- MongoDB server for database logging
