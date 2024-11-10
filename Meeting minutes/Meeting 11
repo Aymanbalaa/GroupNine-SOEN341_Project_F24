@@ -1,0 +1,32 @@
+##Meeting Notes##
+
+Present: Nikolaos, Karim, Georges, Salahedin, Samuel, Ayman
+Absent: None
+Chair: Karim
+Minutes: Nikolaos
+
+##Upcoming Deadlines##
+
+Completion of Instructor Dashboard Features
+Begin Peer Assessment Integration and Testing
+
+##FOCUS FOR THIS WEEK##: Transition to Sprint 3 and Address Sprint 2 Feedback
+
+##Review Tasks and Set Priorities:##
+Implement instructor dashboard features for detailed assessment views
+Plan and set up initial tasks for peer assessment feature integration
+
+##Individual Updates##
+
+Ayman: Designed unit tests for Sprint 2, adding them to the CI pipeline
+Georges: Fixed back-end server bugs, improving Sprint 2 components.
+Karim & Nikolaos: Collaborated on testing for team creation, evaluations, and peer assessments.
+Salah: Contributed to the initial instructor dashboard setup.
+
+##Action Items##
+Finalize instructor dashboard features.
+Define user stories for peer assessment in Sprint 3.
+
+##Resources##
+GitHub repository for CI pipeline configuration
+Sprint 2 feedback document for reference
