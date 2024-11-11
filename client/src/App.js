@@ -5,12 +5,14 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import CreateTeamFromCsv from './components/CreateTeamFromCsv';
+import CreateTeamManually from './components/CreateTeamManually';
+import InstructorDetailedView from './components/InstructorDetailedView';
+import InstructorSummaryView from './components/InstructorSummaryView';
 import PeerAssessment from './components/PeerAssessment';
 import ViewAssessments from './components/ViewAssessments';
 import EditEvaluation from './components/EditEvaluation';
 import AnonymousFeedback from './components/AnonymousFeedback';
 import AssessmentForm from './components/AssessmentForm';
-import InstructorViewAssessments from './components/InstructorViewAssessments';
 
 const App = () => {
   const [route, setRoute] = useState('login'); // Set initial route
@@ -36,8 +38,15 @@ const App = () => {
         return <AnonymousFeedback setRoute={setRoute} />;
       case 'assessment-form':
         return <AssessmentForm setRoute={setRoute} />;
-      case 'instructor-view-assessments':
-        return <InstructorViewAssessments setRoute={setRoute} />;
+      case 'create-team-manually':
+        return <CreateTeamManually setRoute={setRoute} />;
+      case 'load-team-csv':
+        return <CreateTeamFromCsv setRoute={setRoute} />;
+      case 'detailed-view':
+        return <InstructorDetailedView />;
+      case 'summary-view':
+        return <InstructorSummaryView />;
+        
       case 'login':
       default:
         return <Login setRoute={setRoute} />;

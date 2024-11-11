@@ -1,24 +1,20 @@
 import React, { useState } from 'react';
 import API from '../api';
+import './CreateTeamFromCsv.css';
 
-//Backend
-const CreateTeamFromCsv = ({ setRoute, instructorId }) => { 
-  console.log('setRoute in CreateTeamFromCsv:', setRoute);  
+const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
+  const [teamName, setTeamName] = useState(''); // Store Team Name
+  const [students, setStudents] = useState([]); // Store Students in Database
+  const [selectedStudents, setSelectedStudents] = useState([]); // Store Checkmarked Students
+  const [errorMessage, setErrorMessage] = useState(null); // Error Message Handling
 
-  const [teamName, setTeamName] = useState(''); //Store Team Name
-  const [students, setStudents] = useState([]); //Store Students in Database
-  const [selectedStudents, setSelectedStudents] = useState([]); //Store Checkmarked Students
-  const [errorMessage, setErrorMessage] = useState(null); //Error Message Handling
-
-  //CSV File Upload 
-  //Format includes a header row with Column 1: First Name, Column 2: Last Name and Column 3: ID
-  //CSV File must be of this format
+  // CSV File Upload
+  // Format includes a header row with Column 1: First Name, Column 2: Last Name, and Column 3: ID
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
   
     if (file) {
       const reader = new FileReader();
-  
       reader.onload = async (e) => {
         const contents = e.target.result;
         try {
@@ -35,21 +31,14 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
             })
             .filter(student => student.name && student.lastName && student.id);
   
-          console.log("Parsed Student IDs:", parsedData.map(student => student.id));
-  
-          const studentIdsFromCsv = parsedData.map(student => student.id.replace(/^0+/, '')); //Remove Leading Zeros from ID
-          console.log("Parsed Student IDs after removing leading zeros:", studentIdsFromCsv);
-  
+          const studentIdsFromCsv = parsedData.map(student => student.id.replace(/^0+/, '')); // Remove Leading Zeros
           setErrorMessage(null);
   
           try {
             const studentDetailsPromises = studentIdsFromCsv.map(studentId =>
               API.get(`/auth/student/${studentId}`)
                 .then(res => res.data)
-                .catch(err => {
-                  console.warn(`Student ID ${studentId} not found.`);
-                  return null; // Return null for non-existent students
-                })
+                .catch(() => null)
             );
             const studentDetailsResponses = await Promise.all(studentDetailsPromises);
   
@@ -80,35 +69,28 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
     }
   };
 
-  //Create Team from Checkmarked Students
   const createTeam = async (e) => {
     e.preventDefault();
-  
     if (!teamName.trim()) {
       alert('Team name cannot be empty');
       return;
     }
   
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await API.post('/team/create', {
+      await API.post('/team/create', {
         name: teamName,
         members: students.filter(student => selectedStudents.includes(student._id)),
       });
-  
-      //Clear All After Team Successfully Created
       alert('Team created successfully');
       setTeamName('');
       setSelectedStudents([]);
       setRoute('instructor-dashboard');
     } catch (err) {
       console.error('Error creating team:', err);
-      alert(err.response?.data?.message || 'Failed to create team');
+      alert('Failed to create team');
     }
   };
-  
 
-  //Selection of Students
   const handleStudentSelect = (e) => {
     const { value, checked } = e.target;
     setSelectedStudents((prevSelected) =>
@@ -116,9 +98,8 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
     );
   };
 
-  //Frontend
   return (
-    <div className="container">
+    <div className="csv-upload-container">
       <h2>Create Team from CSV</h2>
       <form onSubmit={createTeam}>
         <input
@@ -130,13 +111,13 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
         />
 
         <h3>Upload CSV File:</h3>
-        <input type="file" accept=".csv" onChange={handleFileUpload} /> {/* File input */}
+        <input type="file" accept=".csv" onChange={handleFileUpload} />
 
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>} {/* Display error message */}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
 
         <h3>Students from CSV:</h3>
         {students.map((student) => (
-          <div key={student._id}>
+          <div key={student._id} className="student-entry">
             <label>
               <input
                 type="checkbox"
@@ -144,15 +125,16 @@ const CreateTeamFromCsv = ({ setRoute, instructorId }) => {
                 checked={selectedStudents.includes(student._id)}
                 onChange={handleStudentSelect}
               />
-              {student.firstname} {student.lastname} {/* Display student names */}
+              {student.firstname} {student.lastname}
             </label>
           </div>
         ))}
 
-        <button type="submit">Create Team</button> {/* Button to create the team */}
+        <button type="submit">Create Team</button>
       </form>
-
-      <button onClick={() => setRoute('instructor-dashboard')}>Back to Instructor Dashboard</button> {/* Go back to dashboard */}
+      <button onClick={() => setRoute('instructor-dashboard')} className="back-button">
+        Back to Instructor Dashboard
+      </button>
     </div>
   );
 };

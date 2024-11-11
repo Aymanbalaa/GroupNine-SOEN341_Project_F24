@@ -15,6 +15,8 @@ describe('Login Component', () => {
     mockSetRoute.mockClear();
   });
 
+  // TEST 1111111111111111111111111111111111111111111111111111111
+  // MAKE SURE BUTTONS AND FORMS ARE THEREEEEEEEEEEEEEEEEEEEEEEEE
   test('renders login form', () => {
     render(<Login setRoute={mockSetRoute} />);
 
@@ -23,6 +25,8 @@ describe('Login Component', () => {
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
 
+  // TEST 222222222222222222222222222222222222222222222222222222
+  // MAKE SURE IT REDIRECTS TO DASHBOARD ON SUCCESSFUL LOGIN
   test('redirects to dashboard on successful login', async () => {
     API.post.mockResolvedValueOnce({});
 
