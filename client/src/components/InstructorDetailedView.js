@@ -111,6 +111,7 @@ const exportToPDF = async () => {
         ]),
       });
 
+      
       yPosition = doc.lastAutoTable.finalY + 10; // Update yPosition to the end of the table + margin
     });
 
