@@ -95,3 +95,56 @@
 .individual-comment:first-child {
   border-top: none;
 }
+
+.average-row {
+  font-weight: bold;
+  background-color: #f0f0f0;
+  text-align: center;
+}
+
+.export-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.export-select {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f4f4f4;
+  cursor: pointer;
+}
+
+.export-button {
+  padding: 8px 20px;
+  background-color: #5e35b1;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.export-button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #5e35b1;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

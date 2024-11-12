@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 import './InstructorDetailedView.css';
 
 const InstructorDetailedView = ({ setRoute }) => {
   const [detailedData, setDetailedData] = useState([]);
   const [error, setError] = useState(null);
+  const [exportFormat, setExportFormat] = useState('pdf');
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     const fetchDetailedData = async () => {
@@ -68,10 +72,94 @@ const InstructorDetailedView = ({ setRoute }) => {
     }
   }, [setRoute]);
 
+  // Function to handle export
+  const handleExport = async () => {
+    setIsExporting(true);
+    if (exportFormat === 'pdf') {
+      await exportToPDF();
+    } else {
+      exportToCSV();
+    }
+    setIsExporting(false);
+  };
+
+  // Export to PDF
+const exportToPDF = async () => {
+  const doc = new jsPDF();
+  let yPosition = 20; // Initial vertical position for the content
+  doc.text('Detailed Assessment Report', 20, yPosition);
+  yPosition += 10; // Move down a bit for the next section
+
+  detailedData.forEach((team) => {
+    doc.text(`Team Name: ${team.name}`, 20, yPosition);
+    yPosition += 10; // Move down before listing members
+
+    team.members.forEach((member) => {
+      doc.text(`Student: ${member.student}`, 20, yPosition);
+      yPosition += 10; // Move down before adding the table
+
+      doc.autoTable({
+        startY: yPosition,
+        head: [['Evaluator', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average']],
+        body: member.assessments.map((assessment) => [
+          assessment.evaluator,
+          assessment.cooperation,
+          assessment.conceptual,
+          assessment.practical,
+          assessment.workEthic,
+          assessment.averageAcrossAll,
+        ]),
+      });
+
+      yPosition = doc.lastAutoTable.finalY + 10; // Update yPosition to the end of the table + margin
+    });
+
+    yPosition += 10; // Add some space before the next team section
+  });
+
+  doc.save('Detailed_Assessment_Report.pdf');
+};
+
+
+  // Export to CSV
+  const exportToCSV = () => {
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    csvContent += 'Team Name,Student,Evaluator,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
+
+    detailedData.forEach((team) => {
+      team.members.forEach((member) => {
+        member.assessments.forEach((assessment) => {
+          csvContent += `${team.name},${member.student},${assessment.evaluator},${assessment.cooperation},${assessment.conceptual},${assessment.practical},${assessment.workEthic},${assessment.averageAcrossAll}\n`;
+        });
+      });
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'Detailed_Assessment_Report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="detailed-view-container">
       <h2>Detailed View of Assessments</h2>
       {error && <p className="error-message">{error}</p>}
+      <div className="export-section">
+        <select
+          value={exportFormat}
+          onChange={(e) => setExportFormat(e.target.value)}
+          className="export-select"
+        >
+          <option value="pdf">Export as PDF</option>
+          <option value="csv">Export as CSV</option>
+        </select>
+        <button onClick={handleExport} className="export-button" disabled={isExporting}>
+          {isExporting ? <div className="spinner"></div> : 'Export'}
+        </button>
+      </div>
       {detailedData.length > 0 ? (
         detailedData.map((team, teamIndex) => (
           <div key={teamIndex} className="team-section">
