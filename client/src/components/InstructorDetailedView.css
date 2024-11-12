@@ -64,3 +64,34 @@
 .error-message {
   color: red;
 }
+
+.no-evaluations,
+.no-comments {
+  color: #999;
+  font-style: italic;
+  margin-top: 10px;
+}
+
+.comments-toggle {
+  color: #5e35b1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.comments-content {
+  padding: 10px;
+  border-left: 3px solid #5e35b1;
+  background-color: #f2f2f2;
+  margin-top: 5px;
+  border-radius: 5px;
+}
+
+.individual-comment {
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-top: 1px solid #ddd;
+}
+
+.individual-comment:first-child {
+  border-top: none;
+}
