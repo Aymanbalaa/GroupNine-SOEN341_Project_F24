@@ -43,9 +43,9 @@ const App = () => {
       case 'load-team-csv':
         return <CreateTeamFromCsv setRoute={setRoute} />;
       case 'detailed-view':
-        return <InstructorDetailedView />;
+        return <InstructorDetailedView  setRoute={setRoute}/>;
       case 'summary-view':
-        return <InstructorSummaryView />;
+        return <InstructorSummaryView setRoute={setRoute} />;
         
       case 'login':
       default:

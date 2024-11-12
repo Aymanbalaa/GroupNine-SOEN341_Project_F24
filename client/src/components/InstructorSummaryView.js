@@ -1,70 +1,18 @@
-// src/components/assessments/InstructorSummaryView.js
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import API from '../api';
 import './InstructorSummaryView.css';
 
-const InstructorSummaryView = () => {
+const InstructorSummaryView = ({ setRoute }) => {
   const [summaryData, setSummaryData] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchSummaryData = async () => {
       try {
-        const res = await API.get('/peer-assessment/all-assessments');
-        const assessments = res.data;
+        const res = await API.get('/peer-assessment/summary-view');
+        const summary = res.data;
 
-        // Summarize data by student
-        const summaryMap = {};
-        assessments.forEach((assessment) => {
-          if (!assessment.memberId || !assessment.studentId) return; // Skip if data is missing
-
-          const memberId = assessment.memberId._id;
-
-          // Initialize student entry if not present
-          if (!summaryMap[memberId]) {
-            summaryMap[memberId] = {
-              studentId: assessment.memberId._id,
-              firstname: assessment.memberId.firstname,
-              lastname: assessment.memberId.lastname,
-              team: 'TBD', // Placeholder if team data is not available
-              cooperation: 0,
-              conceptual: 0,
-              practical: 0,
-              workEthic: 0,
-              responseCount: 0,
-            };
-          }
-
-          // Accumulate ratings and increment response count
-          summaryMap[memberId].cooperation += assessment.ratings["Cooperation"] || 0;
-          summaryMap[memberId].conceptual += assessment.ratings["Conceptual Contribution"] || 0;
-          summaryMap[memberId].practical += assessment.ratings["Practical Contribution"] || 0;
-          summaryMap[memberId].workEthic += assessment.ratings["Work Ethic"] || 0;
-          summaryMap[memberId].responseCount += 1;
-        });
-
-        // Calculate averages for each student and format data for display
-        const summaryArray = Object.values(summaryMap).map((student) => ({
-          studentId: student.studentId,
-          lastname: student.lastname,
-          firstname: student.firstname,
-          team: student.team,
-          cooperation: (student.cooperation / student.responseCount).toFixed(2),
-          conceptual: (student.conceptual / student.responseCount).toFixed(2),
-          practical: (student.practical / student.responseCount).toFixed(2),
-          workEthic: (student.workEthic / student.responseCount).toFixed(2),
-          average: (
-            (student.cooperation +
-              student.conceptual +
-              student.practical +
-              student.workEthic) /
-            (4 * student.responseCount)
-          ).toFixed(2),
-          responseCount: student.responseCount,
-        }));
-
-        setSummaryData(summaryArray);
+        setSummaryData(summary);
       } catch (err) {
         console.error('Error fetching summary data:', err.message);
         setError('Failed to load summary data');
@@ -73,6 +21,15 @@ const InstructorSummaryView = () => {
 
     fetchSummaryData();
   }, []);
+
+  const handleBackToDashboard = useCallback(() => {
+    if (setRoute) {
+      setRoute('instructor-dashboard');
+    } else {
+      console.error('setRoute function is not defined');
+      alert('Unable to navigate back to the dashboard');
+    }
+  }, [setRoute]);
 
   return (
     <div className="summary-view-container">
@@ -114,6 +71,7 @@ const InstructorSummaryView = () => {
       ) : (
         <p>No summary data available.</p>
       )}
+      <button onClick={handleBackToDashboard}>Back to Dashboard</button>
     </div>
   );
 };

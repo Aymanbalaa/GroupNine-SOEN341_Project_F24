@@ -142,52 +142,46 @@ router.get('/detailed-view', verifyToken, async (req, res) => {
 });
 
 
+// Route for instructors to view a summary view of assessments
 router.get('/summary-view', verifyToken, async (req, res) => {
   if (req.user.role !== 'instructor') {
     return res.status(403).json({ message: 'Access denied' });
   }
 
   try {
-    // Step 1: Fetch all peer assessments and include student and member details
     const assessments = await PeerAssessment.find()
       .populate({
         path: 'studentId',
-        select: 'firstname lastname id',  // Ensure the readable `id` is included
+        select: 'firstname lastname id',
       })
       .populate({
         path: 'memberId',
-        select: 'firstname lastname id',  // Ensure the readable `id` is included
+        select: 'firstname lastname id',
       })
       .lean();
 
-    // Step 2: Fetch all teams, and populate members to retrieve `id` for mapping
-    const teams = await Team.find().populate('members', 'id firstname lastname').lean();
+    const teams = await Team.find().populate('members', 'id').lean();
     const teamMap = {};
     teams.forEach((team) => {
       team.members.forEach((member) => {
         if (member && member.id) {
-          teamMap[member.id] = team.name; // Map `User.id` to `Team.name`
+          teamMap[member.id] = team.name;
         }
       });
     });
 
-    console.log('Team map:', teamMap); // Log the team map to confirm correct mapping
-
-    // Step 3: Aggregate data by student, including team name
     const summaryData = {};
     assessments.forEach((assessment) => {
-      // Ensure memberId and studentId exist to avoid undefined errors
       if (!assessment.memberId || !assessment.studentId) return;
 
-      const memberId = assessment.memberId.id; // Use readable `id` instead of `_id`
+      const memberId = assessment.memberId.id;
 
-      // Initialize or accumulate data for each student
       if (!summaryData[memberId]) {
         summaryData[memberId] = {
           studentId: memberId,
           firstname: assessment.memberId.firstname,
           lastname: assessment.memberId.lastname,
-          team: teamMap[memberId] || 'No Team', // Associate `id` with team name or 'No Team'
+          team: teamMap[memberId] || 'No Team',
           cooperation: 0,
           conceptual: 0,
           practical: 0,
@@ -196,7 +190,6 @@ router.get('/summary-view', verifyToken, async (req, res) => {
         };
       }
 
-      // Accumulate ratings
       summaryData[memberId].cooperation += assessment.ratings["Cooperation"] || 0;
       summaryData[memberId].conceptual += assessment.ratings["Conceptual Contribution"] || 0;
       summaryData[memberId].practical += assessment.ratings["Practical Contribution"] || 0;
@@ -204,7 +197,6 @@ router.get('/summary-view', verifyToken, async (req, res) => {
       summaryData[memberId].responseCount += 1;
     });
 
-    // Step 4: Calculate averages and format the summary
     const summary = Object.values(summaryData).map((student) => ({
       studentId: student.studentId,
       lastname: student.lastname,
@@ -224,14 +216,13 @@ router.get('/summary-view', verifyToken, async (req, res) => {
       responseCount: student.responseCount,
     }));
 
-    console.log('Final summary data:', summary); // Log final summary for verification
-
     res.json(summary);
   } catch (err) {
     console.error('Error fetching summary view data:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Route to fetch feedback for a student
 router.get('/my-feedback', verifyToken, async (req, res) => {
