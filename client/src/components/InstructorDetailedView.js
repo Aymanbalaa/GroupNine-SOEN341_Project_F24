@@ -79,42 +79,35 @@ const InstructorDetailedView = ({ setRoute }) => {
             {team.members.map((member, memberIndex) => (
               <div key={memberIndex} className="member-section">
                 <h4>Student Name: {member.student}</h4>
-                <table className="assessment-table">
-                  <thead>
-                    <tr>
-                      <th>Evaluator</th>
-                      <th>Cooperation</th>
-                      <th>Conceptual</th>
-                      <th>Practical</th>
-                      <th>Work Ethic</th>
-                      <th>Average Across All</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {member.assessments.map((assessment, assessmentIndex) => (
-                      <tr key={assessmentIndex}>
-                        <td>{assessment.evaluator}</td>
-                        <td>{assessment.cooperation}</td>
-                        <td>{assessment.conceptual}</td>
-                        <td>{assessment.practical}</td>
-                        <td>{assessment.workEthic}</td>
-                        <td>{assessment.averageAcrossAll}</td>
+                {member.assessments.length > 0 ? (
+                  <table className="assessment-table">
+                    <thead>
+                      <tr>
+                        <th>Evaluator</th>
+                        <th>Cooperation</th>
+                        <th>Conceptual</th>
+                        <th>Practical</th>
+                        <th>Work Ethic</th>
+                        <th>Average Across All</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="comments-section">
-                  <h5>Comments:</h5>
-                  {member.assessments.map((assessment, assessmentIndex) => (
-                    <div key={assessmentIndex}>
-                      {Object.entries(assessment.comments).map(([dimension, comment]) => (
-                        <p key={dimension}>
-                          <strong>{assessment.evaluator} - {dimension} Comment:</strong> {comment || 'No comment provided'}
-                        </p>
+                    </thead>
+                    <tbody>
+                      {member.assessments.map((assessment, assessmentIndex) => (
+                        <tr key={assessmentIndex}>
+                          <td>{assessment.evaluator}</td>
+                          <td>{assessment.cooperation}</td>
+                          <td>{assessment.conceptual}</td>
+                          <td>{assessment.practical}</td>
+                          <td>{assessment.workEthic}</td>
+                          <td>{assessment.averageAcrossAll}</td>
+                        </tr>
                       ))}
-                    </div>
-                  ))}
-                </div>
+                    </tbody>
+                  </table>
+                ) : (
+                  <p className="no-evaluations">No evaluations available for this student.</p>
+                )}
+                <CollapsibleComments assessments={member.assessments} />
               </div>
             ))}
           </div>
@@ -123,6 +116,37 @@ const InstructorDetailedView = ({ setRoute }) => {
         <p>No assessment data available.</p>
       )}
       <button onClick={handleBackToDashboard}>Back to Dashboard</button>
+    </div>
+  );
+};
+
+const CollapsibleComments = ({ assessments }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  const toggleExpanded = () => setExpanded((prev) => !prev);
+
+  return (
+    <div className="comments-section">
+      <h5 onClick={toggleExpanded} className="comments-toggle">
+        {expanded ? 'Hide Comments' : 'Show Comments'}
+      </h5>
+      {expanded && (
+        <div className="comments-content">
+          {assessments.length > 0 ? (
+            assessments.map((assessment, assessmentIndex) => (
+              <div key={assessmentIndex} className="individual-comment">
+                {Object.entries(assessment.comments).map(([dimension, comment]) => (
+                  <p key={dimension}>
+                    <strong>{assessment.evaluator} - {dimension} Comment:</strong> {comment || 'No comment provided'}
+                  </p>
+                ))}
+              </div>
+            ))
+          ) : (
+            <p className="no-comments">No comments available for this student.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
