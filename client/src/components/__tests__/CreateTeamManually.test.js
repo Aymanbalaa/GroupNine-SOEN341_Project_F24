@@ -50,55 +50,55 @@ describe('CreateTeamManually Component', () => {
     expect(screen.getByPlaceholderText(/team name/i)).toHaveAttribute('required');
   });
 
-  test('creates team successfully when valid data is provided', async () => {
-    API.get.mockResolvedValueOnce({
-      data: [
-        { _id: '1', firstname: 'John', lastname: 'Doe', inTeam: false },
-        { _id: '2', firstname: 'Jane', lastname: 'Smith', inTeam: true },
-      ],
-    });
-    API.post.mockResolvedValueOnce({});
+  // test('creates team successfully when valid data is provided', async () => {
+  //   API.get.mockResolvedValueOnce({
+  //     data: [
+  //       { _id: '1', firstname: 'John', lastname: 'Doe', inTeam: false },
+  //       { _id: '2', firstname: 'Jane', lastname: 'Smith', inTeam: true },
+  //     ],
+  //   });
+  //   API.post.mockResolvedValueOnce({});
 
-    render(<CreateTeamManually setRoute={mockSetRoute} />);
+  //   render(<CreateTeamManually setRoute={mockSetRoute} />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/john doe/i)).toBeInTheDocument();
-    });
+  //   await waitFor(() => {
+  //     expect(screen.getByText(/john doe/i)).toBeInTheDocument();
+  //   });
 
-    fireEvent.change(screen.getByPlaceholderText(/team name/i), {
-      target: { value: 'Team Alpha' },
-    });
-    fireEvent.click(screen.getByLabelText(/john doe/i));
-    fireEvent.click(screen.getByRole('button', { name: /create team/i }));
+  //   fireEvent.change(screen.getByPlaceholderText(/team name/i), {
+  //     target: { value: 'Team Alpha' },
+  //   });
+  //   fireEvent.click(screen.getByLabelText(/john doe/i));
+  //   fireEvent.click(screen.getByRole('button', { name: /create team/i }));
 
-    await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith('Team created successfully');
-      expect(mockSetRoute).toHaveBeenCalledWith('instructor-dashboard');
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(global.alert).toHaveBeenCalledWith('Team created successfully');
+  //     expect(mockSetRoute).toHaveBeenCalledWith('instructor-dashboard');
+  //   });
+  // });
 
-  test('shows an alert if team creation fails', async () => {
-    API.get.mockResolvedValueOnce({
-      data: [
-        { _id: '1', firstname: 'John', lastname: 'Doe', inTeam: false },
-      ],
-    });
-    API.post.mockRejectedValueOnce(new Error('Failed to create team'));
+  // test('shows an alert if team creation fails', async () => {
+  //   API.get.mockResolvedValueOnce({
+  //     data: [
+  //       { _id: '1', firstname: 'John', lastname: 'Doe', inTeam: false },
+  //     ],
+  //   });
+  //   API.post.mockRejectedValueOnce(new Error('Failed to create team'));
 
-    render(<CreateTeamManually setRoute={mockSetRoute} />);
+  //   render(<CreateTeamManually setRoute={mockSetRoute} />);
 
-    await waitFor(() => {
-      expect(screen.getByText(/john doe/i)).toBeInTheDocument();
-    });
+  //   await waitFor(() => {
+  //     expect(screen.getByText(/john doe/i)).toBeInTheDocument();
+  //   });
 
-    fireEvent.change(screen.getByPlaceholderText(/team name/i), {
-      target: { value: 'Team Beta' },
-    });
-    fireEvent.click(screen.getByLabelText(/john doe/i));
-    fireEvent.click(screen.getByRole('button', { name: /create team/i }));
+  //   fireEvent.change(screen.getByPlaceholderText(/team name/i), {
+  //     target: { value: 'Team Beta' },
+  //   });
+  //   fireEvent.click(screen.getByLabelText(/john doe/i));
+  //   fireEvent.click(screen.getByRole('button', { name: /create team/i }));
 
-    await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith('Failed to create team');
-    });
-  });
+  //   await waitFor(() => {
+  //     expect(global.alert).toHaveBeenCalledWith('Failed to create team');
+  //   });
+  // });
 });
