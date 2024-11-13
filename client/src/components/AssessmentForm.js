@@ -10,10 +10,11 @@ const AssessmentForm = ({ assessment, onSubmit }) => {
     <div>
       {['Cooperation', 'Conceptual Contribution', 'Practical Contribution', 'Work Ethic'].map((dimension) => (
         <div key={dimension}>
-          <label>{dimension}:</label>
+          <label htmlFor={`rating-${dimension}`}>{dimension}:</label>
           <select
+            id={`rating-${dimension}`}
             value={ratings[dimension] || ''}
-            onChange={(e) => setRatings({ ...ratings, [dimension]: e.target.value })}
+            onChange={(e) => setRatings({ ...ratings, [dimension]: Number(e.target.value) })}
           >
             <option value="">Select Rating</option>
             {[1, 2, 3, 4, 5].map((val) => (
@@ -21,6 +22,7 @@ const AssessmentForm = ({ assessment, onSubmit }) => {
             ))}
           </select>
           <textarea
+            id={`comment-${dimension}`}
             placeholder={`Comments for ${dimension}`}
             value={comments[dimension] || ''}
             onChange={(e) => setComments({ ...comments, [dimension]: e.target.value })}
