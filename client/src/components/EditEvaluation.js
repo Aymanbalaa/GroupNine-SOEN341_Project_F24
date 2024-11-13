@@ -43,8 +43,9 @@ const EditEvaluation = ({ setRoute }) => {
             <>
               {Object.keys(evaluation.ratings).map((dimension) => (
                 <div key={dimension}>
-                  <label>{dimension}:</label>
+                  <label htmlFor={`rating-${dimension}`}>{dimension}:</label>
                   <input
+                    id={`rating-${dimension}`}
                     type="number"
                     value={evaluation.ratings[dimension]}
                     onChange={(e) => {
@@ -54,6 +55,7 @@ const EditEvaluation = ({ setRoute }) => {
                     }}
                   />
                   <textarea
+                    id={`comment-${dimension}`}
                     value={evaluation.comments[dimension]}
                     onChange={(e) => {
                       const updatedEvaluations = [...evaluations];
