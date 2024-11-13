@@ -50,10 +50,7 @@ describe('EditEvaluation', () => {
   });
 
   test('saves an edited evaluation', async () => {
-    API.put.mockResolvedValue({});
-
-    // Mock window.alert
-    const alertMock = jest.spyOn(window, 'alert').mockImplementation();
+    const alertMock = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     fireEvent.click(screen.getAllByText('Edit')[0]); // Assuming there is an "Edit" button for each evaluation
 
