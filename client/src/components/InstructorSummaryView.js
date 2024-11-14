@@ -55,29 +55,37 @@ const InstructorSummaryView = ({ setRoute }) => {
     doc.text('Summary of Peer Assessments', 20, 10);
     doc.autoTable({
       startY: 20,
-      head: [['Student ID', 'Last Name', 'First Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average', 'Peers Responded']],
+      head: [['Student ID', 'Full Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average']],
       body: filteredData.map(student => [
         student.studentId,
-        student.lastname,
-        student.firstname,
+        `${student.firstname} ${student.lastname}`,
         student.team,
         student.cooperation,
         student.conceptual,
         student.practical,
         student.workEthic,
         student.average,
-        student.responseCount,
       ]),
+      columnStyles: {
+        0: { cellWidth: 25 }, // Student ID
+        1: { cellWidth: 30 }, // Full Name
+        2: { cellWidth: 20 }, // Team
+        3: { cellWidth: 20 }, // Cooperation
+        4: { cellWidth: 20 }, // Conceptual
+        5: { cellWidth: 20 }, // Practical
+        6: { cellWidth: 20 }, // Work Ethic
+        7: { cellWidth: 20 }, // Average
+      },
     });
     doc.save('Summary_Assessment_Report.pdf');
   };
 
   const exportToCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded\n';
+    csvContent += 'Student ID,Full Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
 
     filteredData.forEach(student => {
-      csvContent += `${student.studentId},${student.lastname},${student.firstname},${student.team},${student.cooperation},${student.conceptual},${student.practical},${student.workEthic},${student.average},${student.responseCount}\n`;
+      csvContent += `${student.studentId},${student.firstname} ${student.lastname},${student.team},${student.cooperation},${student.conceptual},${student.practical},${student.workEthic},${student.average}\n`;
     });
 
     const encodedUri = encodeURI(csvContent);
@@ -141,7 +149,7 @@ const InstructorSummaryView = ({ setRoute }) => {
         </button>
       </div>
       <div className="search-input-container">
-        <span className="search-input-icon">🔍</span> {/* You can replace this with a FontAwesome or Material icon if preferred */}
+        <span className="search-input-icon">🔍</span>
         <input
           type="text"
           placeholder="Search by name or student ID"
@@ -182,7 +190,6 @@ const InstructorSummaryView = ({ setRoute }) => {
               <th onClick={() => handleSort('average')}>
                 Average {renderSortIcon('average')}
               </th>
-              <th>Peers who responded</th>
             </tr>
           </thead>
           <tbody>
@@ -197,7 +204,6 @@ const InstructorSummaryView = ({ setRoute }) => {
                 <td>{student.practical}</td>
                 <td>{student.workEthic}</td>
                 <td>{student.average}</td>
-                <td>{student.responseCount}</td>
               </tr>
             ))}
           </tbody>
