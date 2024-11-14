@@ -1,44 +1,87 @@
-/* src/components/Dashboard.css */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
+  font-family: 'Arial', sans-serif;
+}
 
-.dashboard {
-    max-width: 800px;
-    margin: 0 auto;
+.dashboard-container h2 {
+  color: #5e35b1;
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid #5e35b1;
+  padding-bottom: 10px;
+}
+
+.dashboard-container p {
+  color: #555;
+  font-size: 16px;
+  text-align: center;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: 2px solid #5e35b1;
+  border-radius: 8px;
+  font-size: 18px;
+  color: #5e35b1;
+  font-weight: bold;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+button:hover {
+  background-color: #5e35b1;
+  color: #ffffff;
+}
+
+button:active {
+  background-color: #4527a0;
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button {
+  background-color: #e53935;
+  color: #ffffff;
+  border: 2px solid #e53935;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #c62828;
+}
+
+.logout-button:active {
+  background-color: #b71c1c;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .dashboard-container {
     padding: 20px;
-    background-color: #f0f0f8;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
-  
-  .dashboard h2 {
-    color: #333;
-    text-align: center;
-    font-size: 24px;
-  }
-  
-  .dashboard p {
-    color: #555;
+
+  button {
     font-size: 16px;
+    padding: 12px;
   }
-  
-  .dashboard button {
-    margin-top: 15px;
-    margin-right: 10px;
-    padding: 10px 20px;
-    font-size: 14px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .dashboard button:hover {
-    background-color: #0056b3;
-  }
-  
-  .center-button {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-  
+}

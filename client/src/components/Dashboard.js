@@ -1,4 +1,3 @@
-// src/components/Dashboard.js
 import React, { useState, useEffect } from 'react';
 import API from '../api';
 import InstructorDashboard from './InstructorDashboard';
@@ -45,7 +44,7 @@ const Dashboard = ({ setRoute }) => {
 
   const backButton = (
     <div className="center-button">
-      <button onClick={() => resetView()}>Back to Dashboard</button>
+      <button onClick={() => resetView()} className="back-button">Back to Dashboard</button>
     </div>
   );
 
@@ -68,7 +67,7 @@ const Dashboard = ({ setRoute }) => {
   }
 
   return (
-    <div className="dashboard">
+    <div className="dashboard-container">
       <h2>Welcome, {user.firstname} {user.lastname}!</h2>
       <p>You are logged in as a {user.role}.</p>
 
@@ -95,7 +94,7 @@ const Dashboard = ({ setRoute }) => {
       ) : (
         <div>
           {team && (
-            <div>
+            <div className="team-info">
               <h3>Your Team: {team.name}</h3>
               <ul>
                 {team.members.map((member) => (
@@ -108,6 +107,10 @@ const Dashboard = ({ setRoute }) => {
           <button onClick={() => toggleView(setMakingEvaluation)}>Make Evaluation</button>
           <button onClick={() => toggleView(setViewingFeedback)}>View Received Feedback</button>
           <button onClick={() => toggleView(setEditingEvaluation)}>Edit Evaluation</button>
+          {/* Logout Button */}
+          <button className="logout-button" onClick={() => setRoute('login')}>
+            Log Out
+          </button>
         </div>
       )}
     </div>
