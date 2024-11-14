@@ -125,14 +125,14 @@ const InstructorStatistics = ({ setRoute }) => {
     ],
   };
 
-  // Chart options optimized for laptop screens
+  // Chart options optimized for laptop screens, with larger x-axis labels
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
       x: {
         ticks: {
-          font: { size: 10 },
+          font: { size: 14 }, // Increase font size for student/team names
           maxRotation: 45,
           minRotation: 45,
         },

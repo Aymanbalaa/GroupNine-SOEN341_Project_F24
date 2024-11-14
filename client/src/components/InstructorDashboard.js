@@ -27,6 +27,11 @@ const InstructorDashboard = ({ setRoute }) => {
       <button onClick={() => setRoute('statistics-view')}>
         View Statistics
       </button>
+
+      {/* Logout button with different styling */}
+      <button className="logout-button" onClick={() => setRoute('login')}>
+        Log Out
+      </button>
     </div>
   );
 };
