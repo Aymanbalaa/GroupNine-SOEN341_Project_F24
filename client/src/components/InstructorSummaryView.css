@@ -45,3 +45,36 @@
     font-weight: bold;
   }
   
+/* Updated Search bar styling */
+.search-input-container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin: 15px auto;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 12px 10px 35px; /* Added left padding for the icon */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  display: block;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #5e35b1;
+  box-shadow: 0 0 4px rgba(94, 53, 177, 0.3);
+}
+
+/* Search icon inside input */
+.search-input-icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #aaa;
+  pointer-events: none;
+}

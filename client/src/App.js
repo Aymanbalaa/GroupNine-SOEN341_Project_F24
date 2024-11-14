@@ -13,6 +13,7 @@ import ViewAssessments from './components/ViewAssessments';
 import EditEvaluation from './components/EditEvaluation';
 import AnonymousFeedback from './components/AnonymousFeedback';
 import AssessmentForm from './components/AssessmentForm';
+import InstructorStatistics from './components/InstructorStatistics';
 
 const App = () => {
   const [route, setRoute] = useState('login'); // Set initial route
@@ -46,7 +47,8 @@ const App = () => {
         return <InstructorDetailedView  setRoute={setRoute}/>;
       case 'summary-view':
         return <InstructorSummaryView setRoute={setRoute} />;
-        
+      case 'statistics-view':
+        return <InstructorStatistics setRoute={setRoute} />;
       case 'login':
       default:
         return <Login setRoute={setRoute} />;

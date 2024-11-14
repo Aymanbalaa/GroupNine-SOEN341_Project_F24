@@ -6,18 +6,26 @@ import './InstructorSummaryView.css';
 
 const InstructorSummaryView = ({ setRoute }) => {
   const [summaryData, setSummaryData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
   const [exportFormat, setExportFormat] = useState('pdf');
   const [isExporting, setIsExporting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: 'studentId', direction: 'ascending' });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchSummaryData = async () => {
+      setIsLoading(true);
       try {
         const res = await API.get('/peer-assessment/summary-view');
         setSummaryData(res.data);
+        setFilteredData(res.data);
       } catch (err) {
         console.error('Error fetching summary data:', err.message);
         setError('Failed to load summary data');
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSummaryData();
@@ -42,14 +50,13 @@ const InstructorSummaryView = ({ setRoute }) => {
     setIsExporting(false);
   };
 
-  // Export data to PDF
   const exportToPDF = async () => {
     const doc = new jsPDF();
     doc.text('Summary of Peer Assessments', 20, 10);
     doc.autoTable({
       startY: 20,
       head: [['Student ID', 'Last Name', 'First Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average', 'Peers Responded']],
-      body: summaryData.map(student => [
+      body: filteredData.map(student => [
         student.studentId,
         student.lastname,
         student.firstname,
@@ -65,12 +72,11 @@ const InstructorSummaryView = ({ setRoute }) => {
     doc.save('Summary_Assessment_Report.pdf');
   };
 
-  // Export data to CSV
   const exportToCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
     csvContent += 'Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded\n';
 
-    summaryData.forEach(student => {
+    filteredData.forEach(student => {
       csvContent += `${student.studentId},${student.lastname},${student.firstname},${student.team},${student.cooperation},${student.conceptual},${student.practical},${student.workEthic},${student.average},${student.responseCount}\n`;
     });
 
@@ -81,6 +87,40 @@ const InstructorSummaryView = ({ setRoute }) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleSort = (key) => {
+    const sortableColumns = ['studentId', 'lastname', 'firstname', 'cooperation', 'conceptual', 'practical', 'workEthic', 'average'];
+    if (!sortableColumns.includes(key)) return;
+
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (a[key] < b[key]) return direction === 'ascending' ? -1 : 1;
+      if (a[key] > b[key]) return direction === 'ascending' ? 1 : -1;
+      return 0;
+    });
+    setFilteredData(sortedData);
+  };
+
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+    const filtered = summaryData.filter(
+      (student) =>
+        student.studentId.toString().includes(term) ||
+        student.firstname.toLowerCase().includes(term) ||
+        student.lastname.toLowerCase().includes(term)
+    );
+    setFilteredData(filtered);
+  };
+
+  const renderSortIcon = (column) => {
+    if (sortConfig.key !== column) return null;
+    return sortConfig.direction === 'ascending' ? '▲' : '▼';
   };
 
   return (
@@ -100,24 +140,53 @@ const InstructorSummaryView = ({ setRoute }) => {
           {isExporting ? <div className="spinner"></div> : 'Export'}
         </button>
       </div>
-      {summaryData.length > 0 ? (
+      <div className="search-input-container">
+        <span className="search-input-icon">🔍</span> {/* You can replace this with a FontAwesome or Material icon if preferred */}
+        <input
+          type="text"
+          placeholder="Search by name or student ID"
+          value={searchTerm}
+          onChange={handleSearch}
+          className="search-input"
+        />
+      </div>
+
+      {isLoading ? (
+        <div className="loading-spinner">Loading...</div>
+      ) : filteredData.length > 0 ? (
         <table className="summary-table">
           <thead>
             <tr>
-              <th>Student ID</th>
-              <th>Last Name</th>
-              <th>First Name</th>
+              <th onClick={() => handleSort('studentId')}>
+                Student ID {renderSortIcon('studentId')}
+              </th>
+              <th onClick={() => handleSort('lastname')}>
+                Last Name {renderSortIcon('lastname')}
+              </th>
+              <th onClick={() => handleSort('firstname')}>
+                First Name {renderSortIcon('firstname')}
+              </th>
               <th>Team</th>
-              <th>Cooperation</th>
-              <th>Conceptual Contribution</th>
-              <th>Practical Contribution</th>
-              <th>Work Ethic</th>
-              <th>Average</th>
+              <th onClick={() => handleSort('cooperation')}>
+                Cooperation {renderSortIcon('cooperation')}
+              </th>
+              <th onClick={() => handleSort('conceptual')}>
+                Conceptual Contribution {renderSortIcon('conceptual')}
+              </th>
+              <th onClick={() => handleSort('practical')}>
+                Practical Contribution {renderSortIcon('practical')}
+              </th>
+              <th onClick={() => handleSort('workEthic')}>
+                Work Ethic {renderSortIcon('workEthic')}
+              </th>
+              <th onClick={() => handleSort('average')}>
+                Average {renderSortIcon('average')}
+              </th>
               <th>Peers who responded</th>
             </tr>
           </thead>
           <tbody>
-            {summaryData.map((student, index) => (
+            {filteredData.map((student, index) => (
               <tr key={index}>
                 <td>{student.studentId}</td>
                 <td>{student.lastname}</td>

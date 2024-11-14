@@ -23,6 +23,10 @@ const InstructorDashboard = ({ setRoute }) => {
       <button onClick={() => setRoute('summary-view')}>
         Summary View of Assessments
       </button>
+
+      <button onClick={() => setRoute('statistics-view')}>
+        View Statistics
+      </button>
     </div>
   );
 };
