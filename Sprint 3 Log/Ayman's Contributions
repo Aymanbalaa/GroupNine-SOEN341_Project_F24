@@ -1,4 +1,4 @@
-Designed unit tests for sprint 1 activities and added them to the CI Pipeline. 30/10/2024 - 5 HOURS
+Designed unit tests for sprint 1 activities and added them to the CI Pipeline.       30/10/2024 - 5 HOURS
 Implemeneted the detailed instructor dashboard.                                      2/11/2024  - 4 HOURS
 Implemented the summarized instructor dashboard.                                     3/11/2024  - 6 HOURS
 Designed the instuctor dashboard with navigation options.                            6/11/2024  - 5 HOURS
@@ -6,3 +6,4 @@ Fetched peer assessment and logged them in instructor dhasboard.                
 Added more Unit Tests for previous sprint features                                   11/11/2024 - 6 HOURS
 Added Export As PDF or CSV Buttons for Detailed and Summary View                     12/11/2024 - 5 HOURS
 Implemented new Statistics View for Instructor for individual and team averages      13/11/2024 - 8 HOURS
+Enhanced Pipeline runnind and dependency fix for Github Actions                      14/11/2024 - 4 HOURS
