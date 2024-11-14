@@ -11,14 +11,13 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 20  # Overall timeout for the job
+    timeout-minutes: 15  # Sets an overall timeout for the job
 
     services:
       mongodb:
         image: mongo:latest
         ports:
           - 27017:27017
-
 
     steps:
       - name: Checkout repository
@@ -29,29 +28,24 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-            ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # Global Jest installation to avoid permission issues
+      - name: Install Jest globally
+        run: npm install -g jest
 
       # Backend setup and tests
-      - name: Install backend dependencies
+      - name: Install dependencies for backend
         working-directory: server
-        run: npm install --legacy-peer-deps
+        run: timeout 300 npm install --legacy-peer-deps
 
       - name: Run backend tests
         working-directory: server
         run: npm test
 
       # Frontend setup and tests
-      - name: Install frontend dependencies
+      - name: Install dependencies for frontend
         working-directory: client
-        run: npm install --legacy-peer-deps
+        run: timeout 300 npm install --legacy-peer-deps
+  # Times out after 5 minutes if install hangs
 
       - name: Run frontend tests
         working-directory: client
