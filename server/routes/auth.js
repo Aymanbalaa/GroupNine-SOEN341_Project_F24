@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-  const { username, firstname, lastname, id, password, role } = req.body;
+  const { username, firstname, lastname,email, id, password, role } = req.body;
 
   try {
     if (!/^\d{9}$/.test(id)) {
@@ -29,6 +29,7 @@ router.post('/register', async (req, res) => {
       username,
       firstname,
       lastname,
+      email,
       id,
       password: await bcrypt.hash(password, 10),
       role
