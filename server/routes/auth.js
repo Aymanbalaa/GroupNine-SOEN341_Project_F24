@@ -37,6 +37,9 @@ router.post('/register', async (req, res) => {
 
     await user.save();
 
+    // Send welcome email
+    await sendEmail(email, 'Welcome to Our Platform', 'Thank you for registering!');
+
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
