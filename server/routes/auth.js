@@ -70,6 +70,15 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
+
+    // Send welcome email
+    const subject = 'Welcome Back!';
+    const text = `Hello ${user.firstname},\n\nWelcome back to our platform. We are glad to see you again.\n\nBest regards,\nThe Team`;
+    try {
+      await sendEmail(user.email, subject, text);
+    } catch (emailError) {
+      console.error('Error sending welcome email:', emailError.message);
+    }
     
     res.json({ message: 'Login successful' });
   } catch (err) {
