@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import API from '../api';
-import InstructorDashboard from './InstructorDashboard';
-import ViewAssessments from './ViewAssessments';
-import PeerAssessment from './PeerAssessment';
-import AnonymousFeedback from './AnonymousFeedback';
-import EditEvaluation from './EditEvaluation';
 import './Dashboard.css';
 
 const Dashboard = ({ setRoute }) => {
@@ -44,7 +39,9 @@ const Dashboard = ({ setRoute }) => {
 
   const backButton = (
     <div className="center-button">
-      <button onClick={() => resetView()} className="back-button">Back to Dashboard</button>
+      <button onClick={() => resetView()} className="back-button">
+        Back to Dashboard
+      </button>
     </div>
   );
 
@@ -55,59 +52,52 @@ const Dashboard = ({ setRoute }) => {
     setEditingEvaluation(false);
   };
 
-  if (user.role === 'instructor') {
-    return viewingAssessments ? (
-      <div>
-        {backButton}
-        <ViewAssessments role="instructor" />
-      </div>
-    ) : (
-      <InstructorDashboard setRoute={setRoute} handleViewAssessments={() => toggleView(setViewingAssessments)} />
-    );
-  }
-
   return (
     <div className="dashboard-container">
       <h2>Welcome, {user.firstname} {user.lastname}!</h2>
       <p>You are logged in as a {user.role}.</p>
 
+      {team && (
+        <div className="team-info">
+          <h3>Your Team: {team.name}</h3>
+          <ul>
+            {team.members.map((member) => (
+              <li key={member._id}>{member.firstname} {member.lastname}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {viewingAssessments ? (
         <div>
           {backButton}
-          <ViewAssessments role="student" />
+          {/* Replace with your component for viewing assessments */}
+          <div>Viewing Assessments</div>
         </div>
       ) : makingEvaluation ? (
         <div>
           {backButton}
-          <PeerAssessment setRoute={setRoute} />
+          {/* Replace with your component for making evaluations */}
+          <div>Making Evaluation</div>
         </div>
       ) : viewingFeedback ? (
         <div>
           {backButton}
-          <AnonymousFeedback />
+          {/* Replace with your component for viewing feedback */}
+          <div>Viewing Feedback</div>
         </div>
       ) : editingEvaluation ? (
         <div>
           {backButton}
-          <EditEvaluation />
+          {/* Replace with your component for editing evaluations */}
+          <div>Editing Evaluation</div>
         </div>
       ) : (
         <div>
-          {team && (
-            <div className="team-info">
-              <h3>Your Team: {team.name}</h3>
-              <ul>
-                {team.members.map((member) => (
-                  <li key={member._id}>{member.firstname} {member.lastname}</li>
-                ))}
-              </ul>
-            </div>
-          )}
           <button onClick={() => toggleView(setViewingAssessments)}>View Peer Assessments</button>
           <button onClick={() => toggleView(setMakingEvaluation)}>Make Evaluation</button>
           <button onClick={() => toggleView(setViewingFeedback)}>View Received Feedback</button>
           <button onClick={() => toggleView(setEditingEvaluation)}>Edit Evaluation</button>
-          {/* Logout Button */}
           <button className="logout-button" onClick={() => setRoute('login')}>
             Log Out
           </button>
