@@ -9,14 +9,13 @@ const Register = ({ setRoute }) => {
     username: '',
     firstname: '',
     lastname: '',
-    email: '',
     id: '',
     password: '',
     role: 'student'
   });
 
   const [errorMessage, setErrorMessage] = useState('');
-  const { username, firstname, lastname,email, id, password, role } = formData;
+  const { username, firstname, lastname, id, password, role } = formData;
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -78,19 +77,6 @@ const Register = ({ setRoute }) => {
             className="form-input"
           />
         </div>
-
-        <div className="form-group">
-          <input
-            type="text"
-            name="email"
-            value={email}
-            onChange={onChange}
-            placeholder="Email"
-            required
-            className="form-input"
-          />
-        </div>
-
         <div className="form-group">
           <input
             type="number"
