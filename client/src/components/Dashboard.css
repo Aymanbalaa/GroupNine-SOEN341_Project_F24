@@ -1,30 +1,70 @@
+body {
+  background-color: #7e57c2; /* Deep purple background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height for vertical centering */
+  font-family: 'Arial', sans-serif;
+}
+
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px;
   background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  border: 3px solid #5e35b1; /* Purple border */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
   max-width: 500px;
-  margin: 0 auto;
-  font-family: 'Arial', sans-serif;
+  width: 100%;
+  text-align: center; /* Center align all content */
 }
 
 .dashboard-container h2 {
   color: #5e35b1;
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 32px;
+  margin-bottom: 15px;
   font-weight: bold;
-  text-align: center;
   border-bottom: 2px solid #5e35b1;
   padding-bottom: 10px;
 }
 
 .dashboard-container p {
-  color: #555;
+  color: #333;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.team-info {
+  background-color: #ede7f6; /* Very light purple */
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #5e35b1;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: left; /* Align text to the left for better readability */
+}
+
+.team-info h3 {
+  font-size: 20px;
+  color: #5e35b1;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.team-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-info li {
   font-size: 16px;
-  text-align: center;
+  color: #555;
+  margin-bottom: 5px;
 }
 
 button {
@@ -38,41 +78,37 @@ button {
   font-weight: bold;
   background-color: #ffffff;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
   background-color: #5e35b1;
   color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 button:active {
   background-color: #4527a0;
   color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logout-button {
   background-color: #e53935;
   color: #ffffff;
   border: 2px solid #e53935;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .logout-button:hover {
   background-color: #c62828;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .logout-button:active {
   background-color: #b71c1c;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.center-button {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 600px) {
@@ -83,5 +119,9 @@ button:active {
   button {
     font-size: 16px;
     padding: 12px;
+  }
+
+  .team-info {
+    padding: 15px;
   }
 }

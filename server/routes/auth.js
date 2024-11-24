@@ -1,14 +1,13 @@
-// routes/auth.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/User');
 const router = express.Router();
 const sendEmail = require('../utils/email');
 
 // Register route
 router.post('/register', async (req, res) => {
-  const { username, firstname, lastname,email, id, password, role } = req.body;
+  const { username, firstname, lastname, email, id, password, role } = req.body;
 
   try {
     if (!/^\d{9}$/.test(id)) {
@@ -44,7 +43,6 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
-    
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error('Error in register route:', err.message);
@@ -68,19 +66,9 @@ router.post('/login', async (req, res) => {
     
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
-    
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
 
-    // Send welcome email
-    const subject = 'Welcome Back!';
-    const text = `Hello ${user.firstname},\n\nWelcome back to our platform. We are glad to see you again.\n\nBest regards,\nThe Team`;
-    try {
-      await sendEmail(user.email, subject, text);
-    } catch (emailError) {
-      console.error('Error sending welcome email:', emailError.message);
-    }
-    
-    res.json({ message: 'Login successful' });
+    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
+    res.json({ message: 'Login successful', role: user.role }); // Include role in response
   } catch (err) {
     console.error('Error in login route:', err.message);
     res.status(500).send('Server error');
@@ -111,7 +99,7 @@ router.get('/me', verifyToken, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    res.json(user);
+    res.json({ ...user.toObject(), role: user.role }); // Ensure role is returned
   } catch (err) {
     console.error('Error fetching user details:', err.message);
     res.status(500).send('Server error');
