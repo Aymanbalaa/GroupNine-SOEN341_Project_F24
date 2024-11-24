@@ -7,14 +7,15 @@ const Register = ({ setRoute }) => {
     username: '',
     firstname: '',
     lastname: '',
-    email: '',
     id: '',
     password: '',
     role: 'student',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+
   const { username, firstname, lastname, email, id, password, role } = formData;
+
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -32,6 +33,7 @@ const Register = ({ setRoute }) => {
   };
 
   return (
+
     <div className="auth-container">
       <div className="auth-box">
         <div className="auth-content">
@@ -50,6 +52,7 @@ const Register = ({ setRoute }) => {
             </select>
             <button type="submit">Sign Up</button>
           </form>
+
         </div>
         <div className="auth-side">
           <h2>Welcome Back!</h2>

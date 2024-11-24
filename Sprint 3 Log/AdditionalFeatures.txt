@@ -1,0 +1,10 @@
+Export Functionality:
+The dashboard now includes seamless PDF and CSV export options for both the summary and detailed assessment views. Instructors can easily download and share reports with a single click, ensuring a smooth transition between digital and offline workflows.
+
+Dynamic Sorting, Searching, and Filtering:
+In the summary view, instructors can effortlessly sort, search, and filter data by IDs and student names, enabling quick access to relevant information and ensuring streamlined navigation through large datasets.
+
+Comprehensive Statistics View:
+A statistics module has been integrated to provide visual insights into assessment data. This includes:
+Team and student averages displayed in a clean, intuitive format.
+Pie charts with assorted colors for clear, visually engaging representations of performance trends and distribution.

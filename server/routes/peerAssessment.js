@@ -5,7 +5,6 @@ const PeerAssessment = require('../models/peerAssessment');
 const Team = require('../models/Team');
 const User = require('../models/user');
 const { verifyToken } = require('./auth');
-const sendEmail = require('../utils/email');
 
 // Route to submit or update a peer assessment
 router.post('/submit', verifyToken, async (req, res) => {
@@ -20,31 +19,11 @@ router.post('/submit', verifyToken, async (req, res) => {
       existingAssessment.comments = comments;
       existingAssessment.updatedAt = Date.now();
       await existingAssessment.save();
-
-       // Find the evaluated user
-     const evaluatedUser = await User.findById(memberId);
-     if (evaluatedUser) {
-       // Send email notification to the evaluated user
-       const emailSubject = 'You have been evaluated';
-       const emailText = `You have received a new evaluation with updated ratings and comments.`;
-       await sendEmail(evaluatedUser.email, emailSubject, emailText);
-     }
-
       return res.json({ message: 'Peer assessment updated successfully' });
     }
 
     const assessment = new PeerAssessment({ studentId, memberId, ratings, comments });
     await assessment.save();
-
-     // Find the evaluated user
-     const evaluatedUser = await User.findById(memberId);
-     if (evaluatedUser) {
-       // Send email notification to the evaluated user
-       const emailSubject = 'You have been evaluated';
-       const emailText = `You have received a new evaluation with ratings and comments.`;
-       await sendEmail(evaluatedUser.email, emailSubject, emailText);
-     }
-
     res.status(201).json({ message: 'Peer assessment submitted successfully' });
   } catch (err) {
     console.error('Error submitting peer assessment:', err.message);

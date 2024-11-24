@@ -8,7 +8,7 @@ const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-  const { username, firstname, lastname,email, id, password, role } = req.body;
+  const { username, firstname, lastname, id, password, role } = req.body;
 
   try {
     if (!/^\d{9}$/.test(id)) {
@@ -29,16 +29,12 @@ router.post('/register', async (req, res) => {
       username,
       firstname,
       lastname,
-      email,
       id,
       password: await bcrypt.hash(password, 10),
       role
     });
 
     await user.save();
-
-    // Send welcome email
-    await sendEmail(email, 'Welcome to Our Platform', 'Thank you for registering!');
 
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
@@ -70,15 +66,6 @@ router.post('/login', async (req, res) => {
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
     
     res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
-
-    // Send welcome email
-    const subject = 'Welcome Back!';
-    const text = `Hello ${user.firstname},\n\nWelcome back to our platform. We are glad to see you again.\n\nBest regards,\nThe Team`;
-    try {
-      await sendEmail(user.email, subject, text);
-    } catch (emailError) {
-      console.error('Error sending welcome email:', emailError.message);
-    }
     
     res.json({ message: 'Login successful' });
   } catch (err) {

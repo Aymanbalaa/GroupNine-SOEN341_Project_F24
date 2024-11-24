@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const testEmailRoute = require('./routes/testEmail');
 
 const app = express();
 const { router: authRoutes } = require('./routes/auth'); // Correct import for auth routes
@@ -31,9 +30,6 @@ app.use('/api/auth', authRoutes); // Correct usage of auth routes
 app.use('/api/team', require('./routes/team'));
 app.use('/api/peer-assessment', require('./routes/peerAssessment')); // Ensure this line is present and correct
 
-app.use('/api', testEmailRoute);
-
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
