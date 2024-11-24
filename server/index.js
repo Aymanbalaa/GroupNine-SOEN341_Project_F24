@@ -31,5 +31,5 @@ app.use('/api/team', require('./routes/team'));
 app.use('/api/peer-assessment', require('./routes/peerAssessment')); // Ensure this line is present and correct
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

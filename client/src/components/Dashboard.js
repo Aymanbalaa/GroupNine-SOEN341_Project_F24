@@ -69,7 +69,6 @@ const Dashboard = ({ setRoute }) => {
   return (
     <div className="dashboard-container">
       <h2>Welcome, {user.firstname} {user.lastname}!</h2>
-      <p>You are logged in as a {user.role}.</p>
 
       {viewingAssessments ? (
         <div>
@@ -94,7 +93,7 @@ const Dashboard = ({ setRoute }) => {
       ) : (
         <div>
           {team && (
-            <div className="team-info">
+            <div className="team-details">
               <h3>Your Team: {team.name}</h3>
               <ul>
                 {team.members.map((member) => (
@@ -113,6 +112,9 @@ const Dashboard = ({ setRoute }) => {
           </button>
         </div>
       )}
+
+      {/* Message moved to the bottom of the page */}
+      <p className="logged-in-message">You are logged in as a {user.role}.</p>
     </div>
   );
 };
