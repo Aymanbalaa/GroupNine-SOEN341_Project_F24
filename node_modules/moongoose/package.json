@@ -1,0 +1,15 @@
+{
+  "name": "moongoose",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ziggy Jonsson https://github.com/zjonsson",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.0",
+    "streamz": "^1.5.2"
+  }
+}
