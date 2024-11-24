@@ -1,9 +1,23 @@
+/* Apply a purple background to the entire page */
+body {
+  
+  background: linear-gradient(120deg, #6c63ff, #5a55ea); /* Light purple background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure it covers the full height of the viewport */
+}
+
+/* Updated Dashboard Container */
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 40px;
-  background: #ffffff;
+  background: #ffffff; /* White background for the box */
+  border: 4px solid #5e35b1; /* Purple border around the box */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 500px;
