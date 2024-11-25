@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import API from '../api';
-import './Login.css';
+import './sharedfile.css';
 
-//Backend
 const Login = ({ setRoute }) => {
-  // console.log("setRoute in Login:", setRoute);
-
-  const [formData, setFormData] = useState({
-    username: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ username: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
 
   const { username, password } = formData;
@@ -28,39 +22,24 @@ const Login = ({ setRoute }) => {
     }
   };
 
-  //Frontend
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      <form onSubmit={onSubmit} className="login-form">
-        <div className="form-group">
-          <input
-            type="text"
-            name="username"
-            value={username}
-            onChange={onChange}
-            placeholder="Username"
-            required
-            className="form-input"
-          />
+    <div className="auth-container">
+      <div className="auth-box">
+        <div className="auth-content">
+          <h2>Sign In</h2>
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
+          <form onSubmit={onSubmit} className="auth-form">
+            <input type="text" name="username" value={username} onChange={onChange} placeholder="Username" required />
+            <input type="password" name="password" value={password} onChange={onChange} placeholder="Password" required />
+            <button type="submit">Sign In</button>
+          </form>
         </div>
-        <div className="form-group">
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={onChange}
-            placeholder="Password"
-            required
-            className="form-input"
-          />
+        <div className="auth-side">
+          <h2>Hello, Friend!</h2>
+          <p>Register your personal details to start your journey with us.</p>
+          <button onClick={() => setRoute('register')}>Sign Up</button>
         </div>
-        <button type="submit" className="login-button">Login</button>
-        <button type="button" className="register-button" onClick={() => setRoute('register')}>
-          Don't have an account? Register
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
