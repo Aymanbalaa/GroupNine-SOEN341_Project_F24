@@ -35,7 +35,7 @@ jobs:
       # Install Global Tools
       - name: Install prettier
         run: |
-          npm install -g prettier 
+          npm install -g prettier
 
       # Backend setup and tests
       - name: Install dependencies for backend
@@ -64,5 +64,4 @@ jobs:
       - name: Build frontend
         working-directory: client
         run: npm run build # Builds the frontend for production
-
 
