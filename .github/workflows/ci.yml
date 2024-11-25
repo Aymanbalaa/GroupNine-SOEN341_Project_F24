@@ -28,6 +28,10 @@ jobs:
         with:
           node-version: '16'
 
+      # Global Jest installation to avoid permission issues
+      - name: Install Jest globally
+        run: npm install -g jest
+
       # Install Global Tools
       - name: Install prettier
         run: |
