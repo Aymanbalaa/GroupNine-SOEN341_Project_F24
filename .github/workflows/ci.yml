@@ -58,7 +58,7 @@ jobs:
       # Run Prettier for Code Formatting Check
       - name: Check code formatting with Prettier (Frontend & Backend)
         working-directory: .
-        run: prettier --check "client/src/**/*.{js,jsx}" "server/src/**/*.js"
+        run: npx prettier --check .
 
       # Build Frontend
       - name: Build frontend
