@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import API from '../api';
-import './blabla.css';
+import './sharedfile.css';
 
 const Register = ({ setRoute }) => {
   const [formData, setFormData] = useState({
@@ -53,7 +53,7 @@ const Register = ({ setRoute }) => {
         </div>
         <div className="auth-side">
           <h2>Welcome Back!</h2>
-          <p>Enter your personal details and start your journey with us.</p>
+          <p>Enter your personal details and start reviewing your peers with us.</p>
           <button onClick={() => setRoute('login')}>Sign In</button>
         </div>
       </div>

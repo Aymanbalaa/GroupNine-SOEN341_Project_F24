@@ -5,7 +5,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height for vertical centering */
+  height: 110vh; /* Full height for vertical centering */
   font-family: 'Arial', sans-serif;
 }
 
@@ -25,7 +25,7 @@ body {
 
 .dashboard-container h2 {
   color: #5e35b1;
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: 15px;
   font-weight: bold;
   border-bottom: 2px solid #5e35b1;
