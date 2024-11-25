@@ -1,7 +1,7 @@
-/* eslint-disable testing-library/no-unnecessary-act */
-/* eslint-disable testing-library/prefer-presence-queries */
-/* eslint-disable testing-library/no-wait-for-multiple-assertions */
-/* eslint-disable testing-library/prefer-find-by */
+ 
+ 
+ 
+ 
 // src/components/__tests__/Dashboard.test.js
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
