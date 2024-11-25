@@ -1,50 +1,50 @@
 .summary-view-container {
-    padding: 20px;
-    background-color: #f9f9f9; /* Light background to match detailed view */
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px;
-  }
-  
-  h2 {
-    color: #5e35b1; /* Match header color with detailed view */
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .summary-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
-  
-  .summary-table th,
-  .summary-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
-    text-align: center;
-  }
-  
-  .summary-table th {
-    background-color: #5e35b1; /* Header background color to match theme */
-    color: #fff;
-    font-weight: bold;
-  }
-  
-  .summary-table tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternate row background for readability */
-  }
-  
-  .summary-table tr:hover {
-    background-color: #e8eaf6; /* Hover effect for table rows */
-  }
-  
-  .error-message {
-    color: red;
-    text-align: center;
-    font-weight: bold;
-  }
-  
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background to match detailed view */
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
+
+h2 {
+  color: #5e35b1; /* Match header color with detailed view */
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.summary-table th,
+.summary-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.summary-table th {
+  background-color: #5e35b1; /* Header background color to match theme */
+  color: #fff;
+  font-weight: bold;
+}
+
+.summary-table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternate row background for readability */
+}
+
+.summary-table tr:hover {
+  background-color: #e8eaf6; /* Hover effect for table rows */
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  font-weight: bold;
+}
+
 /* Updated Search bar styling */
 .search-input-container {
   position: relative;

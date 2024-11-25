@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Chart, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import 'chart.js/auto';
 import API from '../api';
 import './InstructorStatistics.css';
@@ -62,15 +70,25 @@ const InstructorStatistics = ({ setRoute }) => {
     // Calculate averages
     return Object.keys(teamScores).map((teamName) => ({
       name: teamName,
-      cooperation: (teamScores[teamName].cooperation / teamScores[teamName].count).toFixed(2),
-      conceptual: (teamScores[teamName].conceptual / teamScores[teamName].count).toFixed(2),
-      practical: (teamScores[teamName].practical / teamScores[teamName].count).toFixed(2),
-      workEthic: (teamScores[teamName].workEthic / teamScores[teamName].count).toFixed(2),
+      cooperation: (
+        teamScores[teamName].cooperation / teamScores[teamName].count
+      ).toFixed(2),
+      conceptual: (
+        teamScores[teamName].conceptual / teamScores[teamName].count
+      ).toFixed(2),
+      practical: (
+        teamScores[teamName].practical / teamScores[teamName].count
+      ).toFixed(2),
+      workEthic: (
+        teamScores[teamName].workEthic / teamScores[teamName].count
+      ).toFixed(2),
     }));
   };
 
   // Prepare data for individual student chart
-  const individualLabels = summaryData.map((student) => student.firstname + ' ' + student.lastname);
+  const individualLabels = summaryData.map(
+    (student) => student.firstname + ' ' + student.lastname,
+  );
   const individualData = {
     labels: individualLabels,
     datasets: [
@@ -148,33 +166,45 @@ const InstructorStatistics = ({ setRoute }) => {
       legend: { labels: { font: { size: 12 } } },
       title: {
         display: true,
-        text: view === 'individual' ? 'Average Scores by Student' : 'Average Scores by Team',
+        text:
+          view === 'individual'
+            ? 'Average Scores by Student'
+            : 'Average Scores by Team',
         font: { size: 16 },
       },
     },
   };
 
   return (
-    <div className="statistics-container">
-      <div className="statistics-content">
-        <h2 className="statistics-title">Performance Metrics</h2>
+    <div className='statistics-container'>
+      <div className='statistics-content'>
+        <h2 className='statistics-title'>Performance Metrics</h2>
 
         {/* Toggle Button */}
-        <button onClick={() => setView(view === 'individual' ? 'team' : 'individual')} className="toggle-button">
-          {view === 'individual' ? 'View Team Averages' : 'View Individual Averages'}
+        <button
+          onClick={() => setView(view === 'individual' ? 'team' : 'individual')}
+          className='toggle-button'
+        >
+          {view === 'individual'
+            ? 'View Team Averages'
+            : 'View Individual Averages'}
         </button>
         {/* Chart with scrolling */}
-        <div className="chart-scroll-wrapper">
-          <div className="chart-wrapper">
-            <Bar key={JSON.stringify(view === 'individual' ? individualData : teamAverageData)}
-                 data={view === 'individual' ? individualData : teamAverageData}
-                 options={options} />
+        <div className='chart-scroll-wrapper'>
+          <div className='chart-wrapper'>
+            <Bar
+              key={JSON.stringify(
+                view === 'individual' ? individualData : teamAverageData,
+              )}
+              data={view === 'individual' ? individualData : teamAverageData}
+              options={options}
+            />
           </div>
         </div>
 
         <button
           onClick={() => setRoute('instructor-dashboard')}
-          className="back-button"
+          className='back-button'
         >
           Back to Dashboard
         </button>

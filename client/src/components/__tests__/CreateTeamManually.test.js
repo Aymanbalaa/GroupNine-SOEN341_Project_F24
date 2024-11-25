@@ -1,6 +1,12 @@
 /* eslint-disable testing-library/no-wait-for-multiple-assertions */
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CreateTeamManually from '../CreateTeamManually';
 import API from '../../api';
@@ -33,13 +39,19 @@ describe('CreateTeamManually Component', () => {
 
     // Verify form elements
     expect(screen.getByPlaceholderText(/team name/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /create team/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /back to dashboard/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /create team/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /back to dashboard/i }),
+    ).toBeInTheDocument();
 
     // Wait for students to load
     await waitFor(() => {
       expect(screen.getByText(/john doe/i)).toBeInTheDocument();
-      expect(screen.getByText(/jane smith \(already in a team\)/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/jane smith \(already in a team\)/i),
+      ).toBeInTheDocument();
     });
   });
 
@@ -47,7 +59,9 @@ describe('CreateTeamManually Component', () => {
     render(<CreateTeamManually setRoute={mockSetRoute} />);
 
     fireEvent.click(screen.getByRole('button', { name: /create team/i }));
-    expect(screen.getByPlaceholderText(/team name/i)).toHaveAttribute('required');
+    expect(screen.getByPlaceholderText(/team name/i)).toHaveAttribute(
+      'required',
+    );
   });
 
   // test('creates team successfully when valid data is provided', async () => {

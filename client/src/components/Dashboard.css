@@ -78,7 +78,10 @@ button {
   font-weight: bold;
   background-color: #ffffff;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -98,7 +101,10 @@ button:active {
   background-color: #e53935;
   color: #ffffff;
   border: 2px solid #e53935;
-  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .logout-button:hover {

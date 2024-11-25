@@ -31,7 +31,10 @@ const Dashboard = ({ setRoute }) => {
         const res = await API.get('/team/myteam');
         setTeam(res.data);
       } catch (err) {
-        console.error('Error fetching team details:', err.response?.data || err.message);
+        console.error(
+          'Error fetching team details:',
+          err.response?.data || err.message,
+        );
       }
     };
 
@@ -43,8 +46,8 @@ const Dashboard = ({ setRoute }) => {
   const toggleView = (setFunction) => setFunction((prev) => !prev);
 
   const backButton = (
-    <div className="center-button">
-      <button onClick={() => resetView()} className="back-button">
+    <div className='center-button'>
+      <button onClick={() => resetView()} className='back-button'>
         Back to Dashboard
       </button>
     </div>
@@ -61,24 +64,31 @@ const Dashboard = ({ setRoute }) => {
     return viewingAssessments ? (
       <div>
         {backButton}
-        <ViewAssessments role="instructor" />
+        <ViewAssessments role='instructor' />
       </div>
     ) : (
-      <InstructorDashboard setRoute={setRoute} handleViewAssessments={() => toggleView(setViewingAssessments)} />
+      <InstructorDashboard
+        setRoute={setRoute}
+        handleViewAssessments={() => toggleView(setViewingAssessments)}
+      />
     );
   }
 
   return (
-    <div className="dashboard-container">
-      <h2>Welcome, {user.firstname} {user.lastname}!</h2>
+    <div className='dashboard-container'>
+      <h2>
+        Welcome, {user.firstname} {user.lastname}!
+      </h2>
       <p>You are logged in as a {user.role}.</p>
 
       {team && (
-        <div className="team-info">
+        <div className='team-info'>
           <h3>Your Team: {team.name}</h3>
           <ul>
             {team.members.map((member) => (
-              <li key={member._id}>{member.firstname} {member.lastname}</li>
+              <li key={member._id}>
+                {member.firstname} {member.lastname}
+              </li>
             ))}
           </ul>
         </div>
@@ -87,7 +97,7 @@ const Dashboard = ({ setRoute }) => {
       {viewingAssessments ? (
         <div>
           {backButton}
-          <ViewAssessments role="student" />
+          <ViewAssessments role='student' />
         </div>
       ) : makingEvaluation ? (
         <div>
@@ -106,11 +116,19 @@ const Dashboard = ({ setRoute }) => {
         </div>
       ) : (
         <div>
-          <button onClick={() => toggleView(setViewingAssessments)}>View Peer Assessments</button>
-          <button onClick={() => toggleView(setMakingEvaluation)}>Make Evaluation</button>
-          <button onClick={() => toggleView(setViewingFeedback)}>View Received Feedback</button>
-          <button onClick={() => toggleView(setEditingEvaluation)}>Edit Evaluation</button>
-          <button className="logout-button" onClick={() => setRoute('login')}>
+          <button onClick={() => toggleView(setViewingAssessments)}>
+            View Peer Assessments
+          </button>
+          <button onClick={() => toggleView(setMakingEvaluation)}>
+            Make Evaluation
+          </button>
+          <button onClick={() => toggleView(setViewingFeedback)}>
+            View Received Feedback
+          </button>
+          <button onClick={() => toggleView(setEditingEvaluation)}>
+            Edit Evaluation
+          </button>
+          <button className='logout-button' onClick={() => setRoute('login')}>
             Log Out
           </button>
         </div>

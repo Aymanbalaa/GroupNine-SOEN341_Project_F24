@@ -84,7 +84,8 @@ h2::after {
   border-color: #6c63ff;
 }
 
-.login-button, .register-button {
+.login-button,
+.register-button {
   background-color: #6c63ff;
   color: white;
   border: none;
@@ -92,10 +93,13 @@ h2::after {
   border-radius: 25px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
-.login-button:hover, .register-button:hover {
+.login-button:hover,
+.register-button:hover {
   background-color: #594adc;
   transform: translateY(-2px);
 }

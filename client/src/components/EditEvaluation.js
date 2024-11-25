@@ -34,11 +34,14 @@ const EditEvaluation = ({ setRoute }) => {
   };
 
   return (
-    <div className="edit-evaluation">
+    <div className='edit-evaluation'>
       <h2>Edit Evaluations</h2>
       {evaluations.map((evaluation, index) => (
-        <div key={index} className="evaluation-card">
-          <h3>Evaluating: {evaluation.memberId.firstname} {evaluation.memberId.lastname}</h3>
+        <div key={index} className='evaluation-card'>
+          <h3>
+            Evaluating: {evaluation.memberId.firstname}{' '}
+            {evaluation.memberId.lastname}
+          </h3>
           {editingIndex === index ? (
             <>
               {Object.keys(evaluation.ratings).map((dimension) => (
@@ -46,11 +49,12 @@ const EditEvaluation = ({ setRoute }) => {
                   <label htmlFor={`rating-${dimension}`}>{dimension}:</label>
                   <input
                     id={`rating-${dimension}`}
-                    type="number"
+                    type='number'
                     value={evaluation.ratings[dimension]}
                     onChange={(e) => {
                       const updatedEvaluations = [...evaluations];
-                      updatedEvaluations[index].ratings[dimension] = e.target.value;
+                      updatedEvaluations[index].ratings[dimension] =
+                        e.target.value;
                       setEvaluations(updatedEvaluations);
                     }}
                   />
@@ -59,7 +63,8 @@ const EditEvaluation = ({ setRoute }) => {
                     value={evaluation.comments[dimension]}
                     onChange={(e) => {
                       const updatedEvaluations = [...evaluations];
-                      updatedEvaluations[index].comments[dimension] = e.target.value;
+                      updatedEvaluations[index].comments[dimension] =
+                        e.target.value;
                       setEvaluations(updatedEvaluations);
                     }}
                   />
@@ -70,7 +75,9 @@ const EditEvaluation = ({ setRoute }) => {
           ) : (
             <>
               {Object.entries(evaluation.ratings).map(([dimension, rating]) => (
-                <p key={dimension}><strong>{dimension}:</strong> {rating}</p>
+                <p key={dimension}>
+                  <strong>{dimension}:</strong> {rating}
+                </p>
               ))}
               <button onClick={() => handleEdit(index)}>Edit</button>
             </>

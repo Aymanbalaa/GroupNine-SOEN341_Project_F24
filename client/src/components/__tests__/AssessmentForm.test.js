@@ -25,23 +25,38 @@ describe('AssessmentForm', () => {
 
   beforeEach(() => {
     // eslint-disable-next-line testing-library/no-render-in-setup
-    render(<AssessmentForm assessment={mockAssessment} onSubmit={mockOnSubmit} />);
+    render(
+      <AssessmentForm assessment={mockAssessment} onSubmit={mockOnSubmit} />,
+    );
   });
 
   test('renders form with all dimensions', () => {
-    const dimensions = ['Cooperation', 'Conceptual Contribution', 'Practical Contribution', 'Work Ethic'];
+    const dimensions = [
+      'Cooperation',
+      'Conceptual Contribution',
+      'Practical Contribution',
+      'Work Ethic',
+    ];
     dimensions.forEach((dimension) => {
       expect(screen.getByLabelText(dimension + ':')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(`Comments for ${dimension}`)).toBeInTheDocument();
+      expect(
+        screen.getByPlaceholderText(`Comments for ${dimension}`),
+      ).toBeInTheDocument();
     });
   });
 
   test('allows changing ratings and comments', () => {
-    fireEvent.change(screen.getByLabelText('Cooperation:'), { target: { value: '4' } });
-    fireEvent.change(screen.getByPlaceholderText('Comments for Cooperation'), { target: { value: 'Excellent teamwork' } });
+    fireEvent.change(screen.getByLabelText('Cooperation:'), {
+      target: { value: '4' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Comments for Cooperation'), {
+      target: { value: 'Excellent teamwork' },
+    });
 
     expect(screen.getByLabelText('Cooperation:').value).toBe('4');
-    expect(screen.getByPlaceholderText('Comments for Cooperation').value).toBe('Excellent teamwork');
+    expect(screen.getByPlaceholderText('Comments for Cooperation').value).toBe(
+      'Excellent teamwork',
+    );
   });
 
   test('calls onSubmit with correct data when submit button is clicked', () => {

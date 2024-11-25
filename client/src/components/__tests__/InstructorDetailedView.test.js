@@ -47,7 +47,9 @@ describe('InstructorDetailedView', () => {
   beforeEach(async () => {
     API.get.mockResolvedValueOnce({ data: mockAssessments });
     render(<InstructorDetailedView teams={mockTeams} />);
-    await waitFor(() => expect(API.get).toHaveBeenCalledWith('/peer-assessment/all-assessments'));
+    await waitFor(() =>
+      expect(API.get).toHaveBeenCalledWith('/peer-assessment/all-assessments'),
+    );
   });
 
   test('fetches and processes assessments correctly', async () => {
@@ -56,22 +58,24 @@ describe('InstructorDetailedView', () => {
         name: team.name,
         members: team.members.map((member) => {
           const memberAssessments = mockAssessments.filter(
-            (assessment) => assessment.memberId && assessment.memberId._id === member._id
+            (assessment) =>
+              assessment.memberId && assessment.memberId._id === member._id,
           );
 
           const assessmentDetails = memberAssessments.map((assessment) => ({
             evaluator: assessment.studentId
               ? `${assessment.studentId.firstname} ${assessment.studentId.lastname}`
               : 'Unknown Evaluator',
-            cooperation: assessment.ratings["Cooperation"] || 0,
-            conceptual: assessment.ratings["Conceptual Contribution"] || 0,
-            practical: assessment.ratings["Practical Contribution"] || 0,
-            workEthic: assessment.ratings["Work Ethic"] || 0,
+            cooperation: assessment.ratings['Cooperation'] || 0,
+            conceptual: assessment.ratings['Conceptual Contribution'] || 0,
+            practical: assessment.ratings['Practical Contribution'] || 0,
+            workEthic: assessment.ratings['Work Ethic'] || 0,
             averageAcrossAll: (
-              (assessment.ratings["Cooperation"] +
-                assessment.ratings["Conceptual Contribution"] +
-                assessment.ratings["Practical Contribution"] +
-                assessment.ratings["Work Ethic"]) / 4
+              (assessment.ratings['Cooperation'] +
+                assessment.ratings['Conceptual Contribution'] +
+                assessment.ratings['Practical Contribution'] +
+                assessment.ratings['Work Ethic']) /
+              4
             ).toFixed(2),
           }));
 
@@ -127,30 +131,34 @@ describe('InstructorDetailedView', () => {
   test('exports to CSV correctly', () => {
     const exportToCSV = jest.fn(() => {
       let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += 'Team Name,Student,Evaluator,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
+      csvContent +=
+        'Team Name,Student,Evaluator,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
 
       mockTeams.forEach((team) => {
         team.members.forEach((member) => {
           const memberAssessments = mockAssessments.filter(
-            (assessment) => assessment.memberId && assessment.memberId._id === member._id
+            (assessment) =>
+              assessment.memberId && assessment.memberId._id === member._id,
           );
 
           memberAssessments.forEach((assessment) => {
-            csvContent += [
-              team.name,
-              `${member.firstname} ${member.lastname}`,
-              `${assessment.studentId.firstname} ${assessment.studentId.lastname}`,
-              assessment.ratings.Cooperation,
-              assessment.ratings['Conceptual Contribution'],
-              assessment.ratings['Practical Contribution'],
-              assessment.ratings['Work Ethic'],
-              (
-                (assessment.ratings.Cooperation +
-                  assessment.ratings['Conceptual Contribution'] +
-                  assessment.ratings['Practical Contribution'] +
-                  assessment.ratings['Work Ethic']) / 4
-              ).toFixed(2),
-            ].join(',') + '\n';
+            csvContent +=
+              [
+                team.name,
+                `${member.firstname} ${member.lastname}`,
+                `${assessment.studentId.firstname} ${assessment.studentId.lastname}`,
+                assessment.ratings.Cooperation,
+                assessment.ratings['Conceptual Contribution'],
+                assessment.ratings['Practical Contribution'],
+                assessment.ratings['Work Ethic'],
+                (
+                  (assessment.ratings.Cooperation +
+                    assessment.ratings['Conceptual Contribution'] +
+                    assessment.ratings['Practical Contribution'] +
+                    assessment.ratings['Work Ethic']) /
+                  4
+                ).toFixed(2),
+              ].join(',') + '\n';
           });
         });
       });
@@ -160,7 +168,9 @@ describe('InstructorDetailedView', () => {
 
     const csvContent = exportToCSV();
 
-    expect(csvContent).toContain('Team Name,Student,Evaluator,Cooperation,Conceptual,Practical,Work Ethic,Average');
+    expect(csvContent).toContain(
+      'Team Name,Student,Evaluator,Cooperation,Conceptual,Practical,Work Ethic,Average',
+    );
     expect(csvContent).toContain('Team A,John Doe,Alice Johnson,4,3,5,4,4.00');
     expect(csvContent).toContain('Team A,Jane Smith,Bob Brown,5,2,3,5,3.75');
   });

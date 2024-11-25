@@ -3,7 +3,13 @@
 // FILE: EditEvaluation.test.js
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import EditEvaluation from '../EditEvaluation';
 import API from '../../api'; // Adjust the import path as necessary
@@ -31,12 +37,18 @@ describe('EditEvaluation', () => {
     await act(async () => {
       render(<EditEvaluation />);
     });
-    await waitFor(() => expect(API.get).toHaveBeenCalledWith('/peer-assessment/my-assessments'));
+    await waitFor(() =>
+      expect(API.get).toHaveBeenCalledWith('/peer-assessment/my-assessments'),
+    );
   });
 
   test('fetches and displays evaluations', async () => {
     mockEvaluations.forEach((evaluation) => {
-      expect(screen.getByText(`Evaluating: ${evaluation.memberId.firstname} ${evaluation.memberId.lastname}`)).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          `Evaluating: ${evaluation.memberId.firstname} ${evaluation.memberId.lastname}`,
+        ),
+      ).toBeInTheDocument();
     });
   });
 
@@ -59,7 +71,12 @@ describe('EditEvaluation', () => {
 
     fireEvent.click(screen.getByText('Save')); // Assuming there is a "Save" button
 
-    await waitFor(() => expect(API.put).toHaveBeenCalledWith('/peer-assessment/update', expect.any(Object)));
+    await waitFor(() =>
+      expect(API.put).toHaveBeenCalledWith(
+        '/peer-assessment/update',
+        expect.any(Object),
+      ),
+    );
     expect(alertMock).toHaveBeenCalledWith('Evaluation updated successfully');
 
     // Clean up the mock

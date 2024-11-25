@@ -32,7 +32,7 @@ const App = () => {
       case 'peer-assessment':
         return <PeerAssessment setRoute={setRoute} />;
       case 'view-assessments':
-        return <ViewAssessments role="student" setRoute={setRoute} />;
+        return <ViewAssessments role='student' setRoute={setRoute} />;
       case 'edit-evaluation':
         return <EditEvaluation setRoute={setRoute} />;
       case 'anonymous-feedback':
@@ -44,7 +44,7 @@ const App = () => {
       case 'load-team-csv':
         return <CreateTeamFromCsv setRoute={setRoute} />;
       case 'detailed-view':
-        return <InstructorDetailedView  setRoute={setRoute}/>;
+        return <InstructorDetailedView setRoute={setRoute} />;
       case 'summary-view':
         return <InstructorSummaryView setRoute={setRoute} />;
       case 'statistics-view':
@@ -55,11 +55,7 @@ const App = () => {
     }
   };
 
-  return (
-    <div className="app-container">
-      {renderComponent()}
-    </div>
-  );
+  return <div className='app-container'>{renderComponent()}</div>;
 };
 
 export default App;

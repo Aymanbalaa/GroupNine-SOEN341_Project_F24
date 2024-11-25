@@ -11,22 +11,22 @@ const CreateTeamManually = ({ setRoute }) => {
     const fetchStudents = async () => {
       try {
         const [studentsRes, teamsRes] = await Promise.all([
-          API.get('/auth/all-students'),  // Fetch all students
-          API.get('/team/all')            // Fetch all teams to check team membership
+          API.get('/auth/all-students'), // Fetch all students
+          API.get('/team/all'), // Fetch all teams to check team membership
         ]);
 
         // Create a map of student IDs who are already in a team
         const studentsInTeams = new Set();
-        teamsRes.data.forEach(team => {
-          team.members.forEach(member => studentsInTeams.add(member._id));
+        teamsRes.data.forEach((team) => {
+          team.members.forEach((member) => studentsInTeams.add(member._id));
         });
 
         // Add `inTeam` property to each student based on membership
-        const studentsData = studentsRes.data.map(student => ({
+        const studentsData = studentsRes.data.map((student) => ({
           ...student,
-          inTeam: studentsInTeams.has(student._id)
+          inTeam: studentsInTeams.has(student._id),
         }));
-        
+
         setStudents(studentsData);
       } catch (err) {
         console.error('Error fetching students or teams:', err);
@@ -38,7 +38,9 @@ const CreateTeamManually = ({ setRoute }) => {
   const handleStudentSelect = useCallback((e) => {
     const { value, checked } = e.target;
     setSelectedStudents((prevSelected) =>
-      checked ? [...prevSelected, value] : prevSelected.filter((id) => id !== value)
+      checked
+        ? [...prevSelected, value]
+        : prevSelected.filter((id) => id !== value),
     );
   }, []);
 
@@ -49,7 +51,10 @@ const CreateTeamManually = ({ setRoute }) => {
       return;
     }
     try {
-      await API.post('/team/create', { name: teamName, members: selectedStudents });
+      await API.post('/team/create', {
+        name: teamName,
+        members: selectedStudents,
+      });
       alert('Team created successfully');
       setTeamName('');
       setSelectedStudents([]);
@@ -61,31 +66,37 @@ const CreateTeamManually = ({ setRoute }) => {
   };
 
   return (
-    <div className="create-team-container">
+    <div className='create-team-container'>
       <h2>Create Team Manually</h2>
       <form onSubmit={createTeam}>
         <input
-          type="text"
+          type='text'
           value={teamName}
           onChange={(e) => setTeamName(e.target.value)}
-          placeholder="Team Name"
+          placeholder='Team Name'
           required
         />
         <h3>Select Students:</h3>
         {students.map((student) => (
-          <label key={student._id} className={student.inTeam ? 'disabled-student' : ''}>
+          <label
+            key={student._id}
+            className={student.inTeam ? 'disabled-student' : ''}
+          >
             <input
-              type="checkbox"
+              type='checkbox'
               value={student._id}
               onChange={handleStudentSelect}
               disabled={student.inTeam} // Disable if student is already in a team
             />
-            {student.firstname} {student.lastname} {student.inTeam && '(Already in a team)'}
+            {student.firstname} {student.lastname}{' '}
+            {student.inTeam && '(Already in a team)'}
           </label>
         ))}
-        <button type="submit">Create Team</button>
+        <button type='submit'>Create Team</button>
       </form>
-      <button onClick={() => setRoute('instructor-dashboard')}>Back to Dashboard</button>
+      <button onClick={() => setRoute('instructor-dashboard')}>
+        Back to Dashboard
+      </button>
     </div>
   );
 };

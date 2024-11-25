@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Sets an overall timeout for the job
+    timeout-minutes: 15 # Sets an overall timeout for the job
 
     services:
       mongodb:
@@ -28,9 +28,10 @@ jobs:
         with:
           node-version: '16'
 
-      # Global Jest installation to avoid permission issues
-      - name: Install Jest globally
-        run: npm install -g jest
+      # Install Global Tools
+      - name: Install prettier
+        run: |
+          npm install -g prettier 
 
       # Backend setup and tests
       - name: Install dependencies for backend
@@ -45,19 +46,19 @@ jobs:
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install --legacy-peer-deps
-  # Times out after 5 minutes if install hangs
 
       - name: Run frontend tests
         working-directory: client
         run: npm test
 
+      # Run Prettier for Code Formatting Check
+      - name: Check code formatting with Prettier (Frontend & Backend)
+        working-directory: .
+        run: prettier --check "client/src/**/*.{js,jsx}" "server/src/**/*.js"
+
       # Build Frontend
       - name: Build frontend
         working-directory: client
-        run: npm run build  # Builds the frontend for production
+        run: npm run build # Builds the frontend for production
 
-      # Deployment (Optional)
-      - name: Deploy (Optional)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Add your deployment command or script here"
+

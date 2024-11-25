@@ -11,7 +11,10 @@ const InstructorSummaryView = ({ setRoute }) => {
   const [exportFormat, setExportFormat] = useState('pdf');
   const [isExporting, setIsExporting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [sortConfig, setSortConfig] = useState({ key: 'studentId', direction: 'ascending' });
+  const [sortConfig, setSortConfig] = useState({
+    key: 'studentId',
+    direction: 'ascending',
+  });
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -55,8 +58,19 @@ const InstructorSummaryView = ({ setRoute }) => {
     doc.text('Summary of Peer Assessments', 20, 10);
     doc.autoTable({
       startY: 20,
-      head: [['Student ID', 'Full Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average']],
-      body: filteredData.map(student => [
+      head: [
+        [
+          'Student ID',
+          'Full Name',
+          'Team',
+          'Cooperation',
+          'Conceptual',
+          'Practical',
+          'Work Ethic',
+          'Average',
+        ],
+      ],
+      body: filteredData.map((student) => [
         student.studentId,
         `${student.firstname} ${student.lastname}`,
         student.team,
@@ -82,9 +96,10 @@ const InstructorSummaryView = ({ setRoute }) => {
 
   const exportToCSV = () => {
     let csvContent = 'data:text/csv;charset=utf-8,';
-    csvContent += 'Student ID,Full Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
+    csvContent +=
+      'Student ID,Full Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average\n';
 
-    filteredData.forEach(student => {
+    filteredData.forEach((student) => {
       csvContent += `${student.studentId},${student.firstname} ${student.lastname},${student.team},${student.cooperation},${student.conceptual},${student.practical},${student.workEthic},${student.average}\n`;
     });
 
@@ -98,7 +113,16 @@ const InstructorSummaryView = ({ setRoute }) => {
   };
 
   const handleSort = (key) => {
-    const sortableColumns = ['studentId', 'lastname', 'firstname', 'cooperation', 'conceptual', 'practical', 'workEthic', 'average'];
+    const sortableColumns = [
+      'studentId',
+      'lastname',
+      'firstname',
+      'cooperation',
+      'conceptual',
+      'practical',
+      'workEthic',
+      'average',
+    ];
     if (!sortableColumns.includes(key)) return;
 
     let direction = 'ascending';
@@ -121,7 +145,7 @@ const InstructorSummaryView = ({ setRoute }) => {
       (student) =>
         student.studentId.toString().includes(term) ||
         student.firstname.toLowerCase().includes(term) ||
-        student.lastname.toLowerCase().includes(term)
+        student.lastname.toLowerCase().includes(term),
     );
     setFilteredData(filtered);
   };
@@ -132,37 +156,41 @@ const InstructorSummaryView = ({ setRoute }) => {
   };
 
   return (
-    <div className="summary-view-container">
+    <div className='summary-view-container'>
       <h2>Summary of Results</h2>
-      {error && <p className="error-message">{error}</p>}
-      <div className="export-section">
+      {error && <p className='error-message'>{error}</p>}
+      <div className='export-section'>
         <select
           value={exportFormat}
           onChange={(e) => setExportFormat(e.target.value)}
-          className="export-select"
+          className='export-select'
         >
-          <option value="pdf">Export as PDF</option>
-          <option value="csv">Export as CSV</option>
+          <option value='pdf'>Export as PDF</option>
+          <option value='csv'>Export as CSV</option>
         </select>
-        <button onClick={handleExport} className="export-button" disabled={isExporting}>
-          {isExporting ? <div className="spinner"></div> : 'Export'}
+        <button
+          onClick={handleExport}
+          className='export-button'
+          disabled={isExporting}
+        >
+          {isExporting ? <div className='spinner'></div> : 'Export'}
         </button>
       </div>
-      <div className="search-input-container">
-        <span className="search-input-icon">🔍</span>
+      <div className='search-input-container'>
+        <span className='search-input-icon'>🔍</span>
         <input
-          type="text"
-          placeholder="Search by name or student ID"
+          type='text'
+          placeholder='Search by name or student ID'
           value={searchTerm}
           onChange={handleSearch}
-          className="search-input"
+          className='search-input'
         />
       </div>
 
       {isLoading ? (
-        <div className="loading-spinner">Loading...</div>
+        <div className='loading-spinner'>Loading...</div>
       ) : filteredData.length > 0 ? (
-        <table className="summary-table">
+        <table className='summary-table'>
           <thead>
             <tr>
               <th onClick={() => handleSort('studentId')}>

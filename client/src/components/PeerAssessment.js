@@ -17,10 +17,12 @@ const PeerAssessment = ({ setRoute }) => {
         const userRes = await API.get('/auth/me');
         const teamRes = await API.get('/team/myteam');
         const filteredMembers = teamRes.data.members.filter(
-          (member) => member._id !== userRes.data._id
+          (member) => member._id !== userRes.data._id,
         );
         setTeamMembers(filteredMembers);
-        setSelectedMemberId(filteredMembers.length ? filteredMembers[0]._id : '');
+        setSelectedMemberId(
+          filteredMembers.length ? filteredMembers[0]._id : '',
+        );
       } catch (err) {
         console.error('Error fetching data:', err);
       }
@@ -31,14 +33,20 @@ const PeerAssessment = ({ setRoute }) => {
   const handleRatingChange = (dimension, value) => {
     setRatings((prevRatings) => ({
       ...prevRatings,
-      [selectedMemberId]: { ...(prevRatings[selectedMemberId] || {}), [dimension]: value },
+      [selectedMemberId]: {
+        ...(prevRatings[selectedMemberId] || {}),
+        [dimension]: value,
+      },
     }));
   };
 
   const handleCommentChange = (dimension, value) => {
     setComments((prevComments) => ({
       ...prevComments,
-      [selectedMemberId]: { ...(prevComments[selectedMemberId] || {}), [dimension]: value },
+      [selectedMemberId]: {
+        ...(prevComments[selectedMemberId] || {}),
+        [dimension]: value,
+      },
     }));
   };
 
@@ -59,19 +67,21 @@ const PeerAssessment = ({ setRoute }) => {
 
   if (submitted) {
     return (
-      <div className="submission-message">
+      <div className='submission-message'>
         <div>Thank you for your submission!</div>
-        <button onClick={() => setSubmitted(false)}>Submit Another Assessment</button>
+        <button onClick={() => setSubmitted(false)}>
+          Submit Another Assessment
+        </button>
       </div>
     );
   }
 
   return (
-    <div className="assessment-container">
+    <div className='assessment-container'>
       <h2>Peer Assessment</h2>
-      <label htmlFor="memberSelect">Select a team member to evaluate:</label>
+      <label htmlFor='memberSelect'>Select a team member to evaluate:</label>
       <select
-        id="memberSelect"
+        id='memberSelect'
         value={selectedMemberId}
         onChange={(e) => setSelectedMemberId(e.target.value)}
       >
@@ -82,19 +92,29 @@ const PeerAssessment = ({ setRoute }) => {
         ))}
       </select>
       {selectedMemberId && (
-        <div className="member-assessment">
-          <h3>Evaluating: {teamMembers.find((m) => m._id === selectedMemberId).firstname}{' '}
-            {teamMembers.find((m) => m._id === selectedMemberId).lastname}</h3>
-          {['Cooperation', 'Conceptual Contribution', 'Practical Contribution', 'Work Ethic'].map((dimension) => (
-            <div key={dimension} className="assessment-dimension">
+        <div className='member-assessment'>
+          <h3>
+            Evaluating:{' '}
+            {teamMembers.find((m) => m._id === selectedMemberId).firstname}{' '}
+            {teamMembers.find((m) => m._id === selectedMemberId).lastname}
+          </h3>
+          {[
+            'Cooperation',
+            'Conceptual Contribution',
+            'Practical Contribution',
+            'Work Ethic',
+          ].map((dimension) => (
+            <div key={dimension} className='assessment-dimension'>
               <label>{dimension}:</label>
               <select
                 value={ratings[selectedMemberId]?.[dimension] || ''}
                 onChange={(e) => handleRatingChange(dimension, e.target.value)}
               >
-                <option value="">Select Rating</option>
+                <option value=''>Select Rating</option>
                 {[1, 2, 3, 4, 5].map((val) => (
-                  <option key={val} value={val}>{val}</option>
+                  <option key={val} value={val}>
+                    {val}
+                  </option>
                 ))}
               </select>
               <textarea

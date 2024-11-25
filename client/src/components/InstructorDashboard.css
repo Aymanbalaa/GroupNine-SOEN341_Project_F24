@@ -1,7 +1,10 @@
 /* Apply a purple background to the entire page */
 body {
-  
-  background: linear-gradient(120deg, #6c63ff, #5a55ea); /* Light purple background */
+  background: linear-gradient(
+    120deg,
+    #6c63ff,
+    #5a55ea
+  ); /* Light purple background */
   margin: 0;
   padding: 0;
   display: flex;
@@ -46,7 +49,9 @@ button {
   font-weight: bold;
   background-color: #ffffff;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
@@ -67,7 +72,9 @@ button:active {
   background-color: #e53935; /* Red background for logout */
   color: #ffffff; /* White text color */
   border: 2px solid #e53935; /* Red border */
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .logout-button:hover {

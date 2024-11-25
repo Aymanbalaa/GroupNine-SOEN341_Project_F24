@@ -11,7 +11,7 @@ const { router: authRoutes } = require('./routes/auth'); // Correct import for a
 const corsOptions = {
   origin: 'http://localhost:3000',
   credentials: true,
-  optionSuccessStatus: 200
+  optionSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
@@ -19,12 +19,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://aymanbalaa30:SOEN341GROUP9@soen341.flzqs.mongodb.net/?retryWrites=true&w=majority&appName=SOEN341', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(
+    'mongodb+srv://aymanbalaa30:SOEN341GROUP9@soen341.flzqs.mongodb.net/?retryWrites=true&w=majority&appName=SOEN341',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    },
+  )
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // Routes
 app.use('/api/auth', authRoutes); // Correct usage of auth routes

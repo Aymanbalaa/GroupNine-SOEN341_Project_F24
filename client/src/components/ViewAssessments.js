@@ -9,9 +9,10 @@ const ViewAssessments = ({ role, setRoute }) => {
   useEffect(() => {
     const fetchAssessments = async () => {
       try {
-        const endpoint = role === 'instructor' 
-          ? '/peer-assessment/all-assessments' 
-          : '/peer-assessment/my-assessments';
+        const endpoint =
+          role === 'instructor'
+            ? '/peer-assessment/all-assessments'
+            : '/peer-assessment/my-assessments';
         const res = await API.get(endpoint);
         setAssessments(res.data);
       } catch (err) {
@@ -27,11 +28,15 @@ const ViewAssessments = ({ role, setRoute }) => {
       <h2>Peer Assessments</h2>
       {assessments.length > 0 ? (
         assessments.map((assessment, index) => (
-          <div key={index} className="assessment-card">
-            <h4>Assessment for: {assessment.memberId.firstname} {assessment.memberId.lastname}</h4>
+          <div key={index} className='assessment-card'>
+            <h4>
+              Assessment for: {assessment.memberId.firstname}{' '}
+              {assessment.memberId.lastname}
+            </h4>
             {Object.keys(assessment.ratings).map((dimension) => (
               <p key={dimension}>
-                <strong>{dimension}:</strong> {assessment.ratings[dimension]} <br />
+                <strong>{dimension}:</strong> {assessment.ratings[dimension]}{' '}
+                <br />
                 <strong>Comments:</strong> {assessment.comments[dimension]}
               </p>
             ))}

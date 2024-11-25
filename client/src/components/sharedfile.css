@@ -1,170 +1,175 @@
 .auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: linear-gradient(120deg, #6c63ff, #5a55ea);
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(120deg, #6c63ff, #5a55ea);
+}
+
+.auth-box {
+  position: relative;
+  display: flex;
+  width: 1100px; /* Adjusted width */
+  height: 605px; /* Adjusted height */
+  background: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.auth-content,
+.auth-side {
+  width: 50%;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-content {
+  background: #f9f9f9;
+  z-index: 1;
+}
+
+.auth-side {
+  position: relative;
+  background: linear-gradient(120deg, #6c63ff, #5a55ea);
+  color: white;
+  overflow: hidden;
+}
+
+.auth-side::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -70px; /* Adjusted for slanted angle */
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(120deg, #6c63ff, #594adc);
+  transform: skewX(-20deg); /* Creates the angled divider */
+  z-index: 0;
+}
+
+.auth-side h2 {
+  z-index: 1;
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.auth-side p {
+  z-index: 1;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+.auth-side button {
+  z-index: 1;
+  padding: 10px 30px;
+  background: none;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.auth-side button:hover {
+  background: white;
+  color: #6c63ff;
+}
+
+.auth-form {
+  width: 100%;
+}
+
+.auth-form input,
+.auth-form select {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 25px;
+  background: #e7e7e7;
+  font-size: 1rem;
+  outline: none;
+  transition:
+    background 0.3s,
+    box-shadow 0.3s;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  background: #fff;
+  box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+}
+
+.auth-form button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 25px;
+  background: #6c63ff;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition:
+    background 0.3s,
+    transform 0.2s;
+}
+
+.auth-form button:hover {
+  background: #594adc;
+  transform: translateY(-2px);
+}
+
+.switch-button {
+  margin-top: 20px;
+  padding: 10px;
+  background: none;
+  color: #6c63ff;
+  border: 2px solid #6c63ff;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.switch-button:hover {
+  background: #6c63ff;
+  color: white;
+}
+
+.error-message {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: red;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
   .auth-box {
-    position: relative;
-    display: flex;
-    width: 1100px; /* Adjusted width */
-    height: 605px; /* Adjusted height */
-    background: #fff;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    height: auto;
+    width: 90%;
   }
-  
+
   .auth-content,
   .auth-side {
-    width: 50%;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    width: 100%;
+    padding: 30px;
   }
-  
-  .auth-content {
-    background: #f9f9f9;
-    z-index: 1;
-  }
-  
-  .auth-side {
-    position: relative;
-    background: linear-gradient(120deg, #6c63ff, #5a55ea);
-    color: white;
-    overflow: hidden;
-  }
-  
+
   .auth-side::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -70px; /* Adjusted for slanted angle */
-    width: 150%;
-    height: 100%;
-    background: linear-gradient(120deg, #6c63ff, #594adc);
-    transform: skewX(-20deg); /* Creates the angled divider */
-    z-index: 0;
+    left: 0;
+    transform: skewX(-10deg);
   }
-  
-  .auth-side h2 {
-    z-index: 1;
-    font-size: 2rem;
-    margin-bottom: 15px;
-  }
-  
-  .auth-side p {
-    z-index: 1;
-    margin-bottom: 20px;
-    font-size: 1.2rem;
-    line-height: 1.5;
-  }
-  
-  .auth-side button {
-    z-index: 1;
-    padding: 10px 30px;
-    background: none;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-  
-  .auth-side button:hover {
-    background: white;
-    color: #6c63ff;
-  }
-  
-  .auth-form {
-    width: 100%;
-  }
-  
-  .auth-form input,
-  .auth-form select {
-    width: 100%;
-    padding: 15px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 25px;
-    background: #e7e7e7;
-    font-size: 1rem;
-    outline: none;
-    transition: background 0.3s, box-shadow 0.3s;
-  }
-  
-  .auth-form input:focus,
-  .auth-form select:focus {
-    background: #fff;
-    box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
-  }
-  
-  .auth-form button {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 25px;
-    background: #6c63ff;
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-  }
-  
-  .auth-form button:hover {
-    background: #594adc;
-    transform: translateY(-2px);
-  }
-  
-  .switch-button {
-    margin-top: 20px;
-    padding: 10px;
-    background: none;
-    color: #6c63ff;
-    border: 2px solid #6c63ff;
-    border-radius: 25px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  
-  .switch-button:hover {
-    background: #6c63ff;
-    color: white;
-  }
-  
-  .error-message {
-    background-color: rgba(255, 0, 0, 0.1);
-    color: red;
-    padding: 10px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    text-align: center;
-  }
-  
-  /* Responsive adjustments */
-  @media screen and (max-width: 768px) {
-    .auth-box {
-      flex-direction: column;
-      height: auto;
-      width: 90%;
-    }
-  
-    .auth-content,
-    .auth-side {
-      width: 100%;
-      padding: 30px;
-    }
-  
-    .auth-side::before {
-      left: 0;
-      transform: skewX(-10deg);
-    }
-  }
-  
+}

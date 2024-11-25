@@ -14,7 +14,7 @@ const verifyInstructor = (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');  // Removed '${}'
+    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}'); // Removed '${}'
     if (decoded.role !== 'instructor') {
       return res.status(403).json({ message: 'Access denied' });
     }
@@ -33,13 +33,20 @@ router.post('/create', async (req, res) => {
 
     //Check If All Fields Are Completed
     if (!name || !members || members.length === 0) {
-      return res.status(400).json({ message: 'Team name and members are required' });
+      return res
+        .status(400)
+        .json({ message: 'Team name and members are required' });
     }
 
     //Check if Users Are in the Database
-    const foundMembers = await User.find({ _id: { $in: members }, role: 'student' });
+    const foundMembers = await User.find({
+      _id: { $in: members },
+      role: 'student',
+    });
     if (foundMembers.length !== members.length) {
-      return res.status(400).json({ message: 'Some members were not found in the database' });
+      return res
+        .status(400)
+        .json({ message: 'Some members were not found in the database' });
     }
 
     //Create New Team
@@ -56,46 +63,45 @@ router.post('/create', async (req, res) => {
   }
 });
 
-
-
-
 //Fetch All Teams
 router.get('/all', async (req, res) => {
-    try {
-      const teams = await Team.find().populate('members', 'firstname lastname'); // Populate members with firstname and lastname
-      res.json(teams);
-    } catch (err) {
-      console.error('Error fetching teams:', err.message);
-      res.status(500).send('Server error');
+  try {
+    const teams = await Team.find().populate('members', 'firstname lastname'); // Populate members with firstname and lastname
+    res.json(teams);
+  } catch (err) {
+    console.error('Error fetching teams:', err.message);
+    res.status(500).send('Server error');
+  }
+});
+
+router.get('/myteam', async (req, res) => {
+  try {
+    const token = req.cookies.token;
+    if (!token) {
+      return res.status(401).json({ message: 'Not authenticated' });
     }
-  });
-  
-  
-  
-  
-  router.get('/myteam', async (req, res) => {
-    try {
-      const token = req.cookies.token;
-      if (!token) {
-        return res.status(401).json({ message: 'Not authenticated' });
-      }
-  
-      // Decode the JWT to get the user ID
-      const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
-      const userId = decoded.userId;
-  
-      // Find the team where the student is a member
-      const team = await Team.findOne({ members: userId }).populate('members', 'firstname lastname');
-      
-      if (!team) {
-        return res.status(404).json({ message: 'You are not assigned to any team' });
-      }
-  
-      res.json(team);
-    } catch (err) {
-      console.error('Error fetching team details:', err.message);
-      res.status(500).send('Server error');
+
+    // Decode the JWT to get the user ID
+    const decoded = jwt.verify(token, '${process.env.JWT_SECRET_KEY}');
+    const userId = decoded.userId;
+
+    // Find the team where the student is a member
+    const team = await Team.findOne({ members: userId }).populate(
+      'members',
+      'firstname lastname',
+    );
+
+    if (!team) {
+      return res
+        .status(404)
+        .json({ message: 'You are not assigned to any team' });
     }
-  });
+
+    res.json(team);
+  } catch (err) {
+    console.error('Error fetching team details:', err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;

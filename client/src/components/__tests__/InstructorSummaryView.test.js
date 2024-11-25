@@ -47,21 +47,23 @@ describe('InstructorSummaryView', () => {
   test('exports to CSV correctly', () => {
     const exportToCSV = jest.fn(() => {
       let csvContent = 'data:text/csv;charset=utf-8,';
-      csvContent += 'Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded\n';
+      csvContent +=
+        'Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded\n';
 
       mockSummaryData.forEach((student) => {
-        csvContent += [
-          student.studentId,
-          student.lastname,
-          student.firstname,
-          student.team,
-          student.cooperation,
-          student.conceptual,
-          student.practical,
-          student.workEthic,
-          student.average,
-          student.responseCount,
-        ].join(',') + '\n';
+        csvContent +=
+          [
+            student.studentId,
+            student.lastname,
+            student.firstname,
+            student.team,
+            student.cooperation,
+            student.conceptual,
+            student.practical,
+            student.workEthic,
+            student.average,
+            student.responseCount,
+          ].join(',') + '\n';
       });
 
       return csvContent;
@@ -69,7 +71,9 @@ describe('InstructorSummaryView', () => {
 
     const csvContent = exportToCSV();
 
-    expect(csvContent).toContain('Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded');
+    expect(csvContent).toContain(
+      'Student ID,Last Name,First Name,Team,Cooperation,Conceptual,Practical,Work Ethic,Average,Peers Responded',
+    );
     expect(csvContent).toContain('123,Doe,John,Team A,4,3,5,4,4,3');
     expect(csvContent).toContain('456,Smith,Jane,Team B,5,2,3,5,3.75,4');
   });
@@ -82,8 +86,21 @@ describe('InstructorSummaryView', () => {
     const generatePDF = () => {
       doc.autoTable({
         startY: 20,
-        head: [['Student ID', 'Last Name', 'First Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average', 'Peers Responded']],
-        body: mockSummaryData.map(student => [
+        head: [
+          [
+            'Student ID',
+            'Last Name',
+            'First Name',
+            'Team',
+            'Cooperation',
+            'Conceptual',
+            'Practical',
+            'Work Ethic',
+            'Average',
+            'Peers Responded',
+          ],
+        ],
+        body: mockSummaryData.map((student) => [
           student.studentId,
           student.lastname,
           student.firstname,
@@ -103,8 +120,21 @@ describe('InstructorSummaryView', () => {
 
     expect(doc.autoTable).toHaveBeenCalledWith({
       startY: 20,
-      head: [['Student ID', 'Last Name', 'First Name', 'Team', 'Cooperation', 'Conceptual', 'Practical', 'Work Ethic', 'Average', 'Peers Responded']],
-      body: mockSummaryData.map(student => [
+      head: [
+        [
+          'Student ID',
+          'Last Name',
+          'First Name',
+          'Team',
+          'Cooperation',
+          'Conceptual',
+          'Practical',
+          'Work Ethic',
+          'Average',
+          'Peers Responded',
+        ],
+      ],
+      body: mockSummaryData.map((student) => [
         student.studentId,
         student.lastname,
         student.firstname,
@@ -121,7 +151,7 @@ describe('InstructorSummaryView', () => {
   });
 
   test('processes summary data correctly', () => {
-    const processedData = mockSummaryData.map(student => ({
+    const processedData = mockSummaryData.map((student) => ({
       studentId: student.studentId,
       lastname: student.lastname,
       firstname: student.firstname,
@@ -136,5 +166,4 @@ describe('InstructorSummaryView', () => {
 
     expect(processedData).toEqual(mockSummaryData);
   });
-
 });

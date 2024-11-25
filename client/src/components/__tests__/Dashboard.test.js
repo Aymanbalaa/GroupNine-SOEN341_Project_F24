@@ -4,7 +4,13 @@
 /* eslint-disable testing-library/prefer-find-by */
 // src/components/__tests__/Dashboard.test.js
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Dashboard from '../Dashboard';
 import API from '../../api';
@@ -19,7 +25,12 @@ describe('Dashboard Component', () => {
     jest.clearAllMocks();
   });
 
-  const mockUserStudent = { _id: 'student123', role: 'student', firstname: 'John', lastname: 'Doe' };
+  const mockUserStudent = {
+    _id: 'student123',
+    role: 'student',
+    firstname: 'John',
+    lastname: 'Doe',
+  };
 
   const mockTeamData = {
     name: 'Team Alpha',
@@ -60,38 +71,60 @@ describe('Dashboard Component', () => {
 
     // Verify team details appear without relying on exact member names
     expect(screen.getByText(/team/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /view peer assessments/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /make evaluation/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /view peer assessments/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /make evaluation/i }),
+    ).toBeInTheDocument();
   });
 
   test('student can toggle between views - assessments, evaluation, feedback, and edit evaluation', async () => {
     await renderDashboard(mockUserStudent);
-  
+
     // Helper function to click the first "Back" button that is a button element
     const clickBackButton = async () => {
       const backButtons = screen.getAllByRole('button', { name: /back/i });
       fireEvent.click(backButtons[0]); // Click the first button element with "Back"
     };
-  
+
     // Toggle assessments view
-    fireEvent.click(screen.getByRole('button', { name: /view peer assessments/i }));
-    await waitFor(() => expect(screen.getAllByRole('button', { name: /back/i }).length).toBeGreaterThan(0));
+    fireEvent.click(
+      screen.getByRole('button', { name: /view peer assessments/i }),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('button', { name: /back/i }).length,
+      ).toBeGreaterThan(0),
+    );
     await clickBackButton();
-  
+
     // Toggle evaluation view
     fireEvent.click(screen.getByRole('button', { name: /make evaluation/i }));
-    await waitFor(() => expect(screen.getAllByRole('button', { name: /back/i }).length).toBeGreaterThan(0));
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('button', { name: /back/i }).length,
+      ).toBeGreaterThan(0),
+    );
     await clickBackButton();
-  
+
     // Toggle feedback view
-    fireEvent.click(screen.getByRole('button', { name: /view received feedback/i }));
-    await waitFor(() => expect(screen.getAllByRole('button', { name: /back/i }).length).toBeGreaterThan(0));
+    fireEvent.click(
+      screen.getByRole('button', { name: /view received feedback/i }),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('button', { name: /back/i }).length,
+      ).toBeGreaterThan(0),
+    );
     await clickBackButton();
-  
+
     // Toggle edit evaluation view
     fireEvent.click(screen.getByRole('button', { name: /edit evaluation/i }));
-    await waitFor(() => expect(screen.getAllByRole('button', { name: /back/i }).length).toBeGreaterThan(0));
+    await waitFor(() =>
+      expect(
+        screen.getAllByRole('button', { name: /back/i }).length,
+      ).toBeGreaterThan(0),
+    );
   });
-  
-  
 });
