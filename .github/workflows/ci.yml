@@ -28,6 +28,10 @@ jobs:
         with:
           node-version: '18'
 
+      # Disable Husky in CI
+      - name: Disable Husky
+        run: npm config set husky 0
+
       # Backend setup
       - name: Install dependencies for backend
         working-directory: server
