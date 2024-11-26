@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15  # Sets an overall timeout for the job
+    timeout-minutes: 15
 
     services:
       mongodb:
@@ -20,72 +20,47 @@ jobs:
           - 27017:27017
 
     steps:
-      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Upgrade to Node.js 18 for Stylelint compatibility
+          node-version: '18'
 
-      # Step 3: Install Jest globally
-      - name: Install Jest globally
-        run: npm install -g jest
+      - name: Disable Husky in CI
+        run: npm config set husky 0
 
-      # Step 4: ESLint Setup and Run for Backend
-      - name: Run ESLint for backend
-        working-directory: server
-        run: |
-          npm install eslint --save-dev --legacy-peer-deps
-          npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
-
-      # Step 5: ESLint Setup and Run for Frontend
-      - name: Run ESLint for frontend
-        working-directory: client
-        run: |
-          npm install eslint --save-dev --legacy-peer-deps
-          npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
-
-      # Step 6: Stylelint Setup and Run for Frontend
-      - name: Run Stylelint for frontend
-        working-directory: client
-        run: |
-          npm install stylelint stylelint-config-standard --save-dev --legacy-peer-deps
-          npx stylelint "**/*.css" || echo "Stylelint warnings/errors ignored"
-
-      # Step 7: Install dependencies for backend
+      # Backend setup
       - name: Install dependencies for backend
         working-directory: server
         run: timeout 300 npm install --legacy-peer-deps
 
-      # Step 8: Run backend tests
+      - name: Run ESLint for backend
+        working-directory: server
+        run: npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
+
       - name: Run backend tests
         working-directory: server
         run: npm test
 
-      # Step 9: Install dependencies for frontend
+      # Frontend setup
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install --legacy-peer-deps
 
-      # Step 10: Run frontend tests
+      - name: Run ESLint for frontend
+        working-directory: client
+        run: npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
+
+      - name: Run Stylelint for frontend
+        working-directory: client
+        run: npx stylelint "**/*.css" || echo "Stylelint warnings/errors ignored"
+
       - name: Run frontend tests
         working-directory: client
         run: npm test
 
-      # Step 11: Build Frontend
       - name: Build frontend
         working-directory: client
         run: npm run build
-
-      # Step 12: Fix Husky Permissions (Optional)
-      - name: Fix Husky permissions
-        run: chmod +x .husky/* .git/hooks/*
-
-      # Step 13: Deployment (Optional)
-      - name: Deploy (Optional)
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Add your deployment command or script here"
