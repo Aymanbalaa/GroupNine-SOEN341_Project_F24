@@ -28,14 +28,10 @@ jobs:
         with:
           node-version: '18'
 
-      # Set HUSKY globally for the job
-      - name: Set environment variable for Husky
-        run: echo "HUSKY=0" >> $GITHUB_ENV
-
       # Backend setup
       - name: Install dependencies for backend
         working-directory: server
-        run: timeout 300 npm install --legacy-peer-deps
+        run: timeout 300 npm install --legacy-peer-deps --ignore-scripts
 
       - name: Run ESLint for backend
         working-directory: server
@@ -48,7 +44,7 @@ jobs:
       # Frontend setup
       - name: Install dependencies for frontend
         working-directory: client
-        run: timeout 300 npm install --legacy-peer-deps
+        run: timeout 300 npm install --legacy-peer-deps --ignore-scripts
 
       - name: Run ESLint for frontend
         working-directory: client
