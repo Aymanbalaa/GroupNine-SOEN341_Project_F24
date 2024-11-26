@@ -1,4 +1,4 @@
-name: CI Pipeline with SonarQube
+name: CI with SonarQube
 
 on:
   push:
@@ -9,47 +9,59 @@ on:
       - main
 
 jobs:
-  build-and-analyze:
+  sonarqube-analysis:
     runs-on: ubuntu-latest
     services:
       sonarqube:
         image: sonarqube:latest
         ports:
           - 9000:9000
-        options: --health-cmd='curl -f http://localhost:9000 || exit 1' --health-interval=5s --health-timeout=10s --health-retries=3
+        options: >-
+          --health-cmd='curl --fail http://localhost:9000/api/system/health || exit 1'
+          --health-interval=5s
+          --health-timeout=10s
+          --health-retries=10
+
     steps:
-      # Step 1: Checkout repository
-      - name: Checkout repository
+      # Step 1: Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
-      # Step 2: Wait for SonarQube to start
+      # Step 2: Install Java (required for SonarQube scanner)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      # Step 3: Wait for SonarQube to be ready
       - name: Wait for SonarQube
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:9000/api/system/health | grep -q "GREEN"; then
-              echo "SonarQube is up and running."
+            if curl --silent http://localhost:9000/api/system/health | grep -q "GREEN"; then
+              echo "SonarQube is ready."
               break
             fi
-            echo "Waiting for SonarQube to be ready..."
+            echo "Waiting for SonarQube..."
             sleep 5
           done
 
-      # Step 3: Install Sonar Scanner CLI
-      - name: Install Sonar Scanner
+      # Step 4: Download and set up SonarQube Scanner
+      - name: Set up SonarQube Scanner
         run: |
           curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
-          unzip sonar-scanner.zip
-          mv sonar-scanner-* sonar-scanner
+          unzip sonar-scanner.zip -d $HOME/
+          export PATH="$HOME/sonar-scanner-4.8.0.2856-linux/bin:$PATH"
 
-      # Step 4: Run Sonar Scanner Analysis
-      - name: Run Sonar Scanner
+      # Step 5: Run SonarQube Analysis
+      - name: Run SonarQube Scanner
         env:
           SONAR_HOST_URL: http://localhost:9000
           SONAR_LOGIN: admin
           SONAR_PASSWORD: admin
         run: |
-          ./sonar-scanner/bin/sonar-scanner \
+          sonar-scanner \
             -Dsonar.projectKey=Peer-Assessment \
             -Dsonar.sources=. \
             -Dsonar.host.url=$SONAR_HOST_URL \
             -Dsonar.login=$SONAR_LOGIN
+
