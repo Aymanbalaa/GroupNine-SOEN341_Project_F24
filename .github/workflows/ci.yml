@@ -20,57 +20,71 @@ jobs:
           - 27017:27017
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18'  # Upgrade to Node.js 18 for Stylelint compatibility
 
-      # Global Jest installation to avoid permission issues
+      # Step 3: Install Jest globally
       - name: Install Jest globally
         run: npm install -g jest
 
-      # ESLint Setup and Run for Backend
+      # Step 4: ESLint Setup and Run for Backend
       - name: Run ESLint for backend
         working-directory: server
         run: |
           npm install eslint --save-dev --legacy-peer-deps
           npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
 
-      # ESLint Setup and Run for Frontend
+      # Step 5: ESLint Setup and Run for Frontend
       - name: Run ESLint for frontend
         working-directory: client
         run: |
           npm install eslint --save-dev --legacy-peer-deps
           npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
 
-      # Backend setup and tests
+      # Step 6: Stylelint Setup and Run for Frontend
+      - name: Run Stylelint for frontend
+        working-directory: client
+        run: |
+          npm install stylelint stylelint-config-standard --save-dev --legacy-peer-deps
+          npx stylelint "**/*.css" || echo "Stylelint warnings/errors ignored"
+
+      # Step 7: Install dependencies for backend
       - name: Install dependencies for backend
         working-directory: server
         run: timeout 300 npm install --legacy-peer-deps
 
+      # Step 8: Run backend tests
       - name: Run backend tests
         working-directory: server
         run: npm test
 
-      # Frontend setup and tests
+      # Step 9: Install dependencies for frontend
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install --legacy-peer-deps
-        # Times out after 5 minutes if install hangs
 
+      # Step 10: Run frontend tests
       - name: Run frontend tests
         working-directory: client
         run: npm test
 
-      # Build Frontend
+      # Step 11: Build Frontend
       - name: Build frontend
         working-directory: client
-        run: npm run build  # Builds the frontend for production
+        run: npm run build
 
-      # Deployment (Optional)
+      # Step 12: Fix Husky Permissions (Optional)
+      - name: Fix Husky permissions
+        run: chmod +x .husky/* .git/hooks/*
+
+      # Step 13: Deployment (Optional)
       - name: Deploy (Optional)
         if: github.ref == 'refs/heads/main'
         run: |
