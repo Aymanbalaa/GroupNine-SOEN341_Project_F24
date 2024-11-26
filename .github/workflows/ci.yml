@@ -58,3 +58,24 @@ jobs:
       - name: Run ESLint for frontend
         working-directory: client
         run: npx eslint . --ext .js
+
+      # Step 9: Set up Java (required for SonarScanner)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      # Step 10: Run SonarScanner
+      - name: Run SonarScanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Store your token securely in GitHub Secrets
+        run: |
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.8.0.2856-linux.zip
+          unzip sonar-scanner.zip -d $HOME
+          $HOME/sonar-scanner-*/bin/sonar-scanner \
+            -Dsonar.projectKey=Peer-Assessment123 \
+            -Dsonar.projectName=Peer-Assessment \
+            -Dsonar.sources=client \
+            -Dsonar.host.url=http://localhost:9000 \
+            -Dsonar.token=$SONAR_TOKEN

@@ -1,0 +1,6 @@
+projectKey=Peer-Assessment123
+serverUrl=http://localhost:9000
+serverVersion=10.7.0.96327
+dashboardUrl=http://localhost:9000/dashboard?id=Peer-Assessment123
+ceTaskId=d58df5b4-e3d8-4f58-8562-63d1c6b26bad
+ceTaskUrl=http://localhost:9000/api/ce/task?id=d58df5b4-e3d8-4f58-8562-63d1c6b26bad
