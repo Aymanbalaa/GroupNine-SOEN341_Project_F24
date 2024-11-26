@@ -32,6 +32,20 @@ jobs:
       - name: Install Jest globally
         run: npm install -g jest
 
+      # ESLint Setup and Run for Backend
+      - name: Run ESLint for backend
+        working-directory: server
+        run: |
+          npm install eslint --save-dev --legacy-peer-deps
+          npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
+
+      # ESLint Setup and Run for Frontend
+      - name: Run ESLint for frontend
+        working-directory: client
+        run: |
+          npm install eslint --save-dev --legacy-peer-deps
+          npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
+
       # Backend setup and tests
       - name: Install dependencies for backend
         working-directory: server
@@ -45,7 +59,7 @@ jobs:
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install --legacy-peer-deps
-  # Times out after 5 minutes if install hangs
+        # Times out after 5 minutes if install hangs
 
       - name: Run frontend tests
         working-directory: client
