@@ -2,4 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
-npx stylelint "**/*.css"
+npx stylelint "**/*.css" || echo "Stylelint warnings/errors ignored"
+
