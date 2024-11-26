@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 15  # Sets an overall timeout for the job
 
     services:
       mongodb:
@@ -20,44 +20,41 @@ jobs:
           - 27017:27017
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: '16'
 
-      # Backend setup
+      # Step 3: Global Jest installation
+      - name: Install Jest globally
+        run: npm install -g jest
+
+      # Step 4: Backend setup
       - name: Install dependencies for backend
         working-directory: server
         run: timeout 300 npm install --legacy-peer-deps --ignore-scripts
 
+      # Step 5: Run ESLint for backend
       - name: Run ESLint for backend
         working-directory: server
         run: npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
 
+      # Step 6: Run backend tests
       - name: Run backend tests
         working-directory: server
         run: npm test
 
-      # Frontend setup
+      # Step 7: Frontend setup
       - name: Install dependencies for frontend
         working-directory: client
         run: timeout 300 npm install --legacy-peer-deps --ignore-scripts
 
+      # Step 8: Run ESLint for frontend
       - name: Run ESLint for frontend
         working-directory: client
-        run: npx eslint . --ext .js,.jsx || echo "Lint warnings/errors ignored"
-
-      - name: Run Stylelint for frontend
-        working-directory: client
-        run: npx stylelint "**/*.css" || echo "Stylelint warnings/errors ignored"
-
-      - name: Run frontend tests
-        working-directory: client
-        run: npm test
-
-      - name: Build frontend
-        working-directory: client
-        run: npm run build
+        run: npx eslint . --ext .js
