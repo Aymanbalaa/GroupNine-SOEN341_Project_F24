@@ -1,5 +1,6 @@
 // server/utils/email.js
 const sgMail = require('@sendgrid/mail');
+
 sgMail.setApiKey('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');
 
 const sendEmail = async (to, subject, text) => {
@@ -7,7 +8,7 @@ const sendEmail = async (to, subject, text) => {
     to,
     from: 'pojgsatools@gmail.com',
     subject,
-    text
+    text,
   };
 
   try {

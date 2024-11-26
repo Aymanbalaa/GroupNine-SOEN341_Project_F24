@@ -1,5 +1,6 @@
 // routes/peerAssessment.js
 const express = require('express');
+
 const router = express.Router();
 const PeerAssessment = require('../models/peerAssessment');
 const Team = require('../models/Team');
@@ -14,36 +15,38 @@ router.post('/submit', verifyToken, async (req, res) => {
 
   try {
     const existingAssessment = await PeerAssessment.findOne({ studentId, memberId });
-    
+
     if (existingAssessment) {
       existingAssessment.ratings = ratings;
       existingAssessment.comments = comments;
       existingAssessment.updatedAt = Date.now();
       await existingAssessment.save();
 
-       // Find the evaluated user
-     const evaluatedUser = await User.findById(memberId);
-     if (evaluatedUser) {
-       // Send email notification to the evaluated user
-       const emailSubject = 'You have been evaluated';
-       const emailText = `You have received a new evaluation with updated ratings and comments.`;
-       await sendEmail(evaluatedUser.email, emailSubject, emailText);
-     }
+      // Find the evaluated user
+      const evaluatedUser = await User.findById(memberId);
+      if (evaluatedUser) {
+        // Send email notification to the evaluated user
+        const emailSubject = 'You have been evaluated';
+        const emailText = 'You have received a new evaluation with updated ratings and comments.';
+        await sendEmail(evaluatedUser.email, emailSubject, emailText);
+      }
 
       return res.json({ message: 'Peer assessment updated successfully' });
     }
 
-    const assessment = new PeerAssessment({ studentId, memberId, ratings, comments });
+    const assessment = new PeerAssessment({
+      studentId, memberId, ratings, comments,
+    });
     await assessment.save();
 
-     // Find the evaluated user
-     const evaluatedUser = await User.findById(memberId);
-     if (evaluatedUser) {
-       // Send email notification to the evaluated user
-       const emailSubject = 'You have been evaluated';
-       const emailText = `You have received a new evaluation with ratings and comments.`;
-       await sendEmail(evaluatedUser.email, emailSubject, emailText);
-     }
+    // Find the evaluated user
+    const evaluatedUser = await User.findById(memberId);
+    if (evaluatedUser) {
+      // Send email notification to the evaluated user
+      const emailSubject = 'You have been evaluated';
+      const emailText = 'You have received a new evaluation with ratings and comments.';
+      await sendEmail(evaluatedUser.email, emailSubject, emailText);
+    }
 
     res.status(201).json({ message: 'Peer assessment submitted successfully' });
   } catch (err) {
@@ -137,10 +140,10 @@ router.get('/detailed-view', verifyToken, async (req, res) => {
           practical: assessment.ratings.get('practical') || 0,
           workEthic: assessment.ratings.get('workEthic') || 0,
           averageAcrossAll: (
-            ((assessment.ratings.get('cooperation') || 0) +
-              (assessment.ratings.get('conceptual') || 0) +
-              (assessment.ratings.get('practical') || 0) +
-              (assessment.ratings.get('workEthic') || 0)) / 4
+            ((assessment.ratings.get('cooperation') || 0)
+              + (assessment.ratings.get('conceptual') || 0)
+              + (assessment.ratings.get('practical') || 0)
+              + (assessment.ratings.get('workEthic') || 0)) / 4
           ).toFixed(2),
           comment: assessment.comments?.get('general') || 'No comment provided',
         }));
@@ -161,7 +164,6 @@ router.get('/detailed-view', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
 
 // Route for instructors to view a summary view of assessments
 router.get('/summary-view', verifyToken, async (req, res) => {
@@ -211,10 +213,10 @@ router.get('/summary-view', verifyToken, async (req, res) => {
         };
       }
 
-      summaryData[memberId].cooperation += assessment.ratings["Cooperation"] || 0;
-      summaryData[memberId].conceptual += assessment.ratings["Conceptual Contribution"] || 0;
-      summaryData[memberId].practical += assessment.ratings["Practical Contribution"] || 0;
-      summaryData[memberId].workEthic += assessment.ratings["Work Ethic"] || 0;
+      summaryData[memberId].cooperation += assessment.ratings.Cooperation || 0;
+      summaryData[memberId].conceptual += assessment.ratings['Conceptual Contribution'] || 0;
+      summaryData[memberId].practical += assessment.ratings['Practical Contribution'] || 0;
+      summaryData[memberId].workEthic += assessment.ratings['Work Ethic'] || 0;
       summaryData[memberId].responseCount += 1;
     });
 
@@ -228,11 +230,11 @@ router.get('/summary-view', verifyToken, async (req, res) => {
       practical: (student.practical / student.responseCount).toFixed(2),
       workEthic: (student.workEthic / student.responseCount).toFixed(2),
       average: (
-        (student.cooperation +
-          student.conceptual +
-          student.practical +
-          student.workEthic) /
-        (4 * student.responseCount)
+        (student.cooperation
+          + student.conceptual
+          + student.practical
+          + student.workEthic)
+        / (4 * student.responseCount)
       ).toFixed(2),
       responseCount: student.responseCount,
     }));
@@ -244,14 +246,13 @@ router.get('/summary-view', verifyToken, async (req, res) => {
   }
 });
 
-
 // Route to fetch feedback for a student
 router.get('/my-feedback', verifyToken, async (req, res) => {
   try {
     const feedback = await PeerAssessment.find({ memberId: req.user.userId })
       .select('ratings comments')
       .exec();
-      
+
     res.json(feedback);
   } catch (err) {
     console.error('Error fetching anonymous feedback:', err.message);

@@ -5,33 +5,37 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   firstname: {
     type: String,
     required: true,
-    unique: false
+    unique: false,
   },
   lastname: {
     type: String,
     required: true,
-    unique: false
+    unique: false,
+  },
+  email: {
+    type: String,
+    required: true,
   },
   id: {
     type: Number,
     required: true,
     unique: true,
-    match: [/^\d{9}$/, 'ID must be a 9-digit number']
+    match: [/^\d{9}$/, 'ID must be a 9-digit number'],
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   role: {
     type: String,
     enum: ['student', 'instructor'],
-    required: true
-  }
+    required: true,
+  },
 });
 
 module.exports = mongoose.model('User', UserSchema);

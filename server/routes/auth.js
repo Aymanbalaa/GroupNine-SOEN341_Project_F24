@@ -4,23 +4,26 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const sendEmail = require('../utils/email');
+
 const router = express.Router();
 
 // Register route
 router.post('/register', async (req, res) => {
-  const { username, firstname, lastname,email, id, password, role } = req.body;
+  const {
+    username, firstname, lastname, email, id, password, role,
+  } = req.body;
 
   try {
     if (!/^\d{9}$/.test(id)) {
       return res.status(400).json({ message: 'ID must be a 9-digit number' });
     }
-    
+
     let user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    let userid = await User.findOne({ id });
+    const userid = await User.findOne({ id });
     if (userid) {
       return res.status(400).json({ message: 'ID already exists' });
     }
@@ -32,7 +35,7 @@ router.post('/register', async (req, res) => {
       email,
       id,
       password: await bcrypt.hash(password, 10),
-      role
+      role,
     });
 
     await user.save();
@@ -42,9 +45,11 @@ router.post('/register', async (req, res) => {
 
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
-    
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
-    
+
+    res.cookie('token', token, {
+      httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000,
+    });
+
     res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
     console.error('Error in register route:', err.message);
@@ -56,7 +61,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    let user = await User.findOne({ username });
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -65,11 +70,13 @@ router.post('/login', async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
-    
+
     const payload = { userId: user._id, role: user.role };
     const token = jwt.sign(payload, '${process.env.JWT_SECRET_KEY}', { expiresIn: '1h' });
-    
-    res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000 });
+
+    res.cookie('token', token, {
+      httpOnly: true, secure: true, sameSite: 'Strict', maxAge: 3600000,
+    });
 
     // Send welcome email
     const subject = 'Welcome Back!';
@@ -79,7 +86,7 @@ router.post('/login', async (req, res) => {
     } catch (emailError) {
       console.error('Error sending welcome email:', emailError.message);
     }
-    
+
     res.json({ message: 'Login successful' });
   } catch (err) {
     console.error('Error in login route:', err.message);
@@ -89,8 +96,8 @@ router.post('/login', async (req, res) => {
 
 // Middleware for verifying tokens
 const verifyToken = (req, res, next) => {
-  const token = req.cookies.token || req.headers['authorization'];
-  
+  const token = req.cookies.token || req.headers.authorization;
+
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }
