@@ -1,0 +1,29 @@
+##Meeting Notes##
+
+Present: Nikolaos, Karim, Ayman
+Absent: None
+Chair: Karim
+Minutes: Nikolaos
+
+##Upcoming Deadlines##
+Sprint 4 Demo
+
+##FOCUS FOR THIS WEEK##: Static analysis tool and code review
+
+##Review Tasks and Set Priorities:##
+Finish up a code review for this sprint
+Finish integrating static tool analysis
+
+##Individual Updates##
+Ayman: Integrated sonar qube and showed the team why it's useful
+Karim : Finished up a code review for Ayman in Pull requests
+Nikolaos : Integrated ESLINT into the pipeline and inside precommit hooks
+
+
+##Action Items##
+Ensure the tools cana nalyze properlyand log warnings/errors
+
+##Resources##
+Github Actions
+Github Wiki
+Pull Requests
