@@ -2,11 +2,11 @@
 
 ## Team Members
 
+- **Ayman El Balaa** - 40200099
 - **Karim Sleiman** - 40224330
 - **Nikolaos Chaskis** - 40092571
 - **Salaheddin Alattar** - 40189830
 - **Georges Ghazal** - 40231026
-- **Ayman El Balaa** - 40200099
 - **Samuel Sebaaly** - 40084264
 
 ---
@@ -43,11 +43,11 @@ The Peer Evaluation System is built using modern web development technologies to
 
 | Name                 | Role                                         |
 |----------------------|----------------------------------------------|
+| **Ayman El Balaa**    | Full Stack Lead Developer                   |
 | **Karim Sleiman**     | Product Owner / Project Manager / Backup Support |
 | **Nikolaos Chaskis**  | Full Stack Developer / User Interface        |
 | **Salaheddin Alattar**| Frontend Developer / User Interface          |
 | **Georges Ghazal**    | Backend Developer / Database and Server      |
-| **Ayman El Balaa**    | Full Stack Developer / User Interface        |
 | **Samuel Sebaaly**    | Backend Developer / Database and Server      |
 
 ---
